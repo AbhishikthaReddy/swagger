@@ -9,6 +9,7 @@ Method | HTTP request | Description
 [**projectsProjectIdDelete**](DefaultApi.md#projectsProjectIdDelete) | **DELETE** /projects/{projectId} | Deletes a project by ID
 [**projectsProjectIdGet**](DefaultApi.md#projectsProjectIdGet) | **GET** /projects/{projectId} | Gets a project by ID
 [**projectsProjectIdPut**](DefaultApi.md#projectsProjectIdPut) | **PUT** /projects/{projectId} | Updates project object
+[**projectsProjectIdWorkspacesGet**](DefaultApi.md#projectsProjectIdWorkspacesGet) | **GET** /projects/{projectId}/workspaces | 
 [**usersGet**](DefaultApi.md#usersGet) | **GET** /users | Gets a list of all users.
 [**usersPost**](DefaultApi.md#usersPost) | **POST** /users | Adds a new user
 [**usersUserIdDelete**](DefaultApi.md#usersUserIdDelete) | **DELETE** /users/{userId} | Deletes a user by ID
@@ -234,6 +235,50 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **projectId** | **String**| The project&#39;s Id | 
  **project** | [**Project**](Project.md)| Project to add | [optional] 
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="projectsProjectIdWorkspacesGet"></a>
+# **projectsProjectIdWorkspacesGet**
+> projectsProjectIdWorkspacesGet(projectId)
+
+
+
+### Example
+```javascript
+var 3BladesApi = require('3_blades_api');
+
+var apiInstance = new 3BladesApi.DefaultApi();
+
+var projectId = "projectId_example"; // String | The project's Id
+
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully.');
+  }
+};
+apiInstance.projectsProjectIdWorkspacesGet(projectId, callback);
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **projectId** | **String**| The project&#39;s Id | 
 
 ### Return type
 

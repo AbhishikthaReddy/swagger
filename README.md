@@ -80,6 +80,7 @@ Class | Method | HTTP request | Description
 *3BladesApi.DefaultApi* | [**projectsProjectIdDelete**](docs/DefaultApi.md#projectsProjectIdDelete) | **DELETE** /projects/{projectId} | Deletes a project by ID
 *3BladesApi.DefaultApi* | [**projectsProjectIdGet**](docs/DefaultApi.md#projectsProjectIdGet) | **GET** /projects/{projectId} | Gets a project by ID
 *3BladesApi.DefaultApi* | [**projectsProjectIdPut**](docs/DefaultApi.md#projectsProjectIdPut) | **PUT** /projects/{projectId} | Updates project object
+*3BladesApi.DefaultApi* | [**projectsProjectIdWorkspacesGet**](docs/DefaultApi.md#projectsProjectIdWorkspacesGet) | **GET** /projects/{projectId}/workspaces | 
 *3BladesApi.DefaultApi* | [**usersGet**](docs/DefaultApi.md#usersGet) | **GET** /users | Gets a list of all users.
 *3BladesApi.DefaultApi* | [**usersPost**](docs/DefaultApi.md#usersPost) | **POST** /users | Adds a new user
 *3BladesApi.DefaultApi* | [**usersUserIdDelete**](docs/DefaultApi.md#usersUserIdDelete) | **DELETE** /users/{userId} | Deletes a user by ID
@@ -97,6 +98,7 @@ Class | Method | HTTP request | Description
  - [3BladesApi.Model](docs/Model.md)
  - [3BladesApi.Project](docs/Project.md)
  - [3BladesApi.ResourcesType](docs/ResourcesType.md)
+ - [3BladesApi.Server](docs/Server.md)
  - [3BladesApi.User](docs/User.md)
  - [3BladesApi.Workspace](docs/Workspace.md)
 

@@ -280,6 +280,49 @@
     }
 
     /**
+     * Callback function to receive the result of the projectsProjectIdWorkspacesGet operation.
+     * @callback module:api/DefaultApi~projectsProjectIdWorkspacesGetCallback
+     * @param {String} error Error message, if any.
+     * @param data This operation does not return a value.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {String} projectId The project&#39;s Id
+     * @param {module:api/DefaultApi~projectsProjectIdWorkspacesGetCallback} callback The callback function, accepting three arguments: error, data, response
+     */
+    this.projectsProjectIdWorkspacesGet = function(projectId, callback) {
+      var postBody = null;
+
+      // verify the required parameter 'projectId' is set
+      if (projectId == undefined || projectId == null) {
+        throw new Error("Missing the required parameter 'projectId' when calling projectsProjectIdWorkspacesGet");
+      }
+
+
+      var pathParams = {
+        'projectId': projectId
+      };
+      var queryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
+
+      var authNames = [];
+      var contentTypes = ['application/json'];
+      var accepts = ['application/json'];
+      var returnType = null;
+
+      return this.apiClient.callApi(
+        '/projects/{projectId}/workspaces', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
+
+    /**
      * Callback function to receive the result of the usersGet operation.
      * @callback module:api/DefaultApi~usersGetCallback
      * @param {String} error Error message, if any.

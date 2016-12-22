@@ -109,6 +109,16 @@
         done();
       });
     });
+    describe('projectsProjectIdWorkspacesGet', function() {
+      it('should call projectsProjectIdWorkspacesGet successfully', function(done) {
+        //uncomment below and update the code to test projectsProjectIdWorkspacesGet
+        //instance.projectsProjectIdWorkspacesGet(pet, function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
+      });
+    });
     describe('usersGet', function() {
       it('should call usersGet successfully', function(done) {
         //uncomment below and update the code to test usersGet

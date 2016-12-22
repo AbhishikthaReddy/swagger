@@ -25,12 +25,12 @@
 (function(factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['ApiClient', 'model/EnvType', 'model/Error', 'model/Job', 'model/Model', 'model/Project', 'model/ResourcesType', 'model/User', 'model/Workspace', 'api/DefaultApi', 'api/PublicOperationsApi'], factory);
+    define(['ApiClient', 'model/EnvType', 'model/Error', 'model/Job', 'model/Model', 'model/Project', 'model/ResourcesType', 'model/Server', 'model/User', 'model/Workspace', 'api/DefaultApi', 'api/PublicOperationsApi'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('./ApiClient'), require('./model/EnvType'), require('./model/Error'), require('./model/Job'), require('./model/Model'), require('./model/Project'), require('./model/ResourcesType'), require('./model/User'), require('./model/Workspace'), require('./api/DefaultApi'), require('./api/PublicOperationsApi'));
+    module.exports = factory(require('./ApiClient'), require('./model/EnvType'), require('./model/Error'), require('./model/Job'), require('./model/Model'), require('./model/Project'), require('./model/ResourcesType'), require('./model/Server'), require('./model/User'), require('./model/Workspace'), require('./api/DefaultApi'), require('./api/PublicOperationsApi'));
   }
-}(function(ApiClient, EnvType, Error, Job, Model, Project, ResourcesType, User, Workspace, DefaultApi, PublicOperationsApi) {
+}(function(ApiClient, EnvType, Error, Job, Model, Project, ResourcesType, Server, User, Workspace, DefaultApi, PublicOperationsApi) {
   'use strict';
 
   /**
@@ -100,6 +100,11 @@
      * @property {module:model/ResourcesType}
      */
     ResourcesType: ResourcesType,
+    /**
+     * The Server model constructor.
+     * @property {module:model/Server}
+     */
+    Server: Server,
     /**
      * The User model constructor.
      * @property {module:model/User}
