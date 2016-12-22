@@ -498,7 +498,6 @@
           "$ref" : "#/definitions/EnvType"
         },
         "resourcesId" : {
-          "type" : "string",
           "$ref" : "#/definitions/ResourcesType"
         }
       }
