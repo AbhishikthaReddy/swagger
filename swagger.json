@@ -365,6 +365,43 @@
             "schema" : {
               "$ref" : "#/definitions/Workspace"
             }
+          },
+          "400" : {
+            "$ref" : "#/responses/BadRequestResponse"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/workspaces/{workspaceId}" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/projectId"
+      }, {
+        "$ref" : "#/parameters/workspaceId"
+      } ],
+      "get" : {
+        "summary" : "Gets workspace by Id",
+        "responses" : {
+          "200" : {
+            "description" : "Workspace data"
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Updates a workspace",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "workspace",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Workspace"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Workspace Updated"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
           }
         }
       }
@@ -584,6 +621,15 @@
       "minLength" : 8,
       "maxLength" : 25,
       "description" : "The project's Id",
+      "type" : "string"
+    },
+    "workspaceId" : {
+      "name" : "workspaceId",
+      "in" : "path",
+      "required" : true,
+      "minLength" : 8,
+      "maxLength" : 25,
+      "description" : "The workspace's Id",
       "type" : "string"
     }
   },
