@@ -360,10 +360,16 @@
           }
         } ],
         "responses" : {
-          "200" : {
+          "201" : {
             "description" : "Workspace created",
             "schema" : {
               "$ref" : "#/definitions/Workspace"
+            },
+            "headers" : {
+              "Location" : {
+                "type" : "string",
+                "description" : "The location where the new workspace is"
+              }
             }
           },
           "400" : {
@@ -399,6 +405,23 @@
         "responses" : {
           "200" : {
             "description" : "Workspace Updated"
+          },
+          "404" : {
+            "description" : "The resource was not found"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Deletes a workspace",
+        "responses" : {
+          "200" : {
+            "description" : "Workspace deleted"
+          },
+          "404" : {
+            "description" : "The resource was not found"
           },
           "default" : {
             "$ref" : "#/responses/Standard500ErrorResponse"
