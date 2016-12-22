@@ -328,13 +328,43 @@
       }
     },
     "/projects/{projectId}/workspaces" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/projectId"
+      } ],
       "get" : {
-        "parameters" : [ {
-          "$ref" : "#/parameters/projectId"
-        } ],
+        "summary" : "Gets all the workspaces contain in a project",
         "responses" : {
+          "200" : {
+            "description" : "List of project workspaces",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Workspace"
+              }
+            }
+          },
           "404" : {
             "$ref" : "#/responses/BadRequestResponse"
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Creates a new workspace to the project",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "workspace",
+          "description" : "Workspace definition",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Workspace"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Workspace created",
+            "schema" : {
+              "$ref" : "#/definitions/Workspace"
+            }
           }
         }
       }
@@ -424,6 +454,9 @@
           "minLength" : 4,
           "maxLength" : 20
         },
+        "startupScript" : {
+          "type" : "string"
+        },
         "envTypeId" : {
           "$ref" : "#/definitions/EnvType"
         },
@@ -435,9 +468,9 @@
     },
     "Workspace" : {
       "type" : "object",
-      "allOf" : {
+      "allOf" : [ {
         "$ref" : "#/definitions/Server"
-      }
+      } ]
     },
     "EnvType" : {
       "type" : "object",
@@ -477,47 +510,47 @@
     },
     "Job" : {
       "type" : "object",
+      "allOf" : [ {
+        "$ref" : "#/definitions/Server"
+      } ],
       "required" : [ "script", "method" ],
       "properties" : {
-        "server_id" : {
-          "type" : "string",
-          "format" : "int32",
-          "example" : 16
-        },
         "script" : {
           "type" : "string",
-          "example" : "my_model"
+          "example" : "my_model.py"
         },
         "method" : {
           "type" : "string",
-          "example" : "sumNumber"
+          "example" : "sumNumbers"
         },
         "auto_restart" : {
           "type" : "boolean",
+          "default" : true,
           "example" : false
         },
         "schedule" : {
           "type" : "string",
-          "example" : "20030405Thursday"
+          "description" : "schedule this job every determined period",
+          "enum" : [ "minute", "hour", "day", "week", "month", "year" ],
+          "default" : "hour",
+          "example" : "minute"
         }
       }
     },
     "Model" : {
       "type" : "object",
+      "allOf" : [ {
+        "$ref" : "#/definitions/Server"
+      } ],
       "required" : [ "script", "method" ],
       "properties" : {
-        "server_id" : {
-          "type" : "string",
-          "format" : "int32",
-          "example" : 16
-        },
         "script" : {
           "type" : "string",
-          "example" : "my_model"
+          "example" : "my_model.py"
         },
         "method" : {
           "type" : "string",
-          "example" : "sumNumber"
+          "example" : "sumNumbers"
         }
       }
     },
