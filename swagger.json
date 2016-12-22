@@ -435,7 +435,7 @@
         "$ref" : "#/definitions/Server"
       },
       "properties" : {
-        "workspaceId" : {
+        "Id" : {
           "type" : "string",
           "readOnly" : true
         },
