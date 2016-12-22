@@ -530,6 +530,108 @@
           }
         }
       }
+    },
+    "/projects/{projectId}/jobs" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/projectId"
+      } ],
+      "get" : {
+        "summary" : "Gets all the jobs contain in a project",
+        "responses" : {
+          "200" : {
+            "description" : "List of project jobs",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Job"
+              }
+            }
+          },
+          "404" : {
+            "$ref" : "#/responses/ProjectDoesNotExistResponse"
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Creates a new job to the project",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "job",
+          "description" : "Job definition",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Job"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Job created",
+            "schema" : {
+              "$ref" : "#/definitions/Job"
+            },
+            "headers" : {
+              "Location" : {
+                "type" : "string",
+                "description" : "The location where the new job is"
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/responses/BadRequestResponse"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/models/{jobId}" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/projectId"
+      }, {
+        "$ref" : "#/parameters/jobId"
+      } ],
+      "get" : {
+        "summary" : "Gets job by Id",
+        "responses" : {
+          "200" : {
+            "description" : "Job data"
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Updates a job",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "model",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Job"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Job Updated"
+          },
+          "404" : {
+            "description" : "The resource was not found"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Deletes a job",
+        "responses" : {
+          "200" : {
+            "description" : "Job deleted"
+          },
+          "404" : {
+            "description" : "The resource was not found"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
+          }
+        }
+      }
     }
   },
   "definitions" : {
@@ -757,12 +859,12 @@
       "type" : "string"
     },
     "modelId" : {
-      "name" : "modelId",
+      "name" : "jobId",
       "in" : "path",
       "required" : true,
       "minLength" : 8,
       "maxLength" : 20,
-      "description" : "The model's Id",
+      "description" : "The job's Id",
       "type" : "string"
     }
   },
