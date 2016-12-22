@@ -96,6 +96,7 @@ Class | Method | HTTP request | Description
  - [3BladesApi.Job](docs/Job.md)
  - [3BladesApi.Model](docs/Model.md)
  - [3BladesApi.Project](docs/Project.md)
+ - [3BladesApi.ResourcesType](docs/ResourcesType.md)
  - [3BladesApi.User](docs/User.md)
  - [3BladesApi.Workspace](docs/Workspace.md)
 

@@ -6,6 +6,6 @@ Name | Type | Description | Notes
 **workspaceId** | **String** |  | [optional] 
 **name** | **String** |  | 
 **envTypeId** | [**EnvType**](EnvType.md) |  | 
-**resourcesId** | **String** |  | 
+**resourcesId** | [**ResourcesType**](ResourcesType.md) |  | 
 
 

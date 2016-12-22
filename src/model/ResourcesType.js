@@ -25,89 +25,81 @@
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['ApiClient', 'model/EnvType', 'model/ResourcesType'], factory);
+    define(['ApiClient'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('../ApiClient'), require('./EnvType'), require('./ResourcesType'));
+    module.exports = factory(require('../ApiClient'));
   } else {
     // Browser globals (root is window)
     if (!root.3BladesApi) {
       root.3BladesApi = {};
     }
-    root.3BladesApi.Workspace = factory(root.3BladesApi.ApiClient, root.3BladesApi.EnvType, root.3BladesApi.ResourcesType);
+    root.3BladesApi.ResourcesType = factory(root.3BladesApi.ApiClient);
   }
-}(this, function(ApiClient, EnvType, ResourcesType) {
+}(this, function(ApiClient) {
   'use strict';
 
 
 
 
   /**
-   * The Workspace model module.
-   * @module model/Workspace
+   * The ResourcesType model module.
+   * @module model/ResourcesType
    * @version 0.1.0
    */
 
   /**
-   * Constructs a new <code>Workspace</code>.
-   * @alias module:model/Workspace
+   * Constructs a new <code>ResourcesType</code>.
+   * @alias module:model/ResourcesType
    * @class
    * @param name {String} 
-   * @param envTypeId {module:model/EnvType} 
-   * @param resourcesId {module:model/ResourcesType} 
+   * @param cpu {Number} 
+   * @param memory {Number} 
    */
-  var exports = function(name, envTypeId, resourcesId) {
+  var exports = function(name, cpu, memory) {
     var _this = this;
 
-
     _this['name'] = name;
-    _this['envTypeId'] = envTypeId;
-    _this['resourcesId'] = resourcesId;
+    _this['cpu'] = cpu;
+    _this['memory'] = memory;
   };
 
   /**
-   * Constructs a <code>Workspace</code> from a plain JavaScript object, optionally creating a new instance.
+   * Constructs a <code>ResourcesType</code> from a plain JavaScript object, optionally creating a new instance.
    * Copies all relevant properties from <code>data</code> to <code>obj</code> if supplied or a new instance if not.
    * @param {Object} data The plain JavaScript object bearing properties of interest.
-   * @param {module:model/Workspace} obj Optional instance to populate.
-   * @return {module:model/Workspace} The populated <code>Workspace</code> instance.
+   * @param {module:model/ResourcesType} obj Optional instance to populate.
+   * @return {module:model/ResourcesType} The populated <code>ResourcesType</code> instance.
    */
   exports.constructFromObject = function(data, obj) {
     if (data) {
       obj = obj || new exports();
 
-      if (data.hasOwnProperty('workspaceId')) {
-        obj['workspaceId'] = ApiClient.convertToType(data['workspaceId'], 'String');
-      }
       if (data.hasOwnProperty('name')) {
         obj['name'] = ApiClient.convertToType(data['name'], 'String');
       }
-      if (data.hasOwnProperty('envTypeId')) {
-        obj['envTypeId'] = EnvType.constructFromObject(data['envTypeId']);
+      if (data.hasOwnProperty('cpu')) {
+        obj['cpu'] = ApiClient.convertToType(data['cpu'], 'Number');
       }
-      if (data.hasOwnProperty('resourcesId')) {
-        obj['resourcesId'] = ResourcesType.constructFromObject(data['resourcesId']);
+      if (data.hasOwnProperty('memory')) {
+        obj['memory'] = ApiClient.convertToType(data['memory'], 'Number');
       }
     }
     return obj;
   }
 
   /**
-   * @member {String} workspaceId
-   */
-  exports.prototype['workspaceId'] = undefined;
-  /**
    * @member {String} name
    */
   exports.prototype['name'] = undefined;
   /**
-   * @member {module:model/EnvType} envTypeId
+   * @member {Number} cpu
    */
-  exports.prototype['envTypeId'] = undefined;
+  exports.prototype['cpu'] = undefined;
   /**
-   * @member {module:model/ResourcesType} resourcesId
+   * @member {Number} memory
    */
-  exports.prototype['resourcesId'] = undefined;
+  exports.prototype['memory'] = undefined;
 
 
 
