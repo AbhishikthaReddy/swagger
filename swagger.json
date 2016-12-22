@@ -582,7 +582,7 @@
         }
       }
     },
-    "/projects/{projectId}/models/{jobId}" : {
+    "/projects/{projectId}/jobs/{jobId}" : {
       "parameters" : [ {
         "$ref" : "#/parameters/projectId"
       }, {
@@ -859,6 +859,15 @@
       "type" : "string"
     },
     "modelId" : {
+      "name" : "modelId",
+      "in" : "path",
+      "required" : true,
+      "minLength" : 8,
+      "maxLength" : 20,
+      "description" : "The model's Id",
+      "type" : "string"
+    },
+    "jobId" : {
       "name" : "jobId",
       "in" : "path",
       "required" : true,
