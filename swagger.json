@@ -246,23 +246,15 @@
       },
       "put" : {
         "summary" : "Updates project object",
-        "description" : "Updates its name or description",
+        "description" : "Updates a project",
         "parameters" : [ {
           "$ref" : "#/parameters/projectId"
         }, {
           "in" : "body",
           "name" : "project",
-          "description" : "Project to add",
+          "description" : "Project to update",
           "schema" : {
-            "type" : "object",
-            "properties" : {
-              "name" : {
-                "type" : "string"
-              },
-              "description" : {
-                "type" : "string"
-              }
-            }
+            "$ref" : "#/definitions/Project"
           }
         } ],
         "responses" : {
@@ -288,35 +280,6 @@
         "responses" : {
           "200" : {
             "description" : "Project deleted"
-          },
-          "404" : {
-            "$ref" : "#/responses/ProjectDoesNotExistResponse"
-          },
-          "default" : {
-            "$ref" : "#/responses/Standard500ErrorResponse"
-          }
-        }
-      }
-    },
-    "/projects/{projectId}/change-visibility" : {
-      "put" : {
-        "summary" : "Change the project visibility",
-        "parameters" : [ {
-          "$ref" : "#/parameters/projectId"
-        }, {
-          "in" : "body",
-          "name" : "isPrivate",
-          "description" : "Send true If the project will be private",
-          "schema" : {
-            "type" : "boolean"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Project updated"
-          },
-          "400" : {
-            "$ref" : "#/responses/BadRequestResponse"
           },
           "404" : {
             "$ref" : "#/responses/ProjectDoesNotExistResponse"
