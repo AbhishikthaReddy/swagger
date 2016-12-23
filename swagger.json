@@ -157,6 +157,43 @@
         }
       }
     },
+    "/users/{userId}/settings/ssh-keys" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/userId"
+      } ],
+      "get" : {
+        "summary" : "Gets the ssh keys created",
+        "responses" : {
+          "200" : {
+            "description" : "",
+            "schema" : {
+              "type" : "array",
+              "items" : [ {
+                "$ref" : "#/definitions/SSH-Key"
+              } ]
+            }
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Creates new ssh keys",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "ssh-keys",
+          "schema" : {
+            "type" : "array",
+            "items" : [ {
+              "$ref" : "#/definitions/SSH-Key"
+            } ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "ssh-keys created"
+          }
+        }
+      }
+    },
     "/users/me" : {
       "get" : {
         "summary" : "Gets the user info",
@@ -250,7 +287,10 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "Returns the project data"
+            "description" : "Returns the project data",
+            "schema" : {
+              "$ref" : "#/definitions/Project"
+            }
           },
           "404" : {
             "$ref" : "#/responses/ProjectDoesNotExistResponse"
@@ -364,7 +404,10 @@
         "summary" : "Gets workspace by Id",
         "responses" : {
           "200" : {
-            "description" : "Workspace data"
+            "description" : "Workspace data",
+            "schema" : {
+              "$ref" : "#/definitions/Workspace"
+            }
           }
         }
       },
@@ -466,7 +509,10 @@
         "summary" : "Gets model by Id",
         "responses" : {
           "200" : {
-            "description" : "Model data"
+            "description" : "Model data",
+            "schema" : {
+              "$ref" : "#/definitions/Model"
+            }
           }
         }
       },
@@ -568,7 +614,10 @@
         "summary" : "Gets job by Id",
         "responses" : {
           "200" : {
-            "description" : "Job data"
+            "description" : "Job data",
+            "schema" : {
+              "$ref" : "#/definitions/Job"
+            }
           }
         }
       },
@@ -772,6 +821,12 @@
         },
         "resourcesId" : {
           "$ref" : "#/definitions/ResourcesType"
+        },
+        "envVars" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
         }
       }
     },
@@ -879,6 +934,12 @@
           "default" : false,
           "readOnly" : true
         }
+      }
+    },
+    "SSH-Key" : {
+      "type" : "object",
+      "additionalProperties" : {
+        "type" : "string"
       }
     },
     "Error" : {
