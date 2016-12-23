@@ -157,6 +157,19 @@
         }
       }
     },
+    "/users/me" : {
+      "get" : {
+        "summary" : "Gets the user info",
+        "responses" : {
+          "200" : {
+            "description" : "User information",
+            "schema" : {
+              "$ref" : "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
     "/projects" : {
       "get" : {
         "tags" : [ "public operations" ],
@@ -637,6 +650,16 @@
           "type" : "boolean"
         },
         "confirmedAt" : {
+          "type" : "string",
+          "format" : "date-time",
+          "readOnly" : true
+        },
+        "createdAt" : {
+          "type" : "string",
+          "format" : "date-time",
+          "readOnly" : true
+        },
+        "updated" : {
           "type" : "string",
           "format" : "date-time",
           "readOnly" : true
