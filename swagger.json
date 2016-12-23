@@ -162,7 +162,7 @@
         "summary" : "Gets the user info",
         "responses" : {
           "200" : {
-            "description" : "User information",
+            "description" : "OK",
             "schema" : {
               "$ref" : "#/definitions/User"
             }
@@ -608,6 +608,70 @@
           }
         }
       }
+    },
+    "/projects/{projectId}/collaborators" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/projectId"
+      } ],
+      "get" : {
+        "summary" : "Gets all active project collaborators",
+        "description" : "",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/Collaborator"
+            }
+          },
+          "404" : {
+            "$ref" : "#/responses/ProjectDoesNotExistResponse"
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Add a collaborator to the project",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "collaborator email",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "The collaborator was added",
+            "headers" : {
+              "Location" : {
+                "description" : "Location where the collaborator can be obtained",
+                "type" : "string"
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/responses/BadRequestResponse"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/collaborators/{email}" : {
+      "delete" : {
+        "summary" : "Deletes a collaborator from the project",
+        "parameters" : [ {
+          "$ref" : "#/parameters/projectId"
+        }, {
+          "in" : "path",
+          "name" : "email",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Collaborator deleted"
+          }
+        }
+      }
     }
   },
   "definitions" : {
@@ -803,8 +867,27 @@
         }
       }
     },
+    "Collaborator" : {
+      "type" : "object",
+      "allOf" : [ {
+        "$ref" : "#/definitions/User"
+      } ],
+      "properties" : {
+        "joined" : {
+          "type" : "string",
+          "format" : "date-time",
+          "readOnly" : true
+        },
+        "isOwner" : {
+          "type" : "boolean",
+          "default" : false,
+          "readOnly" : true
+        }
+      }
+    },
     "Error" : {
       "type" : "object",
+      "required" : [ "code", "message" ],
       "properties" : {
         "code" : {
           "type" : "integer",
