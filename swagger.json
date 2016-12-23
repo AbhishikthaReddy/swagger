@@ -654,17 +654,13 @@
         }
       }
     },
-    "/projects/{projectId}/collaborators/{email}" : {
+    "/projects/{projectId}/collaborators/{collaboratorEmail}" : {
       "delete" : {
         "summary" : "Deletes a collaborator from the project",
         "parameters" : [ {
           "$ref" : "#/parameters/projectId"
         }, {
-          "in" : "path",
-          "name" : "email",
-          "schema" : {
-            "type" : "string"
-          }
+          "$ref" : "#/parameters/collaboratorEmail"
         } ],
         "responses" : {
           "200" : {
@@ -916,6 +912,13 @@
       "minLength" : 8,
       "maxLength" : 25,
       "description" : "The project's Id",
+      "type" : "string"
+    },
+    "collaboratorEmail" : {
+      "name" : "collaboratorEmail",
+      "in" : "path",
+      "required" : true,
+      "description" : "The collaborator's email",
       "type" : "string"
     },
     "workspaceId" : {
