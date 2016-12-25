@@ -1420,6 +1420,19 @@
         }
       }
     },
+    "Token" : {
+      "properties" : {
+        "key" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "userId" : {
+          "format" : "integer",
+          "type" : "integer"
+        }
+      },
+      "type" : "object"
+    },
     "User" : {
       "type" : "object",
       "required" : [ "email", "username", "firstName" ],
@@ -1472,6 +1485,19 @@
           "type" : "string",
           "format" : "date-time",
           "readOnly" : true
+        }
+      }
+    },
+    "UserGroups" : {
+      "type" : "object",
+      "properties" : {
+        "userId" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "groupId" : {
+          "format" : "integer",
+          "type" : "integer"
         }
       }
     },
