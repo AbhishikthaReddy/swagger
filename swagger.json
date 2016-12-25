@@ -726,6 +726,22 @@
         "$ref" : "#/definitions/User"
       } ],
       "properties" : {
+        "joined" : {
+          "type" : "string",
+          "format" : "date-time",
+          "readOnly" : true
+        },
+        "isOwner" : {
+          "type" : "boolean",
+          "default" : false,
+          "readOnly" : true
+        }
+      }
+    },
+    "ResourcesType" : {
+      "type" : "object",
+      "required" : [ "name", "cpu", "memory" ],
+      "properties" : {
         "name" : {
           "type" : "string"
         },
@@ -737,9 +753,7 @@
           "type" : "integer",
           "example" : 512
         }
-      },
-      "ResourcesType" : "",
-      "required" : [ "name", "cpu", "memory" ]
+      }
     },
     "EnvType" : {
       "type" : "object",
@@ -807,6 +821,20 @@
       "allOf" : [ {
         "$ref" : "#/definitions/Server"
       } ],
+      "required" : [ "script", "method" ],
+      "properties" : {
+        "script" : {
+          "type" : "string",
+          "example" : "my_model.py"
+        },
+        "method" : {
+          "type" : "string",
+          "example" : "sumNumbers"
+        }
+      }
+    },
+    "Project" : {
+      "type" : "object",
       "required" : [ "name", "isPrivate" ],
       "properties" : {
         "projectId" : {
@@ -828,8 +856,7 @@
           "type" : "boolean",
           "default" : false
         }
-      },
-      "Project" : ""
+      }
     },
     "Server" : {
       "type" : "object",
