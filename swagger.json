@@ -1,0 +1,1001 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "This is 3Blades's API.",
+    "version" : "0.1.1",
+    "title" : "3Blades API",
+    "contact" : {
+      "email" : "conactt@3blades.io"
+    },
+    "license" : {
+      "name" : "AGPL 3.0",
+      "url" : "https://www.gnu.org/licenses/agpl-3.0.en.html"
+    }
+  },
+  "tags" : [ {
+    "name" : "admins",
+    "description" : "Secured admin-only calls"
+  }, {
+    "name" : "developers",
+    "description" : "Operations available to regular developers"
+  } ],
+  "host" : "virtserver.swaggerhub.com",
+  "basePath" : "/3Blades/core-backend/v1",
+  "schemes" : [ "https" ],
+  "produces" : [ "application/json" ],
+  "consumes" : [ "application/json" ],
+  "paths" : {
+    "/users" : {
+      "get" : {
+        "summary" : "Gets a list of all users.",
+        "responses" : {
+          "200" : {
+            "description" : "A list of users",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/User"
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Adds a new user",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "user",
+          "description" : "User definition",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/User"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "User created",
+            "headers" : {
+              "Location" : {
+                "type" : "string",
+                "description" : "The location to get the new user"
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/responses/BadRequestResponse"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/users/{userId}" : {
+      "get" : {
+        "summary" : "Gets a user by ID",
+        "parameters" : [ {
+          "$ref" : "#/parameters/userId"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Returns the user data",
+            "schema" : {
+              "$ref" : "#/definitions/User"
+            }
+          },
+          "404" : {
+            "$ref" : "#/responses/UserDoesNotExistResponse"
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Updates user object",
+        "description" : "Updates user data",
+        "parameters" : [ {
+          "$ref" : "#/parameters/userId"
+        }, {
+          "in" : "body",
+          "name" : "user",
+          "description" : "User definition",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/User"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "User updated"
+          },
+          "400" : {
+            "$ref" : "#/responses/BadRequestResponse"
+          },
+          "404" : {
+            "$ref" : "#/responses/UserDoesNotExistResponse"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Deletes a user by ID",
+        "parameters" : [ {
+          "$ref" : "#/parameters/userId"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "User deleted"
+          },
+          "404" : {
+            "$ref" : "#/responses/UserDoesNotExistResponse"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/users/{userId}/projects" : {
+      "get" : {
+        "summary" : "Gets all the user's projects",
+        "parameters" : [ {
+          "$ref" : "#/parameters/userId"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The project list",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Project"
+              }
+            }
+          },
+          "404" : {
+            "$ref" : "#/responses/UserDoesNotExistResponse"
+          }
+        }
+      }
+    },
+    "/users/{userId}/settings/ssh-keys" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/userId"
+      } ],
+      "get" : {
+        "summary" : "Gets the ssh keys created",
+        "responses" : {
+          "200" : {
+            "description" : "",
+            "schema" : {
+              "type" : "array",
+              "items" : [ {
+                "$ref" : "#/definitions/SSH-Key"
+              } ]
+            }
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Creates new ssh keys",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "ssh-keys",
+          "schema" : {
+            "type" : "array",
+            "items" : [ {
+              "$ref" : "#/definitions/SSH-Key"
+            } ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "ssh-keys created"
+          }
+        }
+      }
+    },
+    "/users/me" : {
+      "get" : {
+        "summary" : "Gets the user info",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/projects" : {
+      "get" : {
+        "tags" : [ "public operations" ],
+        "summary" : "searches projects",
+        "operationId" : "searchProject",
+        "description" : "By passing in the appropriate options, you can search for\navailable project in the system\n",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "searchString",
+          "description" : "pass an optional search string for looking up project",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "in" : "query",
+          "name" : "skip",
+          "description" : "number of records to skip for pagination",
+          "type" : "integer",
+          "format" : "int32",
+          "minimum" : 0
+        }, {
+          "in" : "query",
+          "name" : "limit",
+          "description" : "maximum number of records to return",
+          "type" : "integer",
+          "format" : "int32",
+          "minimum" : 0,
+          "maximum" : 50
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Search results matching criteria",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Project"
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Adds a new project",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "project",
+          "description" : "Project to add",
+          "schema" : {
+            "$ref" : "#/definitions/Project"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Project created",
+            "headers" : {
+              "Location" : {
+                "type" : "string",
+                "description" : "The location to get the new project"
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/responses/BadRequestResponse"
+          },
+          "409" : {
+            "description" : "An existing project already exists"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}" : {
+      "get" : {
+        "summary" : "Gets a project by ID",
+        "parameters" : [ {
+          "$ref" : "#/parameters/projectId"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Returns the project data",
+            "schema" : {
+              "$ref" : "#/definitions/Project"
+            }
+          },
+          "404" : {
+            "$ref" : "#/responses/ProjectDoesNotExistResponse"
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Updates project object",
+        "description" : "Updates a project",
+        "parameters" : [ {
+          "$ref" : "#/parameters/projectId"
+        }, {
+          "in" : "body",
+          "name" : "project",
+          "description" : "Project to update",
+          "schema" : {
+            "$ref" : "#/definitions/Project"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Project updated"
+          },
+          "400" : {
+            "$ref" : "#/responses/BadRequestResponse"
+          },
+          "404" : {
+            "$ref" : "#/responses/ProjectDoesNotExistResponse"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Deletes a project by ID",
+        "parameters" : [ {
+          "$ref" : "#/parameters/projectId"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Project deleted"
+          },
+          "404" : {
+            "$ref" : "#/responses/ProjectDoesNotExistResponse"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/workspaces" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/projectId"
+      } ],
+      "get" : {
+        "summary" : "Gets all the workspaces contain in a project",
+        "responses" : {
+          "200" : {
+            "description" : "List of project workspaces",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Workspace"
+              }
+            }
+          },
+          "404" : {
+            "$ref" : "#/responses/ProjectDoesNotExistResponse"
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Creates a new workspace to the project",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "workspace",
+          "description" : "Workspace definition",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Workspace"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Workspace created",
+            "schema" : {
+              "$ref" : "#/definitions/Workspace"
+            },
+            "headers" : {
+              "Location" : {
+                "type" : "string",
+                "description" : "The location where the new workspace is"
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/responses/BadRequestResponse"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/workspaces/{workspaceId}" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/projectId"
+      }, {
+        "$ref" : "#/parameters/workspaceId"
+      } ],
+      "get" : {
+        "summary" : "Gets workspace by Id",
+        "responses" : {
+          "200" : {
+            "description" : "Workspace data",
+            "schema" : {
+              "$ref" : "#/definitions/Workspace"
+            }
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Updates a workspace",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "workspace",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Workspace"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Workspace Updated"
+          },
+          "404" : {
+            "description" : "The resource was not found"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Deletes a workspace",
+        "responses" : {
+          "200" : {
+            "description" : "Workspace deleted"
+          },
+          "404" : {
+            "description" : "The resource was not found"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/models" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/projectId"
+      } ],
+      "get" : {
+        "summary" : "Gets all the models contain in a project",
+        "responses" : {
+          "200" : {
+            "description" : "List of project models",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Model"
+              }
+            }
+          },
+          "404" : {
+            "$ref" : "#/responses/ProjectDoesNotExistResponse"
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Creates a new model to the project",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "model",
+          "description" : "Model definition",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Model"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Model created",
+            "schema" : {
+              "$ref" : "#/definitions/Model"
+            },
+            "headers" : {
+              "Location" : {
+                "type" : "string",
+                "description" : "The location where the new model is"
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/responses/BadRequestResponse"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/models/{modelId}" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/projectId"
+      }, {
+        "$ref" : "#/parameters/modelId"
+      } ],
+      "get" : {
+        "summary" : "Gets model by Id",
+        "responses" : {
+          "200" : {
+            "description" : "Model data",
+            "schema" : {
+              "$ref" : "#/definitions/Model"
+            }
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Updates a model",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "model",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Model"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Model Updated"
+          },
+          "404" : {
+            "description" : "The resource was not found"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Deletes a model",
+        "responses" : {
+          "200" : {
+            "description" : "Model deleted"
+          },
+          "404" : {
+            "description" : "The resource was not found"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/jobs" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/projectId"
+      } ],
+      "get" : {
+        "summary" : "Gets all the jobs contain in a project",
+        "responses" : {
+          "200" : {
+            "description" : "List of project jobs",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Job"
+              }
+            }
+          },
+          "404" : {
+            "$ref" : "#/responses/ProjectDoesNotExistResponse"
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Creates a new job to the project",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "job",
+          "description" : "Job definition",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Job"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Job created",
+            "schema" : {
+              "$ref" : "#/definitions/Job"
+            },
+            "headers" : {
+              "Location" : {
+                "type" : "string",
+                "description" : "The location where the new job is"
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/responses/BadRequestResponse"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/jobs/{jobId}" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/projectId"
+      }, {
+        "$ref" : "#/parameters/jobId"
+      } ],
+      "get" : {
+        "summary" : "Gets job by Id",
+        "responses" : {
+          "200" : {
+            "description" : "Job data",
+            "schema" : {
+              "$ref" : "#/definitions/Job"
+            }
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Updates a job",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "model",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Job"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Job Updated"
+          },
+          "404" : {
+            "description" : "The resource was not found"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Deletes a job",
+        "responses" : {
+          "200" : {
+            "description" : "Job deleted"
+          },
+          "404" : {
+            "description" : "The resource was not found"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/collaborators" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/projectId"
+      } ],
+      "get" : {
+        "summary" : "Gets all active project collaborators",
+        "description" : "",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/Collaborator"
+            }
+          },
+          "404" : {
+            "$ref" : "#/responses/ProjectDoesNotExistResponse"
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Add a collaborator to the project",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "collaborator email",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "The collaborator was added",
+            "headers" : {
+              "Location" : {
+                "description" : "Location where the collaborator can be obtained",
+                "type" : "string"
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/responses/BadRequestResponse"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/collaborators/{collaboratorEmail}" : {
+      "delete" : {
+        "summary" : "Deletes a collaborator from the project",
+        "parameters" : [ {
+          "$ref" : "#/parameters/projectId"
+        }, {
+          "$ref" : "#/parameters/collaboratorEmail"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Collaborator deleted"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Collaborator" : {
+      "type" : "object",
+      "allOf" : [ {
+        "$ref" : "#/definitions/User"
+      } ],
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "cpu" : {
+          "type" : "integer",
+          "example" : 10
+        },
+        "memory" : {
+          "type" : "integer",
+          "example" : 512
+        }
+      },
+      "ResourcesType" : "",
+      "required" : [ "name", "cpu", "memory" ]
+    },
+    "EnvType" : {
+      "type" : "object",
+      "required" : [ "name", "imageName", "CMD" ],
+      "properties" : {
+        "envTypeId" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string"
+        },
+        "imageName" : {
+          "type" : "string",
+          "minLength" : 200
+        },
+        "Cmd" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Error" : {
+      "type" : "object",
+      "required" : [ "code", "message" ],
+      "properties" : {
+        "code" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "message" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Job" : {
+      "type" : "object",
+      "allOf" : [ {
+        "$ref" : "#/definitions/Server"
+      } ],
+      "required" : [ "script", "method" ],
+      "properties" : {
+        "script" : {
+          "type" : "string",
+          "example" : "my_model.py"
+        },
+        "method" : {
+          "type" : "string",
+          "example" : "sumNumbers"
+        },
+        "auto_restart" : {
+          "type" : "boolean",
+          "default" : true,
+          "example" : false
+        },
+        "schedule" : {
+          "type" : "string",
+          "description" : "schedule this job every determined period",
+          "enum" : [ "minute", "hour", "day", "week", "month", "year" ],
+          "default" : "hour",
+          "example" : "minute"
+        }
+      }
+    },
+    "Model" : {
+      "type" : "object",
+      "allOf" : [ {
+        "$ref" : "#/definitions/Server"
+      } ],
+      "required" : [ "name", "isPrivate" ],
+      "properties" : {
+        "projectId" : {
+          "type" : "string",
+          "readOnly" : true
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "MyFirstProject",
+          "pattern" : "[a-zA-Z0-9\\-]",
+          "minLength" : 4,
+          "maxLength" : 20
+        },
+        "description" : {
+          "type" : "string",
+          "example" : "A short description about the project."
+        },
+        "isPrivate" : {
+          "type" : "boolean",
+          "default" : false
+        }
+      },
+      "Project" : ""
+    },
+    "Server" : {
+      "type" : "object",
+      "required" : [ "name", "envTypeId", "resourcesId" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "readOnly" : true
+        },
+        "name" : {
+          "type" : "string",
+          "minLength" : 4,
+          "maxLength" : 20
+        },
+        "startupScript" : {
+          "type" : "string"
+        },
+        "envTypeId" : {
+          "$ref" : "#/definitions/EnvType"
+        },
+        "resourcesId" : {
+          "$ref" : "#/definitions/ResourcesType"
+        },
+        "envVars" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "SSH-Key" : {
+      "type" : "object",
+      "additionalProperties" : {
+        "type" : "string"
+      },
+      "User" : "",
+      "required" : [ "email", "username", "firstName" ],
+      "properties" : {
+        "userId" : {
+          "type" : "string",
+          "readOnly" : true
+        },
+        "username" : {
+          "type" : "string"
+        },
+        "firstName" : {
+          "type" : "string"
+        },
+        "lastName" : {
+          "type" : "string"
+        },
+        "email" : {
+          "type" : "string"
+        },
+        "avatarUrl" : {
+          "type" : "string"
+        },
+        "bio" : {
+          "type" : "string"
+        },
+        "location" : {
+          "type" : "string"
+        },
+        "company" : {
+          "type" : "string"
+        },
+        "timezone" : {
+          "type" : "string"
+        },
+        "active" : {
+          "type" : "boolean"
+        },
+        "confirmedAt" : {
+          "type" : "string",
+          "format" : "date-time",
+          "readOnly" : true
+        },
+        "createdAt" : {
+          "type" : "string",
+          "format" : "date-time",
+          "readOnly" : true
+        },
+        "updated" : {
+          "type" : "string",
+          "format" : "date-time",
+          "readOnly" : true
+        }
+      }
+    },
+    "Workspace" : {
+      "type" : "object",
+      "allOf" : [ {
+        "$ref" : "#/definitions/Server"
+      } ]
+    }
+  },
+  "parameters" : {
+    "userId" : {
+      "name" : "userId",
+      "in" : "path",
+      "required" : true,
+      "minLength" : 8,
+      "maxLength" : 25,
+      "description" : "The user's Id",
+      "type" : "string"
+    },
+    "projectId" : {
+      "name" : "projectId",
+      "in" : "path",
+      "required" : true,
+      "minLength" : 8,
+      "maxLength" : 25,
+      "description" : "The project's Id",
+      "type" : "string"
+    },
+    "collaboratorEmail" : {
+      "name" : "collaboratorEmail",
+      "in" : "path",
+      "required" : true,
+      "description" : "The collaborator's email",
+      "type" : "string"
+    },
+    "workspaceId" : {
+      "name" : "workspaceId",
+      "in" : "path",
+      "required" : true,
+      "minLength" : 8,
+      "maxLength" : 20,
+      "description" : "The workspace's Id",
+      "type" : "string"
+    },
+    "modelId" : {
+      "name" : "modelId",
+      "in" : "path",
+      "required" : true,
+      "minLength" : 8,
+      "maxLength" : 20,
+      "description" : "The model's Id",
+      "type" : "string"
+    },
+    "jobId" : {
+      "name" : "jobId",
+      "in" : "path",
+      "required" : true,
+      "minLength" : 8,
+      "maxLength" : 20,
+      "description" : "The job's Id",
+      "type" : "string"
+    }
+  },
+  "responses" : {
+    "UserDoesNotExistResponse" : {
+      "description" : "User does not exist"
+    },
+    "ProjectDoesNotExistResponse" : {
+      "description" : "Project does not exist"
+    },
+    "BadRequestResponse" : {
+      "description" : "Bad request. Verify field values"
+    },
+    "Standard500ErrorResponse" : {
+      "description" : "Something was wrong",
+      "schema" : {
+        "$ref" : "#/definitions/Error"
+      }
+    }
+  }
+}
