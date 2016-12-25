@@ -757,7 +757,7 @@
     },
     "EnvType" : {
       "type" : "object",
-      "required" : [ "name", "imageName", "CMD" ],
+      "required" : [ "name", "imageName", "Cmd" ],
       "properties" : {
         "envTypeId" : {
           "type" : "string"
@@ -892,8 +892,10 @@
       "type" : "object",
       "additionalProperties" : {
         "type" : "string"
-      },
-      "User" : "",
+      }
+    },
+    "User" : {
+      "type" : "object",
       "required" : [ "email", "username", "firstName" ],
       "properties" : {
         "userId" : {
