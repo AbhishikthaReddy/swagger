@@ -720,6 +720,27 @@
     }
   },
   "definitions" : {
+    "AuditLog" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "date" : {
+          "format" : "timestamp with time zone",
+          "type" : "string"
+        },
+        "action" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "user_id" : {
+          "format" : "integer",
+          "type" : "integer"
+        }
+      }
+    },
     "Collaborator" : {
       "type" : "object",
       "allOf" : [ {
