@@ -738,23 +738,6 @@
         }
       }
     },
-    "ResourcesType" : {
-      "type" : "object",
-      "required" : [ "name", "cpu", "memory" ],
-      "properties" : {
-        "name" : {
-          "type" : "string"
-        },
-        "cpu" : {
-          "type" : "integer",
-          "example" : 10
-        },
-        "memory" : {
-          "type" : "integer",
-          "example" : 512
-        }
-      }
-    },
     "EnvType" : {
       "type" : "object",
       "required" : [ "name", "imageName", "Cmd" ],
@@ -835,28 +818,21 @@
     },
     "Project" : {
       "type" : "object",
-      "required" : [ "name", "isPrivate" ],
+      "required" : [ "name", "cpu", "memory" ],
       "properties" : {
-        "projectId" : {
-          "type" : "string",
-          "readOnly" : true
-        },
         "name" : {
-          "type" : "string",
-          "example" : "MyFirstProject",
-          "pattern" : "[a-zA-Z0-9\\-]",
-          "minLength" : 4,
-          "maxLength" : 20
+          "type" : "string"
         },
-        "description" : {
-          "type" : "string",
-          "example" : "A short description about the project."
+        "cpu" : {
+          "type" : "integer",
+          "example" : 10
         },
-        "isPrivate" : {
-          "type" : "boolean",
-          "default" : false
+        "memory" : {
+          "type" : "integer",
+          "example" : 512
         }
-      }
+      },
+      "ResourcesType" : ""
     },
     "Server" : {
       "type" : "object",
