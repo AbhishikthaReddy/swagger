@@ -934,6 +934,7 @@
       }
     },
     "Group" : {
+      "type" : "object",
       "properties" : {
         "id" : {
           "format" : "integer",
@@ -955,8 +956,40 @@
           "format" : "boolean",
           "type" : "boolean"
         }
-      },
-      "type" : "object"
+      }
+    },
+    "Integration" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "integrationId" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "integrationEmail" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "userId" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "scopes" : {
+          "format" : "ARRAY",
+          "type" : "string"
+        },
+        "provider" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "settings" : {
+          "format" : "json",
+          "type" : "string"
+        }
+      }
     },
     "Job" : {
       "type" : "object",
@@ -1027,6 +1060,31 @@
           "type" : "boolean",
           "default" : false
         }
+      }
+    },
+    "ProjectServer" : {
+      "type" : "object",
+      "properties" : {
+        "project_id" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "server_id" : {
+          "format" : "integer",
+          "type" : "integer"
+        }
+      }
+    },
+    "ProjectTeams" : "",
+    "properties" : {
+      "type" : "object",
+      "project_id" : {
+        "format" : "integer",
+        "type" : "integer"
+      },
+      "team_id" : {
+        "format" : "integer",
+        "type" : "integer"
       }
     },
     "ResourcesType" : {
