@@ -25,6 +25,223 @@
   "produces" : [ "application/json" ],
   "consumes" : [ "application/json" ],
   "paths" : {
+    "/audit_log" : {
+      "get" : {
+        "tags" : [ "audit_log", "admins" ],
+        "produces" : [ "application/json", "text/csv" ],
+        "parameters" : [ {
+          "in" : "header",
+          "name" : "Range",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "default" : "items",
+          "in" : "header",
+          "name" : "RangeUnit",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "required" : false,
+          "in" : "query",
+          "name" : "offset",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "required" : false,
+          "in" : "query",
+          "name" : "limit",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "required" : false,
+          "in" : "query",
+          "name" : "select",
+          "type" : "string",
+          "description" : "Filtering Columns"
+        }, {
+          "required" : false,
+          "in" : "query",
+          "name" : "order",
+          "type" : "string",
+          "enum" : [ "id.asc.nullsfirst", "id.asc.nulllast", "id.asc", "id.desc.nullsfirst", "id.desc.nulllast", "id.desc", "id.nullsfirst", "id.nulllast", "id", "date.asc.nullsfirst", "date.asc.nulllast", "date.asc", "date.desc.nullsfirst", "date.desc.nulllast", "date.desc", "date.nullsfirst", "date.nulllast", "date", "action.asc.nullsfirst", "action.asc.nulllast", "action.asc", "action.desc.nullsfirst", "action.desc.nulllast", "action.desc", "action.nullsfirst", "action.nulllast", "action", "user_id.asc.nullsfirst", "user_id.asc.nulllast", "user_id.asc", "user_id.desc.nullsfirst", "user_id.desc.nulllast", "user_id.desc", "user_id.nullsfirst", "user_id.nulllast", "user_id" ],
+          "description" : "Ordering"
+        }, {
+          "required" : false,
+          "in" : "header",
+          "name" : "Prefer",
+          "type" : "string",
+          "enum" : [ "plurality=singular", "count=none" ],
+          "description" : "Preference"
+        }, {
+          "pattern" : "^not[.]eq[.]|^not[.]gte[.]|^not[.]gt[.]|^not[.]lte[.]|^not[.]lt[.]|^not[.]neq[.]|^not[.]like[.]|^not[.]ilike[.]|^not[.]in[.]|^not[.]notin[.]|^not[.]isnot[.]|^not[.]is[.]|^not[.]@@[.]|^not[.]@>[.]|^not[.]<@[.]|^eq[.]|^gte[.]|^gt[.]|^lte[.]|^lt[.]|^neq[.]|^like[.]|^ilike[.]|^in[.]|^notin[.]|^isnot[.]|^is[.]|^@@[.]|^@>[.]|^<@[.]",
+          "format" : "integer",
+          "required" : false,
+          "in" : "query",
+          "name" : "id",
+          "type" : "string"
+        }, {
+          "pattern" : "^not[.]eq[.]|^not[.]gte[.]|^not[.]gt[.]|^not[.]lte[.]|^not[.]lt[.]|^not[.]neq[.]|^not[.]like[.]|^not[.]ilike[.]|^not[.]in[.]|^not[.]notin[.]|^not[.]isnot[.]|^not[.]is[.]|^not[.]@@[.]|^not[.]@>[.]|^not[.]<@[.]|^eq[.]|^gte[.]|^gt[.]|^lte[.]|^lt[.]|^neq[.]|^like[.]|^ilike[.]|^in[.]|^notin[.]|^isnot[.]|^is[.]|^@@[.]|^@>[.]|^<@[.]",
+          "format" : "timestamp with time zone",
+          "required" : false,
+          "in" : "query",
+          "name" : "date",
+          "type" : "string"
+        }, {
+          "pattern" : "^not[.]eq[.]|^not[.]gte[.]|^not[.]gt[.]|^not[.]lte[.]|^not[.]lt[.]|^not[.]neq[.]|^not[.]like[.]|^not[.]ilike[.]|^not[.]in[.]|^not[.]notin[.]|^not[.]isnot[.]|^not[.]is[.]|^not[.]@@[.]|^not[.]@>[.]|^not[.]<@[.]|^eq[.]|^gte[.]|^gt[.]|^lte[.]|^lt[.]|^neq[.]|^like[.]|^ilike[.]|^in[.]|^notin[.]|^isnot[.]|^is[.]|^@@[.]|^@>[.]|^<@[.]",
+          "format" : "character varying",
+          "required" : false,
+          "in" : "query",
+          "name" : "action",
+          "type" : "string"
+        }, {
+          "pattern" : "^not[.]eq[.]|^not[.]gte[.]|^not[.]gt[.]|^not[.]lte[.]|^not[.]lt[.]|^not[.]neq[.]|^not[.]like[.]|^not[.]ilike[.]|^not[.]in[.]|^not[.]notin[.]|^not[.]isnot[.]|^not[.]is[.]|^not[.]@@[.]|^not[.]@>[.]|^not[.]<@[.]|^eq[.]|^gte[.]|^gt[.]|^lte[.]|^lt[.]|^neq[.]|^like[.]|^ilike[.]|^in[.]|^notin[.]|^isnot[.]|^is[.]|^@@[.]|^@>[.]|^<@[.]",
+          "format" : "integer",
+          "required" : false,
+          "in" : "query",
+          "name" : "user_id",
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "206" : {
+            "description" : "Partial Content"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "audit_log" ],
+        "consumes" : [ "application/json", "text/csv" ],
+        "produces" : [ "application/json", "text/csv" ],
+        "parameters" : [ {
+          "required" : false,
+          "in" : "header",
+          "name" : "Prefer",
+          "type" : "string",
+          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
+          "description" : "Preference"
+        }, {
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/AuditLog"
+          },
+          "in" : "body",
+          "name" : "body",
+          "description" : "audit_log"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "201" : {
+            "description" : "Created"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "audit_log" ],
+        "produces" : [ "application/json", "text/csv" ],
+        "parameters" : [ {
+          "required" : false,
+          "in" : "header",
+          "name" : "Prefer",
+          "type" : "string",
+          "enum" : [ "return=representation", "return=minimal", "return=none" ],
+          "description" : "Preference"
+        }, {
+          "pattern" : "^not[.]eq[.]|^not[.]gte[.]|^not[.]gt[.]|^not[.]lte[.]|^not[.]lt[.]|^not[.]neq[.]|^not[.]like[.]|^not[.]ilike[.]|^not[.]in[.]|^not[.]notin[.]|^not[.]isnot[.]|^not[.]is[.]|^not[.]@@[.]|^not[.]@>[.]|^not[.]<@[.]|^eq[.]|^gte[.]|^gt[.]|^lte[.]|^lt[.]|^neq[.]|^like[.]|^ilike[.]|^in[.]|^notin[.]|^isnot[.]|^is[.]|^@@[.]|^@>[.]|^<@[.]",
+          "format" : "integer",
+          "required" : false,
+          "in" : "query",
+          "name" : "id",
+          "type" : "string"
+        }, {
+          "pattern" : "^not[.]eq[.]|^not[.]gte[.]|^not[.]gt[.]|^not[.]lte[.]|^not[.]lt[.]|^not[.]neq[.]|^not[.]like[.]|^not[.]ilike[.]|^not[.]in[.]|^not[.]notin[.]|^not[.]isnot[.]|^not[.]is[.]|^not[.]@@[.]|^not[.]@>[.]|^not[.]<@[.]|^eq[.]|^gte[.]|^gt[.]|^lte[.]|^lt[.]|^neq[.]|^like[.]|^ilike[.]|^in[.]|^notin[.]|^isnot[.]|^is[.]|^@@[.]|^@>[.]|^<@[.]",
+          "format" : "timestamp with time zone",
+          "required" : false,
+          "in" : "query",
+          "name" : "date",
+          "type" : "string"
+        }, {
+          "pattern" : "^not[.]eq[.]|^not[.]gte[.]|^not[.]gt[.]|^not[.]lte[.]|^not[.]lt[.]|^not[.]neq[.]|^not[.]like[.]|^not[.]ilike[.]|^not[.]in[.]|^not[.]notin[.]|^not[.]isnot[.]|^not[.]is[.]|^not[.]@@[.]|^not[.]@>[.]|^not[.]<@[.]|^eq[.]|^gte[.]|^gt[.]|^lte[.]|^lt[.]|^neq[.]|^like[.]|^ilike[.]|^in[.]|^notin[.]|^isnot[.]|^is[.]|^@@[.]|^@>[.]|^<@[.]",
+          "format" : "character varying",
+          "required" : false,
+          "in" : "query",
+          "name" : "action",
+          "type" : "string"
+        }, {
+          "pattern" : "^not[.]eq[.]|^not[.]gte[.]|^not[.]gt[.]|^not[.]lte[.]|^not[.]lt[.]|^not[.]neq[.]|^not[.]like[.]|^not[.]ilike[.]|^not[.]in[.]|^not[.]notin[.]|^not[.]isnot[.]|^not[.]is[.]|^not[.]@@[.]|^not[.]@>[.]|^not[.]<@[.]|^eq[.]|^gte[.]|^gt[.]|^lte[.]|^lt[.]|^neq[.]|^like[.]|^ilike[.]|^in[.]|^notin[.]|^isnot[.]|^is[.]|^@@[.]|^@>[.]|^<@[.]",
+          "format" : "integer",
+          "required" : false,
+          "in" : "query",
+          "name" : "user_id",
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "audit_log" ],
+        "consumes" : [ "application/json", "text/csv" ],
+        "produces" : [ "application/json", "text/csv" ],
+        "parameters" : [ {
+          "required" : false,
+          "in" : "header",
+          "name" : "Prefer",
+          "type" : "string",
+          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
+          "description" : "Preference"
+        }, {
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/AuditLog"
+          },
+          "in" : "body",
+          "name" : "body",
+          "description" : "audit_log"
+        }, {
+          "pattern" : "^not[.]eq[.]|^not[.]gte[.]|^not[.]gt[.]|^not[.]lte[.]|^not[.]lt[.]|^not[.]neq[.]|^not[.]like[.]|^not[.]ilike[.]|^not[.]in[.]|^not[.]notin[.]|^not[.]isnot[.]|^not[.]is[.]|^not[.]@@[.]|^not[.]@>[.]|^not[.]<@[.]|^eq[.]|^gte[.]|^gt[.]|^lte[.]|^lt[.]|^neq[.]|^like[.]|^ilike[.]|^in[.]|^notin[.]|^isnot[.]|^is[.]|^@@[.]|^@>[.]|^<@[.]",
+          "format" : "integer",
+          "required" : false,
+          "in" : "query",
+          "name" : "id",
+          "type" : "string"
+        }, {
+          "pattern" : "^not[.]eq[.]|^not[.]gte[.]|^not[.]gt[.]|^not[.]lte[.]|^not[.]lt[.]|^not[.]neq[.]|^not[.]like[.]|^not[.]ilike[.]|^not[.]in[.]|^not[.]notin[.]|^not[.]isnot[.]|^not[.]is[.]|^not[.]@@[.]|^not[.]@>[.]|^not[.]<@[.]|^eq[.]|^gte[.]|^gt[.]|^lte[.]|^lt[.]|^neq[.]|^like[.]|^ilike[.]|^in[.]|^notin[.]|^isnot[.]|^is[.]|^@@[.]|^@>[.]|^<@[.]",
+          "format" : "timestamp with time zone",
+          "required" : false,
+          "in" : "query",
+          "name" : "date",
+          "type" : "string"
+        }, {
+          "pattern" : "^not[.]eq[.]|^not[.]gte[.]|^not[.]gt[.]|^not[.]lte[.]|^not[.]lt[.]|^not[.]neq[.]|^not[.]like[.]|^not[.]ilike[.]|^not[.]in[.]|^not[.]notin[.]|^not[.]isnot[.]|^not[.]is[.]|^not[.]@@[.]|^not[.]@>[.]|^not[.]<@[.]|^eq[.]|^gte[.]|^gt[.]|^lte[.]|^lt[.]|^neq[.]|^like[.]|^ilike[.]|^in[.]|^notin[.]|^isnot[.]|^is[.]|^@@[.]|^@>[.]|^<@[.]",
+          "format" : "character varying",
+          "required" : false,
+          "in" : "query",
+          "name" : "action",
+          "type" : "string"
+        }, {
+          "pattern" : "^not[.]eq[.]|^not[.]gte[.]|^not[.]gt[.]|^not[.]lte[.]|^not[.]lt[.]|^not[.]neq[.]|^not[.]like[.]|^not[.]ilike[.]|^not[.]in[.]|^not[.]notin[.]|^not[.]isnot[.]|^not[.]is[.]|^not[.]@@[.]|^not[.]@>[.]|^not[.]<@[.]|^eq[.]|^gte[.]|^gt[.]|^lte[.]|^lt[.]|^neq[.]|^like[.]|^ilike[.]|^in[.]|^notin[.]|^isnot[.]|^is[.]|^@@[.]|^@>[.]|^<@[.]",
+          "format" : "integer",
+          "required" : false,
+          "in" : "query",
+          "name" : "userId",
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "204" : {
+            "description" : "No Content"
+          }
+        }
+      }
+    },
     "/users" : {
       "get" : {
         "summary" : "Gets a list of all users.",
