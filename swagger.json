@@ -741,6 +741,60 @@
         }
       }
     },
+    "BillingAddress" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "address" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "city" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "stateProvince" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "zipCode" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "createdAt" : {
+          "format" : "timestamp without time zone",
+          "type" : "string"
+        }
+      }
+    },
+    "BillingPlan" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "name" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "description" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "settings" : {
+          "format" : "json",
+          "type" : "string"
+        },
+        "cost" : {
+          "format" : "numeric",
+          "type" : "number"
+        }
+      }
+    },
     "Collaborator" : {
       "type" : "object",
       "allOf" : [ {
@@ -758,6 +812,27 @@
           "readOnly" : true
         }
       }
+    },
+    "Email" : {
+      "properties" : {
+        "address" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "user_id" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "public" : {
+          "format" : "boolean",
+          "type" : "boolean"
+        },
+        "unsubscribed" : {
+          "format" : "boolean",
+          "type" : "boolean"
+        }
+      },
+      "type" : "object"
     },
     "EnvType" : {
       "type" : "object",
@@ -778,6 +853,60 @@
         }
       }
     },
+    "EnvVars" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "name" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "value" : {
+          "format" : "text",
+          "type" : "string"
+        },
+        "projectId" : {
+          "format" : "integer",
+          "type" : "integer"
+        }
+      }
+    },
+    "EnvironmentResources" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "name" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "cpu" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "memory" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "description" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "created_at" : {
+          "format" : "timestamp without time zone",
+          "type" : "string"
+        },
+        "active" : {
+          "format" : "boolean",
+          "type" : "boolean"
+        }
+      }
+    },
     "Error" : {
       "type" : "object",
       "required" : [ "code", "message" ],
@@ -790,6 +919,44 @@
           "type" : "string"
         }
       }
+    },
+    "Followers" : {
+      "type" : "object",
+      "properties" : {
+        "followedId" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "followerId" : {
+          "format" : "integer",
+          "type" : "integer"
+        }
+      }
+    },
+    "Group" : {
+      "properties" : {
+        "id" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "name" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "admin" : {
+          "format" : "boolean",
+          "type" : "boolean"
+        },
+        "readPermission" : {
+          "format" : "boolean",
+          "type" : "boolean"
+        },
+        "writePermission" : {
+          "format" : "boolean",
+          "type" : "boolean"
+        }
+      },
+      "type" : "object"
     },
     "Job" : {
       "type" : "object",
