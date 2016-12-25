@@ -169,7 +169,7 @@
             "schema" : {
               "type" : "array",
               "items" : [ {
-                "$ref" : "#/definitions/SSH-Key"
+                "$ref" : "#/definitions/SSHKey"
               } ]
             }
           }
@@ -183,7 +183,7 @@
           "schema" : {
             "type" : "array",
             "items" : [ {
-              "$ref" : "#/definitions/SSH-Key"
+              "$ref" : "#/definitions/SSHKey"
             } ]
           }
         } ],
@@ -1075,16 +1075,34 @@
         }
       }
     },
-    "ProjectTeams" : "",
-    "properties" : {
+    "ProjectTeams" : {
       "type" : "object",
-      "project_id" : {
-        "format" : "integer",
-        "type" : "integer"
-      },
-      "team_id" : {
-        "format" : "integer",
-        "type" : "integer"
+      "properties" : {
+        "projectId" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "teamId" : {
+          "format" : "integer",
+          "type" : "integer"
+        }
+      }
+    },
+    "ProjectUsers" : {
+      "type" : "object",
+      "properties" : {
+        "projectId" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "userId" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "owner" : {
+          "format" : "boolean",
+          "type" : "boolean"
+        }
       }
     },
     "ResourcesType" : {
@@ -1101,6 +1119,36 @@
         "memory" : {
           "type" : "integer",
           "example" : 512
+        }
+      }
+    },
+    "Role" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "name" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "description" : {
+          "format" : "character varying",
+          "type" : "string"
+        }
+      }
+    },
+    "RolesUsers" : {
+      "type" : "object",
+      "properties" : {
+        "userId" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "roleId" : {
+          "format" : "integer",
+          "type" : "integer"
         }
       }
     },
@@ -1134,10 +1182,242 @@
         }
       }
     },
-    "SSH-Key" : {
+    "ServerRunStatistics" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "serverId" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "start" : {
+          "format" : "timestamp without time zone",
+          "type" : "string"
+        },
+        "stop" : {
+          "format" : "timestamp without time zone",
+          "type" : "string"
+        },
+        "exitCode" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "size" : {
+          "format" : "bigint",
+          "type" : "string"
+        },
+        "stacktrace" : {
+          "format" : "text",
+          "type" : "string"
+        }
+      }
+    },
+    "ServerStatistics" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "start" : {
+          "format" : "timestamp without time zone",
+          "type" : "string"
+        },
+        "stop" : {
+          "format" : "timestamp without time zone",
+          "type" : "string"
+        },
+        "size" : {
+          "format" : "bigint",
+          "type" : "string"
+        },
+        "serverId" : {
+          "format" : "integer",
+          "type" : "integer"
+        }
+      }
+    },
+    "SSHKey" : {
       "type" : "object",
       "additionalProperties" : {
         "type" : "string"
+      }
+    },
+    "SshTunnel" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "name" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "host" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "local_port" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "endpoint" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "remote_port" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "username" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "server_id" : {
+          "format" : "integer",
+          "type" : "integer"
+        }
+      }
+    },
+    "SyncedResource" : {
+      "properties" : {
+        "id" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "projectId" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "integrationId" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "folder" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "url" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "settings" : {
+          "format" : "json",
+          "type" : "string"
+        },
+        "lastSync" : {
+          "format" : "timestamp without time zone",
+          "type" : "string"
+        },
+        "status" : {
+          "format" : "character varying",
+          "type" : "string"
+        }
+      },
+      "type" : "object"
+    },
+    "Team" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "name" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "email" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "created_at" : {
+          "format" : "timestamp without time zone",
+          "type" : "string"
+        },
+        "createdById" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "avatarUrl" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "website" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "lastUpdated" : {
+          "format" : "timestamp without time zone",
+          "type" : "string"
+        },
+        "location" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "description" : {
+          "format" : "text",
+          "type" : "string"
+        },
+        "billingEmail" : {
+          "format" : "character varying",
+          "type" : "string"
+        },
+        "billingAddressId" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "billingPlanId" : {
+          "format" : "integer",
+          "type" : "integer"
+        }
+      }
+    },
+    "TeamGroups" : {
+      "type" : "object",
+      "properties" : {
+        "teamId" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "groupId" : {
+          "format" : "integer",
+          "type" : "integer"
+        }
+      }
+    },
+    "TeamMember" : {
+      "type" : "object",
+      "properties" : {
+        "teamId" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "memberId" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "status" : {
+          "format" : "character varying",
+          "type" : "string"
+        }
+      }
+    },
+    "TeamWatch" : {
+      "type" : "object",
+      "properties" : {
+        "team_id" : {
+          "format" : "integer",
+          "type" : "integer"
+        },
+        "user_id" : {
+          "format" : "integer",
+          "type" : "integer"
+        }
       }
     },
     "User" : {
