@@ -25,7 +25,7 @@
   "produces" : [ "application/json" ],
   "consumes" : [ "application/json" ],
   "paths" : {
-    "/audit_log" : {
+    "/auditLog" : {
       "get" : {
         "tags" : [ "auditLog", "admins" ],
         "produces" : [ "application/json", "text/csv" ],
@@ -533,7 +533,7 @@
         "$ref" : "#/parameters/projectId"
       } ],
       "get" : {
-        "summary" : "Gets all the workspaces contain in a project",
+        "summary" : "Gets workspaces from a project",
         "responses" : {
           "200" : {
             "description" : "List of project workspaces",
