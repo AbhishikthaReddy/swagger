@@ -218,7 +218,7 @@
           "name" : "Range",
           "in" : "header",
           "type" : "string",
-          "description" : "Limiting and Pagination"
+          "description" : "Limiting and pagination"
         }, {
           "name" : "RangeUnit",
           "in" : "heade",
