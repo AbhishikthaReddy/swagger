@@ -287,19 +287,17 @@
       "post" : {
         "tags" : [ "billingAddress", "admins" ],
         "parameters" : [ {
-          "required" : false,
-          "in" : "header",
           "name" : "Prefer",
+          "in" : "header",
           "type" : "string",
           "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
           "description" : "Preference"
         }, {
-          "required" : false,
+          "name" : "body",
           "schema" : {
             "$ref" : "#/definitions/BillingAddress"
           },
           "in" : "body",
-          "name" : "body",
           "description" : "billing address"
         } ],
         "responses" : {
@@ -314,9 +312,8 @@
       "delete" : {
         "tags" : [ "billingAddress" ],
         "parameters" : [ {
-          "required" : false,
-          "in" : "header",
           "name" : "Prefer",
+          "in" : "header",
           "type" : "string",
           "enum" : [ "return=representation", "return=minimal", "return=none" ],
           "description" : "Preference"
@@ -324,8 +321,7 @@
           "name" : "id",
           "in" : "query",
           "type" : "string",
-          "format" : "integer",
-          "required" : false
+          "format" : "integer"
         }, {
           "name" : "address",
           "in" : "query",
@@ -368,10 +364,10 @@
           "description" : "Preference"
         }, {
           "name" : "body",
+          "in" : "body",
           "schema" : {
             "$ref" : "#/definitions/BillingAddress"
           },
-          "in" : "body",
           "description" : "Billing address"
         }, {
           "name" : "id",
