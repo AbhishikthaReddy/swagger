@@ -28,7 +28,6 @@
     "/auditLog" : {
       "get" : {
         "tags" : [ "auditLog", "admins" ],
-        "produces" : [ "application/json", "text/csv" ],
         "parameters" : [ {
           "name" : "Range",
           "in" : "header",
@@ -99,8 +98,6 @@
       },
       "post" : {
         "tags" : [ "auditLog", "admins" ],
-        "consumes" : [ "application/json", "text/csv" ],
-        "produces" : [ "application/json", "text/csv" ],
         "parameters" : [ {
           "required" : false,
           "in" : "header",
@@ -128,7 +125,6 @@
       },
       "delete" : {
         "tags" : [ "auditLog", "admins" ],
-        "produces" : [ "application/json", "text/csv" ],
         "parameters" : [ {
           "name" : "prefer",
           "in" : "header",
@@ -163,9 +159,7 @@
         }
       },
       "patch" : {
-        "tags" : [ "audit_log", "admins" ],
-        "consumes" : [ "application/json", "text/csv" ],
-        "produces" : [ "application/json", "text/csv" ],
+        "tags" : [ "auditLog", "admins" ],
         "parameters" : [ {
           "name" : "prefer",
           "in" : "header",
