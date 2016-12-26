@@ -207,7 +207,6 @@
     "/billingAddress" : {
       "get" : {
         "tags" : [ "billingAddress", "admins" ],
-        "produces" : [ "application/json", "text/csv" ],
         "parameters" : [ {
           "name" : "Range",
           "in" : "header",
@@ -286,9 +285,7 @@
         }
       },
       "post" : {
-        "tags" : [ "billing_address" ],
-        "consumes" : [ "application/json", "text/csv" ],
-        "produces" : [ "application/json", "text/csv" ],
+        "tags" : [ "billingAddress", "admins" ],
         "parameters" : [ {
           "required" : false,
           "in" : "header",
@@ -315,8 +312,7 @@
         }
       },
       "delete" : {
-        "tags" : [ "billing_address" ],
-        "produces" : [ "application/json", "text/csv" ],
+        "tags" : [ "billingAddress" ],
         "parameters" : [ {
           "required" : false,
           "in" : "header",
@@ -325,47 +321,36 @@
           "enum" : [ "return=representation", "return=minimal", "return=none" ],
           "description" : "Preference"
         }, {
-          "pattern" : "^not[.]eq[.]|^not[.]gte[.]|^not[.]gt[.]|^not[.]lte[.]|^not[.]lt[.]|^not[.]neq[.]|^not[.]like[.]|^not[.]ilike[.]|^not[.]in[.]|^not[.]notin[.]|^not[.]isnot[.]|^not[.]is[.]|^not[.]@@[.]|^not[.]@>[.]|^not[.]<@[.]|^eq[.]|^gte[.]|^gt[.]|^lte[.]|^lt[.]|^neq[.]|^like[.]|^ilike[.]|^in[.]|^notin[.]|^isnot[.]|^is[.]|^@@[.]|^@>[.]|^<@[.]",
-          "format" : "integer",
-          "required" : false,
-          "in" : "query",
           "name" : "id",
-          "type" : "string"
-        }, {
-          "pattern" : "^not[.]eq[.]|^not[.]gte[.]|^not[.]gt[.]|^not[.]lte[.]|^not[.]lt[.]|^not[.]neq[.]|^not[.]like[.]|^not[.]ilike[.]|^not[.]in[.]|^not[.]notin[.]|^not[.]isnot[.]|^not[.]is[.]|^not[.]@@[.]|^not[.]@>[.]|^not[.]<@[.]|^eq[.]|^gte[.]|^gt[.]|^lte[.]|^lt[.]|^neq[.]|^like[.]|^ilike[.]|^in[.]|^notin[.]|^isnot[.]|^is[.]|^@@[.]|^@>[.]|^<@[.]",
-          "format" : "character varying",
-          "required" : false,
           "in" : "query",
+          "type" : "string",
+          "format" : "integer",
+          "required" : false
+        }, {
           "name" : "address",
+          "in" : "query",
+          "format" : "character varying",
           "type" : "string"
         }, {
-          "pattern" : "^not[.]eq[.]|^not[.]gte[.]|^not[.]gt[.]|^not[.]lte[.]|^not[.]lt[.]|^not[.]neq[.]|^not[.]like[.]|^not[.]ilike[.]|^not[.]in[.]|^not[.]notin[.]|^not[.]isnot[.]|^not[.]is[.]|^not[.]@@[.]|^not[.]@>[.]|^not[.]<@[.]|^eq[.]|^gte[.]|^gt[.]|^lte[.]|^lt[.]|^neq[.]|^like[.]|^ilike[.]|^in[.]|^notin[.]|^isnot[.]|^is[.]|^@@[.]|^@>[.]|^<@[.]",
-          "format" : "character varying",
-          "required" : false,
-          "in" : "query",
           "name" : "city",
-          "type" : "string"
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
         }, {
-          "pattern" : "^not[.]eq[.]|^not[.]gte[.]|^not[.]gt[.]|^not[.]lte[.]|^not[.]lt[.]|^not[.]neq[.]|^not[.]like[.]|^not[.]ilike[.]|^not[.]in[.]|^not[.]notin[.]|^not[.]isnot[.]|^not[.]is[.]|^not[.]@@[.]|^not[.]@>[.]|^not[.]<@[.]|^eq[.]|^gte[.]|^gt[.]|^lte[.]|^lt[.]|^neq[.]|^like[.]|^ilike[.]|^in[.]|^notin[.]|^isnot[.]|^is[.]|^@@[.]|^@>[.]|^<@[.]",
+          "name" : "stateProvince",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "zipCode",
+          "type" : "string",
           "format" : "character varying",
-          "required" : false,
-          "in" : "query",
-          "name" : "state_province",
-          "type" : "string"
+          "in" : "query"
         }, {
-          "pattern" : "^not[.]eq[.]|^not[.]gte[.]|^not[.]gt[.]|^not[.]lte[.]|^not[.]lt[.]|^not[.]neq[.]|^not[.]like[.]|^not[.]ilike[.]|^not[.]in[.]|^not[.]notin[.]|^not[.]isnot[.]|^not[.]is[.]|^not[.]@@[.]|^not[.]@>[.]|^not[.]<@[.]|^eq[.]|^gte[.]|^gt[.]|^lte[.]|^lt[.]|^neq[.]|^like[.]|^ilike[.]|^in[.]|^notin[.]|^isnot[.]|^is[.]|^@@[.]|^@>[.]|^<@[.]",
-          "format" : "character varying",
-          "required" : false,
+          "name" : "createdAt",
           "in" : "query",
-          "name" : "zip_code",
-          "type" : "string"
-        }, {
-          "pattern" : "^not[.]eq[.]|^not[.]gte[.]|^not[.]gt[.]|^not[.]lte[.]|^not[.]lt[.]|^not[.]neq[.]|^not[.]like[.]|^not[.]ilike[.]|^not[.]in[.]|^not[.]notin[.]|^not[.]isnot[.]|^not[.]is[.]|^not[.]@@[.]|^not[.]@>[.]|^not[.]<@[.]|^eq[.]|^gte[.]|^gt[.]|^lte[.]|^lt[.]|^neq[.]|^like[.]|^ilike[.]|^in[.]|^notin[.]|^isnot[.]|^is[.]|^@@[.]|^@>[.]|^<@[.]",
-          "format" : "timestamp without time zone",
-          "required" : false,
-          "in" : "query",
-          "name" : "created_at",
-          "type" : "string"
+          "type" : "string",
+          "format" : "timestamp without time zone"
         } ],
         "responses" : {
           "200" : {
@@ -374,66 +359,49 @@
         }
       },
       "patch" : {
-        "tags" : [ "billing_address" ],
-        "consumes" : [ "application/json", "text/csv" ],
-        "produces" : [ "application/json", "text/csv" ],
+        "tags" : [ "billingAddress" ],
         "parameters" : [ {
-          "required" : false,
-          "in" : "header",
           "name" : "Prefer",
+          "in" : "header",
           "type" : "string",
           "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
           "description" : "Preference"
         }, {
-          "required" : false,
+          "name" : "body",
           "schema" : {
             "$ref" : "#/definitions/BillingAddress"
           },
           "in" : "body",
-          "name" : "body",
-          "description" : "billing_address"
+          "description" : "Billing address"
         }, {
-          "pattern" : "^not[.]eq[.]|^not[.]gte[.]|^not[.]gt[.]|^not[.]lte[.]|^not[.]lt[.]|^not[.]neq[.]|^not[.]like[.]|^not[.]ilike[.]|^not[.]in[.]|^not[.]notin[.]|^not[.]isnot[.]|^not[.]is[.]|^not[.]@@[.]|^not[.]@>[.]|^not[.]<@[.]|^eq[.]|^gte[.]|^gt[.]|^lte[.]|^lt[.]|^neq[.]|^like[.]|^ilike[.]|^in[.]|^notin[.]|^isnot[.]|^is[.]|^@@[.]|^@>[.]|^<@[.]",
-          "format" : "integer",
-          "required" : false,
-          "in" : "query",
           "name" : "id",
-          "type" : "string"
-        }, {
-          "pattern" : "^not[.]eq[.]|^not[.]gte[.]|^not[.]gt[.]|^not[.]lte[.]|^not[.]lt[.]|^not[.]neq[.]|^not[.]like[.]|^not[.]ilike[.]|^not[.]in[.]|^not[.]notin[.]|^not[.]isnot[.]|^not[.]is[.]|^not[.]@@[.]|^not[.]@>[.]|^not[.]<@[.]|^eq[.]|^gte[.]|^gt[.]|^lte[.]|^lt[.]|^neq[.]|^like[.]|^ilike[.]|^in[.]|^notin[.]|^isnot[.]|^is[.]|^@@[.]|^@>[.]|^<@[.]",
-          "format" : "character varying",
-          "required" : false,
           "in" : "query",
+          "format" : "integer"
+        }, {
           "name" : "address",
-          "type" : "string"
-        }, {
-          "pattern" : "^not[.]eq[.]|^not[.]gte[.]|^not[.]gt[.]|^not[.]lte[.]|^not[.]lt[.]|^not[.]neq[.]|^not[.]like[.]|^not[.]ilike[.]|^not[.]in[.]|^not[.]notin[.]|^not[.]isnot[.]|^not[.]is[.]|^not[.]@@[.]|^not[.]@>[.]|^not[.]<@[.]|^eq[.]|^gte[.]|^gt[.]|^lte[.]|^lt[.]|^neq[.]|^like[.]|^ilike[.]|^in[.]|^notin[.]|^isnot[.]|^is[.]|^@@[.]|^@>[.]|^<@[.]",
-          "format" : "character varying",
-          "required" : false,
           "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
           "name" : "city",
-          "type" : "string"
-        }, {
-          "pattern" : "^not[.]eq[.]|^not[.]gte[.]|^not[.]gt[.]|^not[.]lte[.]|^not[.]lt[.]|^not[.]neq[.]|^not[.]like[.]|^not[.]ilike[.]|^not[.]in[.]|^not[.]notin[.]|^not[.]isnot[.]|^not[.]is[.]|^not[.]@@[.]|^not[.]@>[.]|^not[.]<@[.]|^eq[.]|^gte[.]|^gt[.]|^lte[.]|^lt[.]|^neq[.]|^like[.]|^ilike[.]|^in[.]|^notin[.]|^isnot[.]|^is[.]|^@@[.]|^@>[.]|^<@[.]",
-          "format" : "character varying",
-          "required" : false,
           "in" : "query",
-          "name" : "state_province",
-          "type" : "string"
+          "type" : "string",
+          "format" : "character varying"
         }, {
-          "pattern" : "^not[.]eq[.]|^not[.]gte[.]|^not[.]gt[.]|^not[.]lte[.]|^not[.]lt[.]|^not[.]neq[.]|^not[.]like[.]|^not[.]ilike[.]|^not[.]in[.]|^not[.]notin[.]|^not[.]isnot[.]|^not[.]is[.]|^not[.]@@[.]|^not[.]@>[.]|^not[.]<@[.]|^eq[.]|^gte[.]|^gt[.]|^lte[.]|^lt[.]|^neq[.]|^like[.]|^ilike[.]|^in[.]|^notin[.]|^isnot[.]|^is[.]|^@@[.]|^@>[.]|^<@[.]",
-          "format" : "character varying",
-          "required" : false,
+          "name" : "stateProvince",
           "in" : "query",
-          "name" : "zip_code",
-          "type" : "string"
+          "type" : "string",
+          "format" : "character varying"
         }, {
-          "pattern" : "^not[.]eq[.]|^not[.]gte[.]|^not[.]gt[.]|^not[.]lte[.]|^not[.]lt[.]|^not[.]neq[.]|^not[.]like[.]|^not[.]ilike[.]|^not[.]in[.]|^not[.]notin[.]|^not[.]isnot[.]|^not[.]is[.]|^not[.]@@[.]|^not[.]@>[.]|^not[.]<@[.]|^eq[.]|^gte[.]|^gt[.]|^lte[.]|^lt[.]|^neq[.]|^like[.]|^ilike[.]|^in[.]|^notin[.]|^isnot[.]|^is[.]|^@@[.]|^@>[.]|^<@[.]",
-          "format" : "timestamp without time zone",
-          "required" : false,
+          "name" : "zipCode",
           "in" : "query",
-          "name" : "created_at",
-          "type" : "string"
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "createdAt",
+          "in" : "query",
+          "type" : "string",
+          "format" : "timestamp without time zone"
         } ],
         "responses" : {
           "200" : {
