@@ -203,63 +203,7 @@
       "get" : {
         "tags" : [ "admins" ],
         "parameters" : [ {
-          "name" : "Range",
-          "in" : "header",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "RangeUnit",
-          "default" : "items",
-          "in" : "header",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "offset",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "limit",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "select",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Filtering Columns"
-        }, {
-          "name" : "order",
-          "in" : "query",
-          "type" : "string",
-          "enum" : [ "id.asc", "id.desc", "id", "date.asc", "date.desc", "date", "action.asc", "action.desc", "action", "user_id.asc", "user_id.desc", "user_id" ],
-          "description" : "Ordering"
-        }, {
-          "name" : "prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "plurality=singular", "count=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "id",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "date",
-          "in" : "query",
-          "type" : "string",
-          "format" : "timestamp with time zone"
-        }, {
-          "name" : "action",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "userId",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
+          "$ref" : "#/parameters/Paging"
         } ],
         "responses" : {
           "200" : {
@@ -1648,19 +1592,6 @@
         "isPrivate" : {
           "type" : "boolean",
           "default" : false
-        }
-      }
-    },
-    "ProjectServer" : {
-      "type" : "object",
-      "properties" : {
-        "project_id" : {
-          "format" : "integer",
-          "type" : "integer"
-        },
-        "server_id" : {
-          "format" : "integer",
-          "type" : "integer"
         }
       }
     },
