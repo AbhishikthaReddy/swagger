@@ -20,14 +20,188 @@
     "description" : "Operations available to regular developers"
   } ],
   "host" : "virtserver.swaggerhub.com",
-  "basePath" : "/3Blades/core-backend/v1",
+  "basePath" : "/3Blades/app-backend/v1",
   "schemes" : [ "https" ],
   "produces" : [ "application/json" ],
   "consumes" : [ "application/json" ],
   "paths" : {
-    "/auditLog" : {
+    "/admin/users" : {
       "get" : {
-        "tags" : [ "auditLog", "admins" ],
+        "summary" : "Gets a list of all users.",
+        "parameters" : [ {
+          "$ref" : "#/parameters/Paging"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "A list of users",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/User"
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Adds a new user",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "user",
+          "description" : "User definition",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/User"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "User created",
+            "headers" : {
+              "Location" : {
+                "type" : "string",
+                "description" : "The location to get the new user"
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/responses/BadRequestResponse"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/admin/environmentResources" : {
+      "get" : {
+        "parameters" : [ {
+          "$ref" : "#/parameters/Paging"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/EnvironmentResources"
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "parameters" : [ {
+          "name" : "env-resources",
+          "in" : "body",
+          "description" : "Resources type to create",
+          "schema" : {
+            "$ref" : "#/definitions/EnvironmentResources"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Created",
+            "headers" : {
+              "Location" : {
+                "type" : "string",
+                "description" : "Location where the new item can be obtained"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/environmentResources/{environmentResourcesId}" : {
+      "parameters" : [ {
+        "in" : "path",
+        "name" : "environmentResourcesId",
+        "required" : true,
+        "type" : "string"
+      } ],
+      "delete" : {
+        "summary" : "Deletes an unused resource type",
+        "responses" : {
+          "200" : {
+            "description" : "Deleted"
+          },
+          "404" : {
+            "$ref" : "#/responses/GeneralDoesNotExistResponse"
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Updates a resource type",
+        "responses" : {
+          "200" : {
+            "description" : "Updated"
+          }
+        }
+      }
+    },
+    "/admin/environmentTypes" : {
+      "get" : {
+        "parameters" : [ {
+          "$ref" : "#/parameters/Paging"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/EnvironmentType"
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "parameters" : [ {
+          "name" : "env-type",
+          "in" : "body",
+          "schema" : {
+            "$ref" : "#/definitions/EnvironmentType"
+          },
+          "description" : "Environment type to create"
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Created"
+          }
+        }
+      }
+    },
+    "/admin/environmentTypes/{environmentTypeId}" : {
+      "parameters" : [ {
+        "in" : "path",
+        "name" : "environmentTypeId",
+        "required" : true,
+        "type" : "string"
+      } ],
+      "delete" : {
+        "summary" : "Deletes an unused env type",
+        "responses" : {
+          "200" : {
+            "description" : "Deleted"
+          },
+          "404" : {
+            "$ref" : "#/responses/GeneralDoesNotExistResponse"
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Updates an env type",
+        "responses" : {
+          "200" : {
+            "description" : "Updated"
+          }
+        }
+      }
+    },
+    "/auditLogs" : {
+      "get" : {
+        "tags" : [ "admins" ],
         "parameters" : [ {
           "name" : "Range",
           "in" : "header",
@@ -204,1479 +378,6 @@
         }
       }
     },
-    "/billingAddress" : {
-      "get" : {
-        "tags" : [ "billingAddress", "admins" ],
-        "parameters" : [ {
-          "name" : "Range",
-          "in" : "header",
-          "type" : "string",
-          "description" : "Limiting and pagination"
-        }, {
-          "name" : "RangeUnit",
-          "in" : "header",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "offset",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "limit",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "select",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Filtering Columns"
-        }, {
-          "name" : "order",
-          "in" : "query",
-          "type" : "string",
-          "enum" : [ "id.asc", "id.desc", "id", "address.asc", "address.desc", "address", "city.asc", "city.desc", "city", "state_province.asc", "state_province.desc", "state_province", "zip_code.asc", "zip_code.desc", "zip_code", "created_at.asc", "created_at.desc", "created_at" ],
-          "description" : "Ordering"
-        }, {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "plurality=singular", "count=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "id",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "address",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "city",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "stateProvince",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "zipCode",
-          "in" : "query",
-          "format" : "character varying",
-          "type" : "string"
-        }, {
-          "name" : "createdAt",
-          "in" : "query",
-          "type" : "string",
-          "format" : "timestamp without time zone"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "206" : {
-            "description" : "Partial Content"
-          }
-        }
-      },
-      "post" : {
-        "tags" : [ "billingAddress", "admins" ],
-        "parameters" : [ {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "body",
-          "schema" : {
-            "$ref" : "#/definitions/BillingAddress"
-          },
-          "in" : "body",
-          "description" : "billing address"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "201" : {
-            "description" : "Created"
-          }
-        }
-      },
-      "delete" : {
-        "tags" : [ "billingAddress", "admins" ],
-        "parameters" : [ {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "id",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "address",
-          "in" : "query",
-          "format" : "character varying",
-          "type" : "string"
-        }, {
-          "name" : "city",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "stateProvince",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "zipCode",
-          "type" : "string",
-          "format" : "character varying",
-          "in" : "query"
-        }, {
-          "name" : "createdAt",
-          "in" : "query",
-          "type" : "string",
-          "format" : "timestamp without time zone"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          }
-        }
-      },
-      "patch" : {
-        "tags" : [ "billingAddress", "admins" ],
-        "parameters" : [ {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "body",
-          "in" : "body",
-          "description" : "billingAddress",
-          "schema" : {
-            "$ref" : "#/definitions/BillingAddress"
-          }
-        }, {
-          "name" : "id",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "address",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "city",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "stateProvince",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "zipCode",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "createdAt",
-          "in" : "query",
-          "type" : "string",
-          "format" : "timestamp without time zone"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "204" : {
-            "description" : "No Content"
-          }
-        }
-      }
-    },
-    "/billingPlan" : {
-      "get" : {
-        "tags" : [ "billing_plan", "admins" ],
-        "produces" : [ "application/json", "text/csv" ],
-        "parameters" : [ {
-          "name" : "Range",
-          "in" : "header",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "RangeUnit",
-          "in" : "header",
-          "default" : "items",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "offset",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "limit",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "select",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Filtering Columns"
-        }, {
-          "name" : "order",
-          "in" : "query",
-          "type" : "string",
-          "enum" : [ "id.asc", "id.desc", "id", "name.asc", "name.desc", "name", "description.asc", "description.desc", "description", "settings.asc", "settings.desc", "settings", "cost.asc", "cost.desc", "cost" ],
-          "description" : "Ordering"
-        }, {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "plurality=singular", "count=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "id",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "name",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "description",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "settings",
-          "in" : "query",
-          "type" : "string",
-          "format" : "json"
-        }, {
-          "name" : "cost",
-          "in" : "query",
-          "type" : "string",
-          "format" : "numeric"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "206" : {
-            "description" : "Partial Content"
-          }
-        }
-      },
-      "post" : {
-        "tags" : [ "billingPlan", "admins" ],
-        "consumes" : [ "application/json", "text/csv" ],
-        "produces" : [ "application/json", "text/csv" ],
-        "parameters" : [ {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "body",
-          "in" : "body",
-          "schema" : {
-            "$ref" : "#/definitions/BillingPlan"
-          },
-          "description" : "billing plan"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "201" : {
-            "description" : "Created"
-          }
-        }
-      },
-      "delete" : {
-        "tags" : [ "billing_plan", "admins" ],
-        "produces" : [ "application/json", "text/csv" ],
-        "parameters" : [ {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "id",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "name",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "description",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "settings",
-          "in" : "query",
-          "type" : "string",
-          "format" : "json"
-        }, {
-          "name" : "cost",
-          "in" : "query",
-          "type" : "string",
-          "format" : "numeric"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          }
-        }
-      },
-      "patch" : {
-        "tags" : [ "billingPlan", "admins" ],
-        "consumes" : [ "application/json", "text/csv" ],
-        "produces" : [ "application/json", "text/csv" ],
-        "parameters" : [ {
-          "required" : false,
-          "in" : "header",
-          "name" : "Prefer",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "required" : false,
-          "schema" : {
-            "$ref" : "#/definitions/BillingPlan"
-          },
-          "in" : "body",
-          "name" : "body",
-          "description" : "billingPlan"
-        }, {
-          "name" : "id",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer",
-          "required" : false
-        }, {
-          "name" : "name",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "description",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "settings",
-          "in" : "query",
-          "type" : "string",
-          "format" : "json"
-        }, {
-          "name" : "cost",
-          "in" : "query",
-          "type" : "string",
-          "format" : "numeric"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "204" : {
-            "description" : "No Content"
-          }
-        }
-      }
-    },
-    "/users" : {
-      "get" : {
-        "summary" : "Gets a list of all users.",
-        "responses" : {
-          "200" : {
-            "description" : "A list of users",
-            "schema" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/definitions/User"
-              }
-            }
-          }
-        }
-      },
-      "post" : {
-        "summary" : "Adds a new user",
-        "parameters" : [ {
-          "in" : "body",
-          "name" : "user",
-          "description" : "User definition",
-          "required" : true,
-          "schema" : {
-            "$ref" : "#/definitions/User"
-          }
-        } ],
-        "responses" : {
-          "201" : {
-            "description" : "User created",
-            "headers" : {
-              "Location" : {
-                "type" : "string",
-                "description" : "The location to get the new user"
-              }
-            }
-          },
-          "400" : {
-            "$ref" : "#/responses/BadRequestResponse"
-          },
-          "default" : {
-            "$ref" : "#/responses/Standard500ErrorResponse"
-          }
-        }
-      }
-    },
-    "/email" : {
-      "get" : {
-        "tags" : [ "email", "admins" ],
-        "parameters" : [ {
-          "name" : "Range",
-          "in" : "header",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "RangeUnit",
-          "default" : "items",
-          "in" : "header",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "offset",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "limit",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "select",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Filtering Columns"
-        }, {
-          "name" : "order",
-          "in" : "query",
-          "type" : "string",
-          "enum" : [ "address.asc", "address.desc", "address", "user_id.asc", "user_id.desc", "user_id", "public.asc", "public.desc", "public", "unsubscribed.asc", "unsubscribed.desc", "unsubscribed" ],
-          "description" : "Ordering"
-        }, {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "plurality=singular", "count=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "address",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "userId",
-          "in" : "query",
-          "format" : "integer",
-          "type" : "string"
-        }, {
-          "name" : "public",
-          "in" : "query",
-          "type" : "string",
-          "format" : "boolean"
-        }, {
-          "name" : "unsubscribed",
-          "in" : "query",
-          "type" : "string",
-          "format" : "boolean"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "206" : {
-            "description" : "Partial Content"
-          }
-        }
-      },
-      "post" : {
-        "tags" : [ "email", "admins" ],
-        "parameters" : [ {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "body",
-          "in" : "body",
-          "schema" : {
-            "$ref" : "#/definitions/Email"
-          },
-          "description" : "Email address"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "201" : {
-            "description" : "Created"
-          }
-        }
-      },
-      "delete" : {
-        "tags" : [ "email", "admins" ],
-        "parameters" : [ {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "address",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "userId",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "public",
-          "in" : "query",
-          "type" : "string",
-          "format" : "boolean"
-        }, {
-          "name" : "unsubscribed",
-          "in" : "query",
-          "type" : "string",
-          "format" : "boolean"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          }
-        }
-      },
-      "patch" : {
-        "tags" : [ "email", "admins" ],
-        "parameters" : [ {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "body",
-          "schema" : {
-            "$ref" : "#/definitions/Email"
-          },
-          "in" : "body",
-          "description" : "email"
-        }, {
-          "name" : "address",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "userId",
-          "format" : "integer",
-          "in" : "query",
-          "type" : "string"
-        }, {
-          "name" : "public",
-          "in" : "query",
-          "type" : "string",
-          "format" : "boolean"
-        }, {
-          "name" : "unsubscribed",
-          "in" : "query",
-          "type" : "string",
-          "format" : "boolean",
-          "required" : false
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "204" : {
-            "description" : "No Content"
-          }
-        }
-      }
-    },
-    "/envVars" : {
-      "get" : {
-        "tags" : [ "envVars", "admins" ],
-        "parameters" : [ {
-          "name" : "Range",
-          "in" : "header",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "RangeUnit",
-          "default" : "items",
-          "in" : "header",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "offset",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "limit",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "select",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Filtering Columns"
-        }, {
-          "name" : "order",
-          "in" : "query",
-          "type" : "string",
-          "enum" : [ "id.asc", "id.desc", "id", "name.asc", "name.desc", "name", "value.asc", "value.desc", "value", "project_id.asc", "project_id.desc", "project_id" ],
-          "description" : "Ordering"
-        }, {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "plurality=singular", "count=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "id",
-          "type" : "string",
-          "format" : "integer",
-          "in" : "query"
-        }, {
-          "name" : "name",
-          "format" : "character varying",
-          "in" : "query",
-          "type" : "string"
-        }, {
-          "name" : "value",
-          "in" : "query",
-          "type" : "string",
-          "format" : "text"
-        }, {
-          "name" : "projectId",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "206" : {
-            "description" : "Partial Content"
-          }
-        }
-      },
-      "post" : {
-        "tags" : [ "envVars", "admins" ],
-        "parameters" : [ {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "body",
-          "in" : "body",
-          "schema" : {
-            "$ref" : "#/definitions/EnvVars"
-          },
-          "description" : "Environment variables"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "201" : {
-            "description" : "Created"
-          }
-        }
-      },
-      "delete" : {
-        "tags" : [ "envVars", "admins" ],
-        "parameters" : [ {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "id",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "name",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "value",
-          "in" : "query",
-          "type" : "string",
-          "format" : "text"
-        }, {
-          "name" : "projectId",
-          "in" : "query",
-          "format" : "integer",
-          "type" : "string"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          }
-        }
-      },
-      "patch" : {
-        "tags" : [ "envVars" ],
-        "parameters" : [ {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "body",
-          "schema" : {
-            "$ref" : "#/definitions/EnvVars"
-          },
-          "in" : "body",
-          "description" : "env_vars"
-        }, {
-          "name" : "id",
-          "type" : "string",
-          "format" : "integer",
-          "in" : "query"
-        }, {
-          "name" : "name",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "value",
-          "in" : "query",
-          "type" : "string",
-          "format" : "text"
-        }, {
-          "name" : "projectId",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "204" : {
-            "description" : "No Content"
-          }
-        }
-      }
-    },
-    "/environmentResources" : {
-      "get" : {
-        "tags" : [ "environmentResources", "admins" ],
-        "parameters" : [ {
-          "name" : "Range",
-          "in" : "header",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "RangeUnit",
-          "in" : "header",
-          "default" : "items",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "offset",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "limit",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "select",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Filtering Columns"
-        }, {
-          "name" : "order",
-          "in" : "query",
-          "type" : "string",
-          "enum" : [ "id.asc", "id.desc", "id", "name.asc", "name.desc", "name", "cpu.asc", "cpu.desc", "cpu", "memory.asc", "memory.desc", "memory", "description.asc", "description.desc", "description", "created_at.asc", "created_at.desc", "created_at", "active.asc", "active.desc", "active" ],
-          "description" : "Ordering"
-        }, {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "plurality=singular", "count=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "id",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "name",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "cpu",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "memory",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "description",
-          "type" : "string",
-          "format" : "character varying",
-          "in" : "query"
-        }, {
-          "name" : "createdAt",
-          "in" : "query",
-          "type" : "string",
-          "format" : "timestamp without time zone"
-        }, {
-          "name" : "active",
-          "in" : "query",
-          "type" : "string",
-          "format" : "boolean"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "206" : {
-            "description" : "Partial Content"
-          }
-        }
-      },
-      "post" : {
-        "tags" : [ "environmentResources", "admins" ],
-        "parameters" : [ {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "body",
-          "in" : "body",
-          "schema" : {
-            "$ref" : "#/definitions/EnvironmentResources"
-          },
-          "description" : "environment_resources"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "201" : {
-            "description" : "Created"
-          }
-        }
-      },
-      "delete" : {
-        "tags" : [ "environmentResources", "admins" ],
-        "parameters" : [ {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "id",
-          "type" : "string",
-          "format" : "integer",
-          "in" : "query"
-        }, {
-          "name" : "name",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "cpu",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "memory",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "description",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "createdAt",
-          "in" : "query",
-          "type" : "string",
-          "format" : "timestamp without time zone"
-        }, {
-          "name" : "active",
-          "in" : "query",
-          "format" : "boolean",
-          "type" : "string"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          }
-        }
-      },
-      "patch" : {
-        "tags" : [ "environmentResources", "admins" ],
-        "parameters" : [ {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "body",
-          "in" : "body",
-          "schema" : {
-            "$ref" : "#/definitions/EnvironmentResources"
-          },
-          "description" : "environment_resources"
-        }, {
-          "name" : "id",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "name",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "cpu",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "memory",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "description",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "createdAt",
-          "in" : "query",
-          "type" : "string",
-          "format" : "timestamp without time zone"
-        }, {
-          "name" : "active",
-          "in" : "query",
-          "type" : "string",
-          "format" : "boolean"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "204" : {
-            "description" : "No Content"
-          }
-        }
-      }
-    },
-    "/environmentType" : {
-      "get" : {
-        "tags" : [ "environmentType", "admins" ],
-        "parameters" : [ {
-          "name" : "Range",
-          "in" : "header",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "RangeUnit",
-          "in" : "header",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "offset",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "limit",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "select",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Filtering Columns"
-        }, {
-          "name" : "order",
-          "in" : "query",
-          "type" : "string",
-          "enum" : [ "id.asc", "id.desc", "id", "name.asc", "name.desc", "name", "image_name.asc", "image_name.desc", "image_name", "created_at.asc", "created_at.desc", "created_at", "cmd.asc", "cmd.desc", "cmd", "description.asc", "description.desc", "description", "work_dir.asc", "work_dir.desc", "work_dir", "env_vars.asc", "env_vars.desc", "env_vars", "container_path.asc", "container_path.desc", "container_path", "container_port.asc", "container_port.desc", "container_port", "active.asc", "active.desc", "active", "urldoc.asc", "urldoc.desc", "urldoc" ],
-          "description" : "Ordering"
-        }, {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "plurality=singular", "count=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "id",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "name",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "imageName",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "createdAt",
-          "in" : "query",
-          "type" : "string",
-          "format" : "timestamp without time zone"
-        }, {
-          "name" : "cmd",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "description",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "workDir",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "envVars",
-          "in" : "query",
-          "type" : "string",
-          "format" : "hstore"
-        }, {
-          "name" : "containerPath",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "containerPort",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "active",
-          "in" : "query",
-          "type" : "string",
-          "format" : "boolean"
-        }, {
-          "name" : "urldoc",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "206" : {
-            "description" : "Partial Content"
-          }
-        }
-      },
-      "post" : {
-        "tags" : [ "environmentType", "admins" ],
-        "parameters" : [ {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "body",
-          "in" : "body",
-          "schema" : {
-            "$ref" : "#/definitions/EnvironmentType"
-          },
-          "description" : "environment_type"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "201" : {
-            "description" : "Created"
-          }
-        }
-      },
-      "delete" : {
-        "tags" : [ "environmentType", "admins" ],
-        "parameters" : [ {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "id",
-          "in" : "query",
-          "format" : "integer",
-          "type" : "string"
-        }, {
-          "name" : "name",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "imageName",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "createdAt",
-          "in" : "query",
-          "type" : "string",
-          "format" : "timestamp without time zone"
-        }, {
-          "name" : "cmd",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "description",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "workDir",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "envVars",
-          "in" : "query",
-          "type" : "string",
-          "format" : "hstore",
-          "required" : false
-        }, {
-          "name" : "containerPath",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "containerPort",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "active",
-          "in" : "query",
-          "type" : "string",
-          "format" : "boolean"
-        }, {
-          "name" : "urldoc",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          }
-        }
-      },
-      "patch" : {
-        "tags" : [ "environmentType", "admins" ],
-        "parameters" : [ {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "body",
-          "in" : "body",
-          "schema" : {
-            "$ref" : "#/definitions/EnvironmentType"
-          },
-          "description" : "environment_type"
-        }, {
-          "name" : "id",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "name",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "imageName",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "createdAt",
-          "in" : "query",
-          "type" : "string",
-          "format" : "timestamp without time zone"
-        }, {
-          "name" : "cmd",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "description",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "workDir",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "envVars",
-          "in" : "query",
-          "type" : "string",
-          "format" : "hstore"
-        }, {
-          "name" : "containerPath",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "containerPort",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "active",
-          "in" : "query",
-          "type" : "string",
-          "format" : "boolean"
-        }, {
-          "name" : "urldoc",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "204" : {
-            "description" : "No Content"
-          }
-        }
-      }
-    },
-    "/followers" : {
-      "get" : {
-        "tags" : [ "followers", "admins" ],
-        "parameters" : [ {
-          "name" : "Range",
-          "in" : "header",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "Range-Unit",
-          "default" : "items",
-          "in" : "header",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "offset",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "limit",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "select",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Filtering Columns"
-        }, {
-          "name" : "order",
-          "in" : "query",
-          "type" : "string",
-          "enum" : [ "followed_id.asc", "followed_id.desc", "followed_id", "follower_id.asc", "follower_id.desc", "follower_id" ],
-          "description" : "Ordering"
-        }, {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "plurality=singular", "count=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "followedId",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "followerId",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "206" : {
-            "description" : "Partial Content"
-          }
-        }
-      },
-      "post" : {
-        "tags" : [ "followers", "admins" ],
-        "parameters" : [ {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "body",
-          "in" : "body",
-          "schema" : {
-            "$ref" : "#/definitions/Followers"
-          },
-          "description" : "followers"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "201" : {
-            "description" : "Created"
-          }
-        }
-      },
-      "delete" : {
-        "tags" : [ "followers", "admins" ],
-        "parameters" : [ {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "followedId",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "followerId",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          }
-        }
-      },
-      "patch" : {
-        "tags" : [ "followers", "admins" ],
-        "parameters" : [ {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "body",
-          "in" : "body",
-          "schema" : {
-            "$ref" : "#/definitions/Followers"
-          },
-          "description" : "followers"
-        }, {
-          "name" : "followedId",
-          "format" : "integer",
-          "in" : "query",
-          "type" : "string"
-        }, {
-          "name" : "followerId",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "204" : {
-            "description" : "No Content"
-          }
-        }
-      }
-    },
     "/projects" : {
       "get" : {
         "tags" : [ "public operations" ],
@@ -1684,26 +385,13 @@
         "operationId" : "searchProject",
         "description" : "By passing in the appropriate options, you can search for\navailable project in the system\n",
         "parameters" : [ {
-          "in" : "query",
           "name" : "searchString",
+          "in" : "query",
           "description" : "pass an optional search string for looking up project",
           "required" : false,
           "type" : "string"
         }, {
-          "in" : "query",
-          "name" : "skip",
-          "description" : "number of records to skip for pagination",
-          "type" : "integer",
-          "format" : "int32",
-          "minimum" : 0
-        }, {
-          "in" : "query",
-          "name" : "limit",
-          "description" : "maximum number of records to return",
-          "type" : "integer",
-          "format" : "int32",
-          "minimum" : 0,
-          "maximum" : 50
+          "$ref" : "#/parameters/Paging"
         } ],
         "responses" : {
           "200" : {
@@ -2762,60 +1450,6 @@
         }
       }
     },
-    "BillingAddress" : {
-      "type" : "object",
-      "properties" : {
-        "id" : {
-          "format" : "integer",
-          "type" : "integer"
-        },
-        "address" : {
-          "format" : "character varying",
-          "type" : "string"
-        },
-        "city" : {
-          "format" : "character varying",
-          "type" : "string"
-        },
-        "stateProvince" : {
-          "format" : "character varying",
-          "type" : "string"
-        },
-        "zipCode" : {
-          "format" : "character varying",
-          "type" : "string"
-        },
-        "createdAt" : {
-          "format" : "timestamp without time zone",
-          "type" : "string"
-        }
-      }
-    },
-    "BillingPlan" : {
-      "type" : "object",
-      "properties" : {
-        "id" : {
-          "format" : "integer",
-          "type" : "integer"
-        },
-        "name" : {
-          "format" : "character varying",
-          "type" : "string"
-        },
-        "description" : {
-          "format" : "character varying",
-          "type" : "string"
-        },
-        "settings" : {
-          "format" : "json",
-          "type" : "string"
-        },
-        "cost" : {
-          "format" : "numeric",
-          "type" : "number"
-        }
-      }
-    },
     "Collaborator" : {
       "type" : "object",
       "allOf" : [ {
@@ -2855,12 +1489,13 @@
       },
       "type" : "object"
     },
-    "EnvType" : {
+    "EnvironmentType" : {
       "type" : "object",
       "required" : [ "name", "imageName", "Cmd" ],
       "properties" : {
-        "envTypeId" : {
-          "type" : "string"
+        "id" : {
+          "type" : "string",
+          "readOnly" : true
         },
         "name" : {
           "type" : "string"
@@ -2874,113 +1509,6 @@
         }
       }
     },
-    "EnvVars" : {
-      "type" : "object",
-      "properties" : {
-        "id" : {
-          "format" : "integer",
-          "type" : "integer"
-        },
-        "name" : {
-          "format" : "character varying",
-          "type" : "string"
-        },
-        "value" : {
-          "format" : "text",
-          "type" : "string"
-        },
-        "projectId" : {
-          "format" : "integer",
-          "type" : "integer"
-        }
-      }
-    },
-    "EnvironmentResources" : {
-      "type" : "object",
-      "properties" : {
-        "id" : {
-          "format" : "integer",
-          "type" : "integer"
-        },
-        "name" : {
-          "format" : "character varying",
-          "type" : "string"
-        },
-        "cpu" : {
-          "format" : "integer",
-          "type" : "integer"
-        },
-        "memory" : {
-          "format" : "integer",
-          "type" : "integer"
-        },
-        "description" : {
-          "format" : "character varying",
-          "type" : "string"
-        },
-        "created_at" : {
-          "format" : "timestamp without time zone",
-          "type" : "string"
-        },
-        "active" : {
-          "format" : "boolean",
-          "type" : "boolean"
-        }
-      }
-    },
-    "EnvironmentType" : {
-      "type" : "object",
-      "properties" : {
-        "id" : {
-          "type" : "integer",
-          "format" : "integer"
-        },
-        "name" : {
-          "type" : "string",
-          "format" : "character varying"
-        },
-        "image_name" : {
-          "type" : "string",
-          "format" : "character varying"
-        },
-        "created_at" : {
-          "type" : "string",
-          "format" : "timestamp without time zone"
-        },
-        "cmd" : {
-          "type" : "string",
-          "format" : "character varying"
-        },
-        "description" : {
-          "type" : "string",
-          "format" : "character varying"
-        },
-        "work_dir" : {
-          "type" : "string",
-          "format" : "character varying"
-        },
-        "env_vars" : {
-          "type" : "string",
-          "format" : "hstore"
-        },
-        "container_path" : {
-          "type" : "string",
-          "format" : "character varying"
-        },
-        "container_port" : {
-          "type" : "integer",
-          "format" : "integer"
-        },
-        "active" : {
-          "type" : "boolean",
-          "format" : "boolean"
-        },
-        "urldoc" : {
-          "type" : "string",
-          "format" : "character varying"
-        }
-      }
-    },
     "Error" : {
       "type" : "object",
       "required" : [ "code", "message" ],
@@ -2991,19 +1519,6 @@
         },
         "message" : {
           "type" : "string"
-        }
-      }
-    },
-    "Followers" : {
-      "type" : "object",
-      "properties" : {
-        "followedId" : {
-          "format" : "integer",
-          "type" : "integer"
-        },
-        "followerId" : {
-          "format" : "integer",
-          "type" : "integer"
         }
       }
     },
@@ -3149,40 +1664,14 @@
         }
       }
     },
-    "ProjectTeams" : {
-      "type" : "object",
-      "properties" : {
-        "projectId" : {
-          "format" : "integer",
-          "type" : "integer"
-        },
-        "teamId" : {
-          "format" : "integer",
-          "type" : "integer"
-        }
-      }
-    },
-    "ProjectUsers" : {
-      "type" : "object",
-      "properties" : {
-        "projectId" : {
-          "format" : "integer",
-          "type" : "integer"
-        },
-        "userId" : {
-          "format" : "integer",
-          "type" : "integer"
-        },
-        "owner" : {
-          "format" : "boolean",
-          "type" : "boolean"
-        }
-      }
-    },
-    "ResourcesType" : {
+    "EnvironmentResources" : {
       "type" : "object",
       "required" : [ "name", "cpu", "memory" ],
       "properties" : {
+        "id" : {
+          "type" : "string",
+          "readOnly" : true
+        },
         "name" : {
           "type" : "string"
         },
@@ -3193,6 +1682,10 @@
         "memory" : {
           "type" : "integer",
           "example" : 512
+        },
+        "active" : {
+          "type" : "boolean",
+          "default" : true
         }
       }
     },
@@ -3213,19 +1706,6 @@
         }
       }
     },
-    "RolesUsers" : {
-      "type" : "object",
-      "properties" : {
-        "userId" : {
-          "format" : "integer",
-          "type" : "integer"
-        },
-        "roleId" : {
-          "format" : "integer",
-          "type" : "integer"
-        }
-      }
-    },
     "Server" : {
       "type" : "object",
       "required" : [ "name", "envTypeId", "resourcesId" ],
@@ -3243,10 +1723,10 @@
           "type" : "string"
         },
         "envTypeId" : {
-          "$ref" : "#/definitions/EnvType"
+          "$ref" : "#/definitions/EnvironmentType"
         },
         "resourcesId" : {
-          "$ref" : "#/definitions/ResourcesType"
+          "$ref" : "#/definitions/EnvironmentResources"
         },
         "envVars" : {
           "type" : "object",
@@ -3562,19 +2042,6 @@
         }
       }
     },
-    "UserGroups" : {
-      "type" : "object",
-      "properties" : {
-        "userId" : {
-          "format" : "integer",
-          "type" : "integer"
-        },
-        "groupId" : {
-          "format" : "integer",
-          "type" : "integer"
-        }
-      }
-    },
     "Workspace" : {
       "type" : "object",
       "allOf" : [ {
@@ -3583,6 +2050,15 @@
     }
   },
   "parameters" : {
+    "Paging" : {
+      "name" : "limit",
+      "description" : "maximum number of records to return",
+      "type" : "integer",
+      "format" : "int32",
+      "minimum" : 0,
+      "in" : "query",
+      "maximum" : 50
+    },
     "userId" : {
       "name" : "userId",
       "in" : "path",
@@ -3642,6 +2118,9 @@
     },
     "ProjectDoesNotExistResponse" : {
       "description" : "Project does not exist"
+    },
+    "GeneralDoesNotExistResponse" : {
+      "description" : "The object does not exist"
     },
     "BadRequestResponse" : {
       "description" : "Bad request. Verify field values"
