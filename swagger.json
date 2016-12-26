@@ -210,7 +210,7 @@
         }
       }
     },
-    "/billing_address" : {
+    "/billingAddress" : {
       "get" : {
         "tags" : [ "billingAddress", "admins" ],
         "produces" : [ "application/json", "text/csv" ],
