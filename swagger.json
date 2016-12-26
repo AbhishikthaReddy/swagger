@@ -869,6 +869,183 @@
         }
       }
     },
+    "/envVars" : {
+      "get" : {
+        "tags" : [ "envVars", "admins" ],
+        "parameters" : [ {
+          "name" : "Range",
+          "in" : "header",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "name" : "RangeUnit",
+          "default" : "items",
+          "in" : "header",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "name" : "select",
+          "in" : "query",
+          "type" : "string",
+          "description" : "Filtering Columns"
+        }, {
+          "name" : "order",
+          "in" : "query",
+          "type" : "string",
+          "enum" : [ "id.asc", "id.desc", "id", "name.asc", "name.desc", "name", "value.asc", "value.desc", "value", "project_id.asc", "project_id.desc", "project_id" ],
+          "description" : "Ordering"
+        }, {
+          "name" : "Prefer",
+          "in" : "header",
+          "type" : "string",
+          "enum" : [ "plurality=singular", "count=none" ],
+          "description" : "Preference"
+        }, {
+          "name" : "id",
+          "type" : "string",
+          "format" : "integer",
+          "in" : "query"
+        }, {
+          "name" : "name",
+          "format" : "character varying",
+          "in" : "query",
+          "type" : "string"
+        }, {
+          "name" : "value",
+          "in" : "query",
+          "type" : "string",
+          "format" : "text"
+        }, {
+          "name" : "projectId",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "206" : {
+            "description" : "Partial Content"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "envVars", "admins" ],
+        "parameters" : [ {
+          "name" : "Prefer",
+          "in" : "header",
+          "type" : "string",
+          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
+          "description" : "Preference"
+        }, {
+          "name" : "body",
+          "in" : "body",
+          "schema" : {
+            "$ref" : "#/definitions/EnvVars"
+          },
+          "description" : "Environment variables"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "201" : {
+            "description" : "Created"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "envVars", "admins" ],
+        "parameters" : [ {
+          "name" : "Prefer",
+          "in" : "header",
+          "type" : "string",
+          "enum" : [ "return=representation", "return=minimal", "return=none" ],
+          "description" : "Preference"
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "value",
+          "in" : "query",
+          "type" : "string",
+          "format" : "text"
+        }, {
+          "name" : "projectId",
+          "in" : "query",
+          "format" : "integer",
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "envVars" ],
+        "parameters" : [ {
+          "name" : "Prefer",
+          "in" : "header",
+          "type" : "string",
+          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
+          "description" : "Preference"
+        }, {
+          "name" : "body",
+          "schema" : {
+            "$ref" : "#/definitions/EnvVars"
+          },
+          "in" : "body",
+          "description" : "env_vars"
+        }, {
+          "name" : "id",
+          "type" : "string",
+          "format" : "integer",
+          "in" : "query"
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "value",
+          "in" : "query",
+          "type" : "string",
+          "format" : "text"
+        }, {
+          "name" : "projectId",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "204" : {
+            "description" : "No Content"
+          }
+        }
+      }
+    },
     "/users/{userId}" : {
       "get" : {
         "summary" : "Gets a user by ID",
