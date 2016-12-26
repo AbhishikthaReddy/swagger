@@ -310,7 +310,7 @@
         }
       },
       "delete" : {
-        "tags" : [ "billingAddress" ],
+        "tags" : [ "billingAddress", "admins" ],
         "parameters" : [ {
           "name" : "Prefer",
           "in" : "header",
@@ -355,7 +355,7 @@
         }
       },
       "patch" : {
-        "tags" : [ "billingAddress" ],
+        "tags" : [ "billingAddress", "admins" ],
         "parameters" : [ {
           "name" : "Prefer",
           "in" : "header",
@@ -364,11 +364,11 @@
           "description" : "Preference"
         }, {
           "name" : "body",
+          "in" : "body",
+          "description" : "billingAddress",
           "schema" : {
             "$ref" : "#/definitions/BillingAddress"
-          },
-          "in" : "body",
-          "description" : "billing address"
+          }
         }, {
           "name" : "id",
           "in" : "query",
