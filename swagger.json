@@ -451,6 +451,207 @@
         }
       }
     },
+    "/billing_plan" : {
+      "get" : {
+        "tags" : [ "billing_plan", "admins" ],
+        "produces" : [ "application/json", "text/csv" ],
+        "parameters" : [ {
+          "name" : "Range",
+          "in" : "header",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "name" : "RangeUnit",
+          "in" : "header",
+          "default" : "items",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "name" : "select",
+          "in" : "query",
+          "type" : "string",
+          "description" : "Filtering Columns"
+        }, {
+          "name" : "order",
+          "in" : "query",
+          "type" : "string",
+          "enum" : [ "id.asc", "id.desc", "id", "name.asc", "name.desc", "name", "description.asc", "description.desc", "description", "settings.asc", "settings.desc", "settings", "cost.asc", "cost.desc", "cost" ],
+          "description" : "Ordering"
+        }, {
+          "name" : "Prefer",
+          "in" : "header",
+          "type" : "string",
+          "enum" : [ "plurality=singular", "count=none" ],
+          "description" : "Preference"
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "description",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "settings",
+          "in" : "query",
+          "type" : "string",
+          "format" : "json"
+        }, {
+          "name" : "cost",
+          "in" : "query",
+          "type" : "string",
+          "format" : "numeric"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "206" : {
+            "description" : "Partial Content"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "billingPlan", "admins" ],
+        "consumes" : [ "application/json", "text/csv" ],
+        "produces" : [ "application/json", "text/csv" ],
+        "parameters" : [ {
+          "name" : "Prefer",
+          "in" : "header",
+          "type" : "string",
+          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
+          "description" : "Preference"
+        }, {
+          "name" : "body",
+          "in" : "body",
+          "schema" : {
+            "$ref" : "#/definitions/BillingPlan"
+          },
+          "description" : "billing plan"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "201" : {
+            "description" : "Created"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "billing_plan", "admins" ],
+        "produces" : [ "application/json", "text/csv" ],
+        "parameters" : [ {
+          "name" : "Prefer",
+          "in" : "header",
+          "type" : "string",
+          "enum" : [ "return=representation", "return=minimal", "return=none" ],
+          "description" : "Preference"
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "description",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "settings",
+          "in" : "query",
+          "type" : "string",
+          "format" : "json"
+        }, {
+          "name" : "cost",
+          "in" : "query",
+          "type" : "string",
+          "format" : "numeric"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "billingPlan", "admins" ],
+        "consumes" : [ "application/json", "text/csv" ],
+        "produces" : [ "application/json", "text/csv" ],
+        "parameters" : [ {
+          "required" : false,
+          "in" : "header",
+          "name" : "Prefer",
+          "type" : "string",
+          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
+          "description" : "Preference"
+        }, {
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/BillingPlan"
+          },
+          "in" : "body",
+          "name" : "body",
+          "description" : "billingPlan"
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer",
+          "required" : false
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "description",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "settings",
+          "in" : "query",
+          "type" : "string",
+          "format" : "json"
+        }, {
+          "name" : "cost",
+          "in" : "query",
+          "type" : "string",
+          "format" : "numeric"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "204" : {
+            "description" : "No Content"
+          }
+        }
+      }
+    },
     "/users" : {
       "get" : {
         "summary" : "Gets a list of all users.",
