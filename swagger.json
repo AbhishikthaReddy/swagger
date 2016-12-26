@@ -221,8 +221,7 @@
           "description" : "Limiting and pagination"
         }, {
           "name" : "RangeUnit",
-          "in" : "heade",
-          "default" : "items",
+          "in" : "header",
           "type" : "string",
           "description" : "Limiting and Pagination"
         }, {
@@ -306,7 +305,7 @@
         }, {
           "required" : false,
           "schema" : {
-            "$ref" : "#/definitions/billingAddress"
+            "$ref" : "#/definitions/BillingAddress"
           },
           "in" : "body",
           "name" : "body",
@@ -394,7 +393,7 @@
         }, {
           "required" : false,
           "schema" : {
-            "$ref" : "#/definitions/billing_address"
+            "$ref" : "#/definitions/BillingAddress"
           },
           "in" : "body",
           "name" : "body",
