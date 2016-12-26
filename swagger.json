@@ -306,11 +306,11 @@
         }, {
           "required" : false,
           "schema" : {
-            "$ref" : "#/definitions/billing_address"
+            "$ref" : "#/definitions/billingAddress"
           },
           "in" : "body",
           "name" : "body",
-          "description" : "billing_address"
+          "description" : "billing address"
         } ],
         "responses" : {
           "200" : {
