@@ -364,11 +364,11 @@
           "description" : "Preference"
         }, {
           "name" : "body",
-          "in" : "body",
           "schema" : {
             "$ref" : "#/definitions/BillingAddress"
           },
-          "description" : "Billing address"
+          "in" : "body",
+          "description" : "billing address"
         }, {
           "name" : "id",
           "in" : "query",
