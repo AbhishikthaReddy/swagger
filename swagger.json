@@ -583,7 +583,7 @@
         }
       }
     },
-    "/users/{userId}/settings/ssh-keys" : {
+    "/users/{userId}/settings/sshkeys" : {
       "parameters" : [ {
         "$ref" : "#/parameters/userId"
       } ],
