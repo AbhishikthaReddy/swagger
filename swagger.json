@@ -1011,6 +1011,525 @@
         }
       }
     },
+    "/environmentResources" : {
+      "get" : {
+        "tags" : [ "environmentResources", "admins" ],
+        "parameters" : [ {
+          "name" : "Range",
+          "in" : "header",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "name" : "RangeUnit",
+          "in" : "header",
+          "default" : "items",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "name" : "select",
+          "in" : "query",
+          "type" : "string",
+          "description" : "Filtering Columns"
+        }, {
+          "name" : "order",
+          "in" : "query",
+          "type" : "string",
+          "enum" : [ "id.asc", "id.desc", "id", "name.asc", "name.desc", "name", "cpu.asc", "cpu.desc", "cpu", "memory.asc", "memory.desc", "memory", "description.asc", "description.desc", "description", "created_at.asc", "created_at.desc", "created_at", "active.asc", "active.desc", "active" ],
+          "description" : "Ordering"
+        }, {
+          "name" : "Prefer",
+          "in" : "header",
+          "type" : "string",
+          "enum" : [ "plurality=singular", "count=none" ],
+          "description" : "Preference"
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "cpu",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
+        }, {
+          "name" : "memory",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
+        }, {
+          "name" : "description",
+          "type" : "string",
+          "format" : "character varying",
+          "in" : "query"
+        }, {
+          "name" : "createdAt",
+          "in" : "query",
+          "type" : "string",
+          "format" : "timestamp without time zone"
+        }, {
+          "name" : "active",
+          "in" : "query",
+          "type" : "string",
+          "format" : "boolean"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "206" : {
+            "description" : "Partial Content"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "environmentResources", "admins" ],
+        "parameters" : [ {
+          "name" : "Prefer",
+          "in" : "header",
+          "type" : "string",
+          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
+          "description" : "Preference"
+        }, {
+          "name" : "body",
+          "in" : "body",
+          "schema" : {
+            "$ref" : "#/definitions/EnvironmentResources"
+          },
+          "description" : "environment_resources"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "201" : {
+            "description" : "Created"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "environmentResources", "admins" ],
+        "parameters" : [ {
+          "name" : "Prefer",
+          "in" : "header",
+          "type" : "string",
+          "enum" : [ "return=representation", "return=minimal", "return=none" ],
+          "description" : "Preference"
+        }, {
+          "name" : "id",
+          "type" : "string",
+          "format" : "integer",
+          "in" : "query"
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "cpu",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
+        }, {
+          "name" : "memory",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
+        }, {
+          "name" : "description",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "createdAt",
+          "in" : "query",
+          "type" : "string",
+          "format" : "timestamp without time zone"
+        }, {
+          "name" : "active",
+          "in" : "query",
+          "format" : "boolean",
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "environmentResources", "admins" ],
+        "parameters" : [ {
+          "name" : "Prefer",
+          "in" : "header",
+          "type" : "string",
+          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
+          "description" : "Preference"
+        }, {
+          "name" : "body",
+          "in" : "body",
+          "schema" : {
+            "$ref" : "#/definitions/EnvironmentResources"
+          },
+          "description" : "environment_resources"
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "cpu",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
+        }, {
+          "name" : "memory",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
+        }, {
+          "name" : "description",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "createdAt",
+          "in" : "query",
+          "type" : "string",
+          "format" : "timestamp without time zone"
+        }, {
+          "name" : "active",
+          "in" : "query",
+          "type" : "string",
+          "format" : "boolean"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "204" : {
+            "description" : "No Content"
+          }
+        }
+      }
+    },
+    "/environmentType" : {
+      "get" : {
+        "tags" : [ "environmentType", "admins" ],
+        "parameters" : [ {
+          "name" : "Range",
+          "in" : "header",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "name" : "RangeUnit",
+          "in" : "header",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "name" : "select",
+          "in" : "query",
+          "type" : "string",
+          "description" : "Filtering Columns"
+        }, {
+          "name" : "order",
+          "in" : "query",
+          "type" : "string",
+          "enum" : [ "id.asc", "id.desc", "id", "name.asc", "name.desc", "name", "image_name.asc", "image_name.desc", "image_name", "created_at.asc", "created_at.desc", "created_at", "cmd.asc", "cmd.desc", "cmd", "description.asc", "description.desc", "description", "work_dir.asc", "work_dir.desc", "work_dir", "env_vars.asc", "env_vars.desc", "env_vars", "container_path.asc", "container_path.desc", "container_path", "container_port.asc", "container_port.desc", "container_port", "active.asc", "active.desc", "active", "urldoc.asc", "urldoc.desc", "urldoc" ],
+          "description" : "Ordering"
+        }, {
+          "name" : "Prefer",
+          "in" : "header",
+          "type" : "string",
+          "enum" : [ "plurality=singular", "count=none" ],
+          "description" : "Preference"
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "imageName",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "createdAt",
+          "in" : "query",
+          "type" : "string",
+          "format" : "timestamp without time zone"
+        }, {
+          "name" : "cmd",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "description",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "workDir",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "envVars",
+          "in" : "query",
+          "type" : "string",
+          "format" : "hstore"
+        }, {
+          "name" : "containerPath",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "containerPort",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
+        }, {
+          "name" : "active",
+          "in" : "query",
+          "type" : "string",
+          "format" : "boolean"
+        }, {
+          "name" : "urldoc",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "206" : {
+            "description" : "Partial Content"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "environmentType", "admins" ],
+        "parameters" : [ {
+          "name" : "Prefer",
+          "in" : "header",
+          "type" : "string",
+          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
+          "description" : "Preference"
+        }, {
+          "name" : "body",
+          "in" : "body",
+          "schema" : {
+            "$ref" : "#/definitions/EnvironmentType"
+          },
+          "description" : "environment_type"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "201" : {
+            "description" : "Created"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "environmentType", "admins" ],
+        "parameters" : [ {
+          "name" : "Prefer",
+          "in" : "header",
+          "type" : "string",
+          "enum" : [ "return=representation", "return=minimal", "return=none" ],
+          "description" : "Preference"
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "format" : "integer",
+          "type" : "string"
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "imageName",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "createdAt",
+          "in" : "query",
+          "type" : "string",
+          "format" : "timestamp without time zone"
+        }, {
+          "name" : "cmd",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "description",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "workDir",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "envVars",
+          "in" : "query",
+          "type" : "string",
+          "format" : "hstore",
+          "required" : false
+        }, {
+          "name" : "containerPath",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "containerPort",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
+        }, {
+          "name" : "active",
+          "in" : "query",
+          "type" : "string",
+          "format" : "boolean"
+        }, {
+          "name" : "urldoc",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "environmentType", "admins" ],
+        "parameters" : [ {
+          "name" : "Prefer",
+          "in" : "header",
+          "type" : "string",
+          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
+          "description" : "Preference"
+        }, {
+          "name" : "body",
+          "in" : "body",
+          "schema" : {
+            "$ref" : "#/definitions/EnvironmentType"
+          },
+          "description" : "environment_type"
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "imageName",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "createdAt",
+          "in" : "query",
+          "type" : "string",
+          "format" : "timestamp without time zone"
+        }, {
+          "name" : "cmd",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "description",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "workDir",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "envVars",
+          "in" : "query",
+          "type" : "string",
+          "format" : "hstore"
+        }, {
+          "name" : "containerPath",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "containerPort",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
+        }, {
+          "name" : "active",
+          "in" : "query",
+          "type" : "string",
+          "format" : "boolean"
+        }, {
+          "name" : "urldoc",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "204" : {
+            "description" : "No Content"
+          }
+        }
+      }
+    },
     "/users/{userId}" : {
       "get" : {
         "summary" : "Gets a user by ID",
@@ -1845,6 +2364,59 @@
         "active" : {
           "format" : "boolean",
           "type" : "boolean"
+        }
+      }
+    },
+    "EnvironmentType" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "integer"
+        },
+        "name" : {
+          "type" : "string",
+          "format" : "character varying"
+        },
+        "image_name" : {
+          "type" : "string",
+          "format" : "character varying"
+        },
+        "created_at" : {
+          "type" : "string",
+          "format" : "timestamp without time zone"
+        },
+        "cmd" : {
+          "type" : "string",
+          "format" : "character varying"
+        },
+        "description" : {
+          "type" : "string",
+          "format" : "character varying"
+        },
+        "work_dir" : {
+          "type" : "string",
+          "format" : "character varying"
+        },
+        "env_vars" : {
+          "type" : "string",
+          "format" : "hstore"
+        },
+        "container_path" : {
+          "type" : "string",
+          "format" : "character varying"
+        },
+        "container_port" : {
+          "type" : "integer",
+          "format" : "integer"
+        },
+        "active" : {
+          "type" : "boolean",
+          "format" : "boolean"
+        },
+        "urldoc" : {
+          "type" : "string",
+          "format" : "character varying"
         }
       }
     },
