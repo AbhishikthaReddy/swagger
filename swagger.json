@@ -1530,139 +1530,149 @@
         }
       }
     },
-    "/users/{userId}" : {
+    "/followers" : {
       "get" : {
-        "summary" : "Gets a user by ID",
+        "tags" : [ "followers", "admins" ],
         "parameters" : [ {
-          "$ref" : "#/parameters/userId"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Returns the user data",
-            "schema" : {
-              "$ref" : "#/definitions/User"
-            }
-          },
-          "404" : {
-            "$ref" : "#/responses/UserDoesNotExistResponse"
-          }
-        }
-      },
-      "put" : {
-        "summary" : "Updates user object",
-        "description" : "Updates user data",
-        "parameters" : [ {
-          "$ref" : "#/parameters/userId"
+          "name" : "Range",
+          "in" : "header",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
         }, {
-          "in" : "body",
-          "name" : "user",
-          "description" : "User definition",
-          "required" : true,
-          "schema" : {
-            "$ref" : "#/definitions/User"
-          }
+          "name" : "Range-Unit",
+          "default" : "items",
+          "in" : "header",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "name" : "select",
+          "in" : "query",
+          "type" : "string",
+          "description" : "Filtering Columns"
+        }, {
+          "name" : "order",
+          "in" : "query",
+          "type" : "string",
+          "enum" : [ "followed_id.asc", "followed_id.desc", "followed_id", "follower_id.asc", "follower_id.desc", "follower_id" ],
+          "description" : "Ordering"
+        }, {
+          "name" : "Prefer",
+          "in" : "header",
+          "type" : "string",
+          "enum" : [ "plurality=singular", "count=none" ],
+          "description" : "Preference"
+        }, {
+          "name" : "followedId",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
+        }, {
+          "name" : "followerId",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
         } ],
         "responses" : {
           "200" : {
-            "description" : "User updated"
+            "description" : "OK"
           },
-          "400" : {
-            "$ref" : "#/responses/BadRequestResponse"
-          },
-          "404" : {
-            "$ref" : "#/responses/UserDoesNotExistResponse"
-          },
-          "default" : {
-            "$ref" : "#/responses/Standard500ErrorResponse"
-          }
-        }
-      },
-      "delete" : {
-        "summary" : "Deletes a user by ID",
-        "parameters" : [ {
-          "$ref" : "#/parameters/userId"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "User deleted"
-          },
-          "404" : {
-            "$ref" : "#/responses/UserDoesNotExistResponse"
-          },
-          "default" : {
-            "$ref" : "#/responses/Standard500ErrorResponse"
-          }
-        }
-      }
-    },
-    "/users/{userId}/projects" : {
-      "get" : {
-        "summary" : "Gets all the user's projects",
-        "parameters" : [ {
-          "$ref" : "#/parameters/userId"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "The project list",
-            "schema" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/definitions/Project"
-              }
-            }
-          },
-          "404" : {
-            "$ref" : "#/responses/UserDoesNotExistResponse"
-          }
-        }
-      }
-    },
-    "/users/{userId}/settings/sshkeys" : {
-      "parameters" : [ {
-        "$ref" : "#/parameters/userId"
-      } ],
-      "get" : {
-        "summary" : "Gets the ssh keys created",
-        "responses" : {
-          "200" : {
-            "description" : "",
-            "schema" : {
-              "type" : "array",
-              "items" : [ {
-                "$ref" : "#/definitions/SSHKey"
-              } ]
-            }
+          "206" : {
+            "description" : "Partial Content"
           }
         }
       },
       "post" : {
-        "summary" : "Creates new ssh keys",
+        "tags" : [ "followers", "admins" ],
         "parameters" : [ {
+          "name" : "Prefer",
+          "in" : "header",
+          "type" : "string",
+          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
+          "description" : "Preference"
+        }, {
+          "name" : "body",
           "in" : "body",
-          "name" : "ssh-keys",
           "schema" : {
-            "type" : "array",
-            "items" : [ {
-              "$ref" : "#/definitions/SSHKey"
-            } ]
-          }
+            "$ref" : "#/definitions/Followers"
+          },
+          "description" : "followers"
         } ],
         "responses" : {
           "200" : {
-            "description" : "ssh-keys created"
+            "description" : "OK"
+          },
+          "201" : {
+            "description" : "Created"
           }
         }
-      }
-    },
-    "/users/me" : {
-      "get" : {
-        "summary" : "Gets the user info",
+      },
+      "delete" : {
+        "tags" : [ "followers", "admins" ],
+        "parameters" : [ {
+          "name" : "Prefer",
+          "in" : "header",
+          "type" : "string",
+          "enum" : [ "return=representation", "return=minimal", "return=none" ],
+          "description" : "Preference"
+        }, {
+          "name" : "followedId",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
+        }, {
+          "name" : "followerId",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
+        } ],
         "responses" : {
           "200" : {
-            "description" : "OK",
-            "schema" : {
-              "$ref" : "#/definitions/User"
-            }
+            "description" : "OK"
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "followers", "admins" ],
+        "parameters" : [ {
+          "name" : "Prefer",
+          "in" : "header",
+          "type" : "string",
+          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
+          "description" : "Preference"
+        }, {
+          "name" : "body",
+          "in" : "body",
+          "schema" : {
+            "$ref" : "#/definitions/Followers"
+          },
+          "description" : "followers"
+        }, {
+          "name" : "followedId",
+          "format" : "integer",
+          "in" : "query",
+          "type" : "string"
+        }, {
+          "name" : "followerId",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "204" : {
+            "description" : "No Content"
           }
         }
       }
@@ -1735,6 +1745,197 @@
           },
           "409" : {
             "description" : "An existing project already exists"
+          }
+        }
+      }
+    },
+    "/group" : {
+      "get" : {
+        "tags" : [ "group", "admins" ],
+        "parameters" : [ {
+          "name" : "Range",
+          "in" : "header",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "name" : "RangeUnit",
+          "in" : "header",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "type" : "string",
+          "description" : "Limiting and Pagination"
+        }, {
+          "name" : "select",
+          "in" : "query",
+          "type" : "string",
+          "description" : "Filtering Columns"
+        }, {
+          "name" : "order",
+          "in" : "query",
+          "type" : "string",
+          "enum" : [ "id.asc", "id.desc", "id", "name.asc", "name.desc", "name", "admin.asc", "admin.desc", "admin", "read_permission.asc", "read_permission.desc", "read_permission", "write_permission.asc", "write_permission.desc", "write_permission" ],
+          "description" : "Ordering"
+        }, {
+          "name" : "Prefer",
+          "in" : "header",
+          "type" : "string",
+          "enum" : [ "plurality=singular", "count=none" ],
+          "description" : "Preference"
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "admin",
+          "in" : "query",
+          "type" : "string",
+          "format" : "boolean"
+        }, {
+          "name" : "readPermission",
+          "in" : "query",
+          "type" : "string",
+          "format" : "boolean"
+        }, {
+          "name" : "writePermission",
+          "in" : "query",
+          "type" : "string",
+          "format" : "boolean"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "206" : {
+            "description" : "Partial Content"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "group", "admins" ],
+        "parameters" : [ {
+          "name" : "Prefer",
+          "in" : "header",
+          "type" : "string",
+          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
+          "description" : "Preference"
+        }, {
+          "name" : "body",
+          "in" : "body",
+          "schema" : {
+            "$ref" : "#/definitions/Group"
+          },
+          "description" : "group"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "201" : {
+            "description" : "Created"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "group", "admins" ],
+        "parameters" : [ {
+          "name" : "Prefer",
+          "in" : "header",
+          "type" : "string",
+          "enum" : [ "return=representation", "return=minimal", "return=none" ],
+          "description" : "Preference"
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "admin",
+          "in" : "query",
+          "type" : "string",
+          "format" : "boolean"
+        }, {
+          "name" : "readPermission",
+          "in" : "query",
+          "type" : "string",
+          "format" : "boolean"
+        }, {
+          "name" : "writePermission",
+          "in" : "query",
+          "type" : "string",
+          "format" : "boolean"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "group", "admins" ],
+        "parameters" : [ {
+          "name" : "Prefer",
+          "in" : "header",
+          "type" : "string",
+          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
+          "description" : "Preference"
+        }, {
+          "name" : "body",
+          "schema" : {
+            "$ref" : "#/definitions/Group"
+          },
+          "in" : "body",
+          "description" : "group"
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "type" : "string",
+          "format" : "integer"
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "type" : "string",
+          "format" : "character varying"
+        }, {
+          "name" : "admin",
+          "in" : "query",
+          "type" : "string",
+          "format" : "boolean"
+        }, {
+          "name" : "readPermission",
+          "in" : "query",
+          "type" : "string",
+          "format" : "boolean"
+        }, {
+          "name" : "writePermission",
+          "in" : "query",
+          "type" : "string",
+          "format" : "boolean"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "204" : {
+            "description" : "No Content"
           }
         }
       }
@@ -2174,6 +2375,143 @@
         "responses" : {
           "200" : {
             "description" : "Collaborator deleted"
+          }
+        }
+      }
+    },
+    "/users/{userId}" : {
+      "get" : {
+        "summary" : "Gets a user by ID",
+        "parameters" : [ {
+          "$ref" : "#/parameters/userId"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Returns the user data",
+            "schema" : {
+              "$ref" : "#/definitions/User"
+            }
+          },
+          "404" : {
+            "$ref" : "#/responses/UserDoesNotExistResponse"
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Updates user object",
+        "description" : "Updates user data",
+        "parameters" : [ {
+          "$ref" : "#/parameters/userId"
+        }, {
+          "in" : "body",
+          "name" : "user",
+          "description" : "User definition",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/User"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "User updated"
+          },
+          "400" : {
+            "$ref" : "#/responses/BadRequestResponse"
+          },
+          "404" : {
+            "$ref" : "#/responses/UserDoesNotExistResponse"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Deletes a user by ID",
+        "parameters" : [ {
+          "$ref" : "#/parameters/userId"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "User deleted"
+          },
+          "404" : {
+            "$ref" : "#/responses/UserDoesNotExistResponse"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/users/{userId}/projects" : {
+      "get" : {
+        "summary" : "Gets all the user's projects",
+        "parameters" : [ {
+          "$ref" : "#/parameters/userId"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The project list",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Project"
+              }
+            }
+          },
+          "404" : {
+            "$ref" : "#/responses/UserDoesNotExistResponse"
+          }
+        }
+      }
+    },
+    "/users/{userId}/settings/sshkeys" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/userId"
+      } ],
+      "get" : {
+        "summary" : "Gets the ssh keys created",
+        "responses" : {
+          "200" : {
+            "description" : "",
+            "schema" : {
+              "type" : "array",
+              "items" : [ {
+                "$ref" : "#/definitions/SSHKey"
+              } ]
+            }
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Creates new ssh keys",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "ssh-keys",
+          "schema" : {
+            "type" : "array",
+            "items" : [ {
+              "$ref" : "#/definitions/SSHKey"
+            } ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "ssh-keys created"
+          }
+        }
+      }
+    },
+    "/users/me" : {
+      "get" : {
+        "summary" : "Gets the user info",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/User"
+            }
           }
         }
       }
