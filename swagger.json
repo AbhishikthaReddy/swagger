@@ -13,11 +13,8 @@
     }
   },
   "tags" : [ {
-    "name" : "admins",
-    "description" : "Secured admin-only calls"
-  }, {
-    "name" : "developers",
-    "description" : "Operations available to regular developers"
+    "name" : "internal-use",
+    "description" : "These actions are used internally for other apps/services"
   } ],
   "host" : "virtserver.swaggerhub.com",
   "basePath" : "/3Blades/app-backend/v1",
@@ -199,15 +196,20 @@
         }
       }
     },
-    "/auditLogs" : {
+    "/admin/auditLogs" : {
       "get" : {
-        "tags" : [ "admins" ],
         "parameters" : [ {
           "$ref" : "#/parameters/Paging"
         } ],
         "responses" : {
           "200" : {
-            "description" : "OK"
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/AuditLog"
+              }
+            }
           },
           "206" : {
             "description" : "Partial Content"
@@ -215,109 +217,20 @@
         }
       },
       "post" : {
-        "tags" : [ "auditLog", "admins" ],
+        "summary" : "Register actions or events that occurs internally on other application or services",
+        "tags" : [ "internal-use" ],
         "parameters" : [ {
-          "required" : false,
-          "in" : "header",
-          "name" : "prefer",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "required" : false,
+          "required" : true,
           "schema" : {
             "$ref" : "#/definitions/AuditLog"
           },
           "in" : "body",
-          "name" : "body",
-          "description" : "audit_log"
+          "name" : "audit-log",
+          "description" : "the event to register"
         } ],
         "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
           "201" : {
             "description" : "Created"
-          }
-        }
-      },
-      "delete" : {
-        "tags" : [ "auditLog", "admins" ],
-        "parameters" : [ {
-          "name" : "prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "id",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "date",
-          "in" : "query",
-          "type" : "string",
-          "format" : "timestamp with time zone"
-        }, {
-          "name" : "action",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "userId",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          }
-        }
-      },
-      "patch" : {
-        "tags" : [ "auditLog", "admins" ],
-        "parameters" : [ {
-          "name" : "prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "body",
-          "in" : "body",
-          "description" : "auditLog",
-          "schema" : {
-            "$ref" : "#/definitions/AuditLog"
-          }
-        }, {
-          "name" : "id",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "date",
-          "in" : "query",
-          "type" : "string",
-          "format" : "timestamp with time zone"
-        }, {
-          "name" : "action",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "userId",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "204" : {
-            "description" : "No Content"
           }
         }
       }
@@ -518,56 +431,6 @@
         "responses" : {
           "200" : {
             "description" : "OK"
-          }
-        }
-      },
-      "patch" : {
-        "tags" : [ "group", "admins" ],
-        "parameters" : [ {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "body",
-          "schema" : {
-            "$ref" : "#/definitions/Group"
-          },
-          "in" : "body",
-          "description" : "group"
-        }, {
-          "name" : "id",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "name",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "admin",
-          "in" : "query",
-          "type" : "string",
-          "format" : "boolean"
-        }, {
-          "name" : "readPermission",
-          "in" : "query",
-          "type" : "string",
-          "format" : "boolean"
-        }, {
-          "name" : "writePermission",
-          "in" : "query",
-          "type" : "string",
-          "format" : "boolean"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "204" : {
-            "description" : "No Content"
           }
         }
       }
@@ -1375,20 +1238,21 @@
   "definitions" : {
     "AuditLog" : {
       "type" : "object",
+      "required" : [ "date", "action", "userId" ],
       "properties" : {
         "id" : {
           "format" : "integer",
-          "type" : "integer"
+          "type" : "integer",
+          "readOnly" : true
         },
         "date" : {
-          "format" : "timestamp with time zone",
+          "format" : "date-time",
           "type" : "string"
         },
         "action" : {
-          "format" : "character varying",
           "type" : "string"
         },
-        "user_id" : {
+        "userId" : {
           "format" : "integer",
           "type" : "integer"
         }
