@@ -917,6 +917,31 @@
         }
       }
     },
+    "/projects/{projectId}/server/{serverId}/runStatistics" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/projectId"
+      }, {
+        "in" : "path",
+        "name" : "serverId",
+        "type" : "string",
+        "required" : true,
+        "description" : "Id to identify any type of server: Workspace, Model or Job"
+      } ],
+      "get" : {
+        "summary" : "Gets all the run statistics",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ServerRunStatistics"
+              }
+            }
+          }
+        }
+      }
+    },
     "/projects/{projectId}/collaborators" : {
       "parameters" : [ {
         "$ref" : "#/parameters/projectId"
@@ -1236,18 +1261,19 @@
           "type" : "string"
         },
         "userId" : {
-          "format" : "integer",
+          "description" : "The User id",
           "type" : "string"
         },
         "scopes" : {
+          "description" : "the scopes where the integration is valid",
           "type" : "string"
         },
         "provider" : {
-          "format" : "character varying",
+          "description" : "Provider name",
           "type" : "string"
         },
         "settings" : {
-          "format" : "json",
+          "description" : "If the integration use addtitional information",
           "type" : "string"
         }
       }
@@ -1352,15 +1378,12 @@
       "type" : "object",
       "properties" : {
         "id" : {
-          "format" : "integer",
           "type" : "integer"
         },
         "name" : {
-          "format" : "character varying",
           "type" : "string"
         },
         "description" : {
-          "format" : "character varying",
           "type" : "string"
         }
       }
@@ -1398,28 +1421,20 @@
     "ServerRunStatistics" : {
       "type" : "object",
       "properties" : {
-        "id" : {
-          "format" : "integer",
-          "type" : "integer"
-        },
-        "serverId" : {
-          "format" : "integer",
-          "type" : "integer"
-        },
         "start" : {
-          "format" : "timestamp without time zone",
+          "format" : "date-time",
           "type" : "string"
         },
         "stop" : {
-          "format" : "timestamp without time zone",
+          "format" : "date-time",
           "type" : "string"
         },
         "exitCode" : {
-          "format" : "integer",
+          "format" : "int32",
           "type" : "integer"
         },
         "size" : {
-          "format" : "bigint",
+          "format" : "int64",
           "type" : "string"
         },
         "stacktrace" : {
