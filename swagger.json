@@ -1037,7 +1037,7 @@
         }
       }
     },
-    "/users/me/settings" : {
+    "/account/settings" : {
       "get" : {
         "tags" : [ "user-information" ],
         "summary" : "Gets the user settings",
@@ -1076,7 +1076,7 @@
         }
       }
     },
-    "/users/me/settings/sshkey" : {
+    "/account/settings/sshkey" : {
       "get" : {
         "tags" : [ "user-information" ],
         "summary" : "Gets the ssh key created",
@@ -1090,7 +1090,7 @@
         }
       }
     },
-    "/users/me/settings/sshkey/reset" : {
+    "/account/settings/sshkey/reset" : {
       "post" : {
         "summary" : "Creates or resets the ssh key",
         "tags" : [ "user-information" ],
@@ -1104,7 +1104,7 @@
         }
       }
     },
-    "/users/me/settings/emails" : {
+    "/account/settings/emails" : {
       "get" : {
         "summary" : "Gets the emails registered in the account",
         "tags" : [ "user-information" ],
@@ -1138,7 +1138,7 @@
         }
       }
     },
-    "/users/me/settings/emails/{address}/make-primary" : {
+    "/account/settings/emails/{address}/make-primary" : {
       "put" : {
         "summary" : "Make the email address primary",
         "parameters" : [ {
@@ -1154,7 +1154,7 @@
         }
       }
     },
-    "/users/me/settings/api-key" : {
+    "/account/settings/api-key" : {
       "get" : {
         "tags" : [ "user-information" ],
         "summary" : "gets the value of api-key",
@@ -1168,7 +1168,7 @@
         }
       }
     },
-    "/users/me/settings/api-key/reset" : {
+    "/account/settings/api-key/reset" : {
       "post" : {
         "summary" : "Creates or Resets the api-key",
         "tags" : [ "user-information" ],
