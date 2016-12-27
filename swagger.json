@@ -462,7 +462,7 @@
         }
       }
     },
-    "/{userId}/integrations" : {
+    "/users/{userId}/integrations" : {
       "parameters" : [ {
         "$ref" : "#/parameters/userId"
       } ],
@@ -1076,6 +1076,14 @@
       "post" : {
         "summary" : "Registers a new email",
         "tags" : [ "user-information" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "email",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Email"
+          }
+        } ],
         "responses" : {
           "201" : {
             "description" : "OK"
