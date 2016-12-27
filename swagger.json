@@ -30,13 +30,20 @@
       "type" : "oauth2",
       "tokenUrl" : "/auth/oauth2/token",
       "scopes" : {
-        "users:admin" : "Provide admin access to user operations"
+        "user" : "User scope",
+        "admin" : "For admin operations"
       }
     }
   },
+  "security" : [ {
+    "oauth2_password" : [ "user" ]
+  } ],
   "paths" : {
     "/admin/users" : {
       "get" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
         "summary" : "Gets a list of all users.",
         "parameters" : [ {
           "$ref" : "#/parameters/skipParam"
@@ -56,6 +63,9 @@
         }
       },
       "post" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
         "summary" : "Adds a new user",
         "parameters" : [ {
           "in" : "body",
@@ -87,6 +97,9 @@
     },
     "/admin/users/{userId}" : {
       "get" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
         "summary" : "Gets a user by ID",
         "parameters" : [ {
           "$ref" : "#/parameters/userId"
@@ -104,6 +117,9 @@
         }
       },
       "put" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
         "summary" : "Updates user object",
         "description" : "Updates user data",
         "parameters" : [ {
@@ -133,6 +149,9 @@
         }
       },
       "delete" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
         "summary" : "Deletes a user by ID",
         "parameters" : [ {
           "$ref" : "#/parameters/userId"
@@ -152,6 +171,9 @@
     },
     "/admin/environmentResources" : {
       "get" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
         "parameters" : [ {
           "$ref" : "#/parameters/skipParam"
         }, {
@@ -170,6 +192,9 @@
         }
       },
       "post" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
         "parameters" : [ {
           "name" : "env-resources",
           "in" : "body",
@@ -199,6 +224,9 @@
         "type" : "string"
       } ],
       "delete" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
         "summary" : "Deletes an unused resource type",
         "responses" : {
           "200" : {
@@ -210,6 +238,9 @@
         }
       },
       "put" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
         "summary" : "Updates a resource type",
         "responses" : {
           "200" : {
@@ -220,6 +251,9 @@
     },
     "/admin/environmentTypes" : {
       "get" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
         "parameters" : [ {
           "$ref" : "#/parameters/skipParam"
         }, {
@@ -238,6 +272,9 @@
         }
       },
       "post" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
         "parameters" : [ {
           "name" : "env-type",
           "in" : "body",
@@ -261,6 +298,9 @@
         "type" : "string"
       } ],
       "delete" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
         "summary" : "Deletes an unused env type",
         "responses" : {
           "200" : {
@@ -272,6 +312,9 @@
         }
       },
       "put" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
         "summary" : "Updates an env type",
         "responses" : {
           "200" : {
@@ -282,6 +325,9 @@
     },
     "/admin/auditLogs" : {
       "get" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
         "parameters" : [ {
           "$ref" : "#/parameters/skipParam"
         }, {
@@ -303,6 +349,9 @@
         }
       },
       "post" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
         "summary" : "Register actions or events that occurs internally on other application or services",
         "tags" : [ "internal-use" ],
         "parameters" : [ {
