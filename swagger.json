@@ -1343,23 +1343,21 @@
       "type" : "object",
       "properties" : {
         "id" : {
-          "format" : "integer",
+          "format" : "Int64",
           "type" : "integer"
         },
         "integrationId" : {
-          "format" : "character varying",
+          "description" : "This value is an external id that the provider use to identify the integration",
           "type" : "string"
         },
         "integrationEmail" : {
-          "format" : "character varying",
           "type" : "string"
         },
         "userId" : {
           "format" : "integer",
-          "type" : "integer"
+          "type" : "string"
         },
         "scopes" : {
-          "format" : "ARRAY",
           "type" : "string"
         },
         "provider" : {
@@ -1858,13 +1856,6 @@
       "minLength" : 8,
       "maxLength" : 25,
       "description" : "The project's Id",
-      "type" : "string"
-    },
-    "collaboratorEmail" : {
-      "name" : "collaboratorEmail",
-      "in" : "path",
-      "required" : true,
-      "description" : "The collaborator's email",
       "type" : "string"
     },
     "workspaceId" : {
