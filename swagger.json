@@ -15,6 +15,9 @@
   "tags" : [ {
     "name" : "internal-use",
     "description" : "These actions are used internally for other apps/services"
+  }, {
+    "name" : "user-information",
+    "description" : "Retrieve information about the user logged in"
   } ],
   "host" : "virtserver.swaggerhub.com",
   "basePath" : "/3Blades/app-backend/v1",
@@ -63,6 +66,71 @@
           },
           "400" : {
             "$ref" : "#/responses/BadRequestResponse"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/admin/users/{userId}" : {
+      "get" : {
+        "summary" : "Gets a user by ID",
+        "parameters" : [ {
+          "$ref" : "#/parameters/userId"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Returns the user data",
+            "schema" : {
+              "$ref" : "#/definitions/User"
+            }
+          },
+          "404" : {
+            "$ref" : "#/responses/UserDoesNotExistResponse"
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Updates user object",
+        "description" : "Updates user data",
+        "parameters" : [ {
+          "$ref" : "#/parameters/userId"
+        }, {
+          "in" : "body",
+          "name" : "user",
+          "description" : "User definition",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/User"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "User updated"
+          },
+          "400" : {
+            "$ref" : "#/responses/BadRequestResponse"
+          },
+          "404" : {
+            "$ref" : "#/responses/UserDoesNotExistResponse"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Deletes a user by ID",
+        "parameters" : [ {
+          "$ref" : "#/parameters/userId"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "User deleted"
+          },
+          "404" : {
+            "$ref" : "#/responses/UserDoesNotExistResponse"
           },
           "default" : {
             "$ref" : "#/responses/Standard500ErrorResponse"
@@ -235,10 +303,12 @@
         }
       }
     },
-    "/projects" : {
+    "/{namespace}/projects" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/namespace"
+      } ],
       "get" : {
-        "tags" : [ "public operations" ],
-        "summary" : "searches projects",
+        "summary" : "Gets all the projects in the namespace context",
         "operationId" : "searchProject",
         "description" : "By passing in the appropriate options, you can search for\navailable project in the system\n",
         "parameters" : [ {
@@ -294,78 +364,23 @@
         }
       }
     },
-    "/group" : {
+    "/{namespace}/groups" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/namespace"
+      } ],
       "get" : {
-        "tags" : [ "group", "admins" ],
         "parameters" : [ {
-          "name" : "Range",
-          "in" : "header",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "RangeUnit",
-          "in" : "header",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "offset",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "limit",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "select",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Filtering Columns"
-        }, {
-          "name" : "order",
-          "in" : "query",
-          "type" : "string",
-          "enum" : [ "id.asc", "id.desc", "id", "name.asc", "name.desc", "name", "admin.asc", "admin.desc", "admin", "read_permission.asc", "read_permission.desc", "read_permission", "write_permission.asc", "write_permission.desc", "write_permission" ],
-          "description" : "Ordering"
-        }, {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "plurality=singular", "count=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "id",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "name",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "admin",
-          "in" : "query",
-          "type" : "string",
-          "format" : "boolean"
-        }, {
-          "name" : "readPermission",
-          "in" : "query",
-          "type" : "string",
-          "format" : "boolean"
-        }, {
-          "name" : "writePermission",
-          "in" : "query",
-          "type" : "string",
-          "format" : "boolean"
+          "$ref" : "#/parameters/Paging"
         } ],
         "responses" : {
           "200" : {
-            "description" : "OK"
-          },
-          "206" : {
-            "description" : "Partial Content"
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Group"
+              }
+            }
           }
         }
       },
@@ -1082,13 +1097,13 @@
         }
       }
     },
-    "/projects/{projectId}/collaborators/{collaboratorEmail}" : {
+    "/projects/{projectId}/collaborators/{userId}" : {
       "delete" : {
         "summary" : "Deletes a collaborator from the project",
         "parameters" : [ {
           "$ref" : "#/parameters/projectId"
         }, {
-          "$ref" : "#/parameters/collaboratorEmail"
+          "$ref" : "#/parameters/userId"
         } ],
         "responses" : {
           "200" : {
@@ -1097,84 +1112,38 @@
         }
       }
     },
-    "/users/{userId}" : {
+    "/users/me/settings" : {
       "get" : {
-        "summary" : "Gets a user by ID",
-        "parameters" : [ {
-          "$ref" : "#/parameters/userId"
-        } ],
+        "tags" : [ "user-information" ],
+        "summary" : "Gets the user settings",
         "responses" : {
           "200" : {
-            "description" : "Returns the user data",
+            "description" : "User settings",
             "schema" : {
-              "$ref" : "#/definitions/User"
-            }
-          },
-          "404" : {
-            "$ref" : "#/responses/UserDoesNotExistResponse"
-          }
-        }
-      },
-      "put" : {
-        "summary" : "Updates user object",
-        "description" : "Updates user data",
-        "parameters" : [ {
-          "$ref" : "#/parameters/userId"
-        }, {
-          "in" : "body",
-          "name" : "user",
-          "description" : "User definition",
-          "required" : true,
-          "schema" : {
-            "$ref" : "#/definitions/User"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "User updated"
-          },
-          "400" : {
-            "$ref" : "#/responses/BadRequestResponse"
-          },
-          "404" : {
-            "$ref" : "#/responses/UserDoesNotExistResponse"
-          },
-          "default" : {
-            "$ref" : "#/responses/Standard500ErrorResponse"
-          }
-        }
-      },
-      "delete" : {
-        "summary" : "Deletes a user by ID",
-        "parameters" : [ {
-          "$ref" : "#/parameters/userId"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "User deleted"
-          },
-          "404" : {
-            "$ref" : "#/responses/UserDoesNotExistResponse"
-          },
-          "default" : {
-            "$ref" : "#/responses/Standard500ErrorResponse"
-          }
-        }
-      }
-    },
-    "/users/{userId}/projects" : {
-      "get" : {
-        "summary" : "Gets all the user's projects",
-        "parameters" : [ {
-          "$ref" : "#/parameters/userId"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "The project list",
-            "schema" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/definitions/Project"
+              "type" : "object",
+              "properties" : {
+                "sshKey" : {
+                  "description" : "The public information about ssh-key generated",
+                  "type" : "",
+                  "$ref" : "#/definitions/SSHKey"
+                },
+                "emails" : {
+                  "description" : "List of all emails registered",
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/definitions/Email"
+                  }
+                },
+                "integrations" : {
+                  "description" : "List of all integrations in the account",
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/definitions/Integration"
+                  }
+                },
+                "token" : {
+                  "type" : "string"
+                }
               }
             }
           },
@@ -1184,20 +1153,15 @@
         }
       }
     },
-    "/users/{userId}/settings/sshkeys" : {
-      "parameters" : [ {
-        "$ref" : "#/parameters/userId"
-      } ],
+    "/users/me/settings/sshkey" : {
       "get" : {
-        "summary" : "Gets the ssh keys created",
+        "tags" : [ "user-information" ],
+        "summary" : "Gets the ssh key created",
         "responses" : {
           "200" : {
-            "description" : "",
+            "description" : "Show the public part of SSH key",
             "schema" : {
-              "type" : "array",
-              "items" : [ {
-                "$ref" : "#/definitions/SSHKey"
-              } ]
+              "$ref" : "#/definitions/SSHKey"
             }
           }
         }
@@ -1590,10 +1554,7 @@
       }
     },
     "SSHKey" : {
-      "type" : "object",
-      "additionalProperties" : {
-        "type" : "string"
-      }
+      "type" : "string"
     },
     "SshTunnel" : {
       "type" : "object",
@@ -1791,7 +1752,9 @@
           "readOnly" : true
         },
         "username" : {
-          "type" : "string"
+          "type" : "string",
+          "minLength" : 6,
+          "maxLength" : 15
         },
         "firstName" : {
           "type" : "string"
@@ -1846,6 +1809,7 @@
   },
   "parameters" : {
     "Paging" : {
+      "required" : false,
       "name" : "limit",
       "description" : "maximum number of records to return",
       "type" : "integer",
@@ -1904,6 +1868,13 @@
       "minLength" : 8,
       "maxLength" : 20,
       "description" : "The job's Id",
+      "type" : "string"
+    },
+    "namespace" : {
+      "name" : "namespace",
+      "in" : "path",
+      "required" : true,
+      "description" : "User id or team Id to identify the context",
       "type" : "string"
     }
   },
