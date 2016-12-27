@@ -1488,7 +1488,7 @@
         },
         "size" : {
           "format" : "int64",
-          "type" : "string"
+          "type" : "number"
         },
         "stacktrace" : {
           "format" : "text",
@@ -1499,25 +1499,17 @@
     "ServerStatistics" : {
       "type" : "object",
       "properties" : {
-        "id" : {
-          "format" : "integer",
-          "type" : "integer"
-        },
         "start" : {
-          "format" : "timestamp without time zone",
+          "format" : "date-time",
           "type" : "string"
         },
         "stop" : {
-          "format" : "timestamp without time zone",
+          "format" : "date-time",
           "type" : "string"
         },
         "size" : {
-          "format" : "bigint",
-          "type" : "string"
-        },
-        "serverId" : {
-          "format" : "integer",
-          "type" : "integer"
+          "format" : "int64",
+          "type" : "number"
         }
       }
     },
@@ -1689,31 +1681,13 @@
         }
       }
     },
-    "TeamWatch" : {
+    "Token" : {
       "type" : "object",
       "properties" : {
-        "team_id" : {
-          "format" : "integer",
-          "type" : "integer"
-        },
-        "user_id" : {
-          "format" : "integer",
-          "type" : "integer"
+        "key" : {
+          "type" : "string"
         }
       }
-    },
-    "Token" : {
-      "properties" : {
-        "key" : {
-          "format" : "character varying",
-          "type" : "string"
-        },
-        "userId" : {
-          "format" : "integer",
-          "type" : "integer"
-        }
-      },
-      "type" : "object"
     },
     "User" : {
       "type" : "object",
