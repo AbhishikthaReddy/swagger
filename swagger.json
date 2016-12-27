@@ -462,7 +462,10 @@
         }
       }
     },
-    "/integration" : {
+    "/{userId}/integrations" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/userId"
+      } ],
       "get" : {
         "tags" : [ "integration", "admins" ],
         "parameters" : [ {
