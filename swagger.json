@@ -397,67 +397,54 @@
         }
       },
       "post" : {
-        "tags" : [ "group", "admins" ],
         "parameters" : [ {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "body",
+          "name" : "group",
           "in" : "body",
           "schema" : {
             "$ref" : "#/definitions/Group"
           },
-          "description" : "group"
+          "description" : "New group to create"
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Created",
+            "schema" : {
+              "$ref" : "#/definitions/Group"
+            }
+          },
+          "400" : {
+            "$ref" : "#/responses/BadRequestResponse"
+          }
+        }
+      }
+    },
+    "/{namespace}/groups/{groupId}" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/namespace"
+      }, {
+        "$ref" : "#/parameters/groupId"
+      } ],
+      "put" : {
+        "description" : "Updates a group",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "group",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Group"
+          }
         } ],
         "responses" : {
           "200" : {
             "description" : "OK"
-          },
-          "201" : {
-            "description" : "Created"
           }
         }
       },
       "delete" : {
-        "tags" : [ "group", "admins" ],
-        "parameters" : [ {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "id",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "name",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "admin",
-          "in" : "query",
-          "type" : "string",
-          "format" : "boolean"
-        }, {
-          "name" : "readPermission",
-          "in" : "query",
-          "type" : "string",
-          "format" : "boolean"
-        }, {
-          "name" : "writePermission",
-          "in" : "query",
-          "type" : "string",
-          "format" : "boolean"
-        } ],
+        "description" : "Deletes a group",
         "responses" : {
           "200" : {
-            "description" : "OK"
+            "description" : "Deleted"
           }
         }
       }
@@ -1210,25 +1197,26 @@
     },
     "Group" : {
       "type" : "object",
+      "required" : [ "name" ],
       "properties" : {
         "id" : {
-          "format" : "integer",
-          "type" : "integer"
-        },
-        "name" : {
-          "format" : "character varying",
           "type" : "string"
         },
+        "name" : {
+          "type" : "string",
+          "minLength" : 4,
+          "maxLength" : 20
+        },
         "admin" : {
-          "format" : "boolean",
+          "default" : false,
           "type" : "boolean"
         },
         "readPermission" : {
-          "format" : "boolean",
+          "default" : false,
           "type" : "boolean"
         },
         "writePermission" : {
-          "format" : "boolean",
+          "default" : false,
           "type" : "boolean"
         }
       }
@@ -1790,6 +1778,15 @@
       "in" : "path",
       "required" : true,
       "description" : "User id or team Id to identify the context",
+      "type" : "string"
+    },
+    "groupId" : {
+      "name" : "groupId",
+      "in" : "path",
+      "required" : true,
+      "minLength" : 8,
+      "maxLength" : 20,
+      "description" : "The group's Id",
       "type" : "string"
     }
   },
