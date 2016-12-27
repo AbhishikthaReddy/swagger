@@ -24,6 +24,16 @@
   "schemes" : [ "https" ],
   "produces" : [ "application/json" ],
   "consumes" : [ "application/json" ],
+  "securityDefinitions" : {
+    "oauth2_password" : {
+      "flow" : "password",
+      "type" : "oauth2",
+      "tokenUrl" : "/auth/oauth2/token",
+      "scopes" : {
+        "users:admin" : "Provide admin access to user operations"
+      }
+    }
+  },
   "paths" : {
     "/admin/users" : {
       "get" : {
