@@ -917,7 +917,7 @@
         }
       }
     },
-    "/projects/{projectId}/server/{serverId}/runStatistics" : {
+    "/projects/{projectId}/server/{serverId}/run-statistics" : {
       "parameters" : [ {
         "$ref" : "#/parameters/projectId"
       }, {
@@ -936,6 +936,31 @@
               "type" : "array",
               "items" : {
                 "$ref" : "#/definitions/ServerRunStatistics"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/server/{serverId}/statistics" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/projectId"
+      }, {
+        "in" : "path",
+        "name" : "serverId",
+        "type" : "string",
+        "required" : true,
+        "description" : "Id to identify any type of server: Workspace, Model or Job"
+      } ],
+      "get" : {
+        "summary" : "Gets all the statistics of server",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ServerStatistics"
               }
             }
           }
@@ -1057,7 +1082,7 @@
     },
     "/users/me/settings/sshkey/reset" : {
       "post" : {
-        "summary" : "Creates or reset the ssh key",
+        "summary" : "Creates or resets the ssh key",
         "tags" : [ "user-information" ],
         "responses" : {
           "201" : {
@@ -1115,6 +1140,34 @@
         "responses" : {
           "200" : {
             "description" : "OK"
+          }
+        }
+      }
+    },
+    "/users/me/settings/api-key" : {
+      "get" : {
+        "tags" : [ "user-information" ],
+        "summary" : "gets the value of api-key",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/Token"
+            }
+          }
+        }
+      }
+    },
+    "/users/me/settings/api-key/reset" : {
+      "post" : {
+        "summary" : "Creates or Resets the api-key",
+        "tags" : [ "user-information" ],
+        "responses" : {
+          "201" : {
+            "description" : "ssh-key created or updated",
+            "schema" : {
+              "$ref" : "#/definitions/Token"
+            }
           }
         }
       }
