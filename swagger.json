@@ -467,81 +467,6 @@
         "$ref" : "#/parameters/userId"
       } ],
       "get" : {
-        "tags" : [ "integration", "admins" ],
-        "parameters" : [ {
-          "name" : "Range",
-          "in" : "header",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "RangeUnit",
-          "default" : "items",
-          "in" : "header",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "offset",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "limit",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Limiting and Pagination"
-        }, {
-          "name" : "select",
-          "in" : "query",
-          "type" : "string",
-          "description" : "Filtering Columns"
-        }, {
-          "name" : "order",
-          "in" : "query",
-          "type" : "string",
-          "enum" : [ "id.asc", "id.desc", "id", "integration_id.asc", "integration_id.desc", "integration_id", "integration_email.asc", "integration_email.desc", "integration_email", "user_id.asc", "user_id.desc", "user_id", "scopes.asc", "scopes.desc", "scopes", "provider.asc", "provider.desc", "provider", "settings.asc", "settings.desc", "settings" ],
-          "description" : "Ordering"
-        }, {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "plurality=singular", "count=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "id",
-          "in" : "query",
-          "format" : "integer",
-          "type" : "string"
-        }, {
-          "name" : "integrationId",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "integrationEmail",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "user_id",
-          "in" : "query",
-          "format" : "integer",
-          "type" : "string"
-        }, {
-          "name" : "scopes",
-          "in" : "query",
-          "format" : "ARRAY",
-          "type" : "string"
-        }, {
-          "name" : "provider",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "settings",
-          "in" : "query",
-          "type" : "string",
-          "format" : "json"
-        } ],
         "responses" : {
           "200" : {
             "description" : "OK"
@@ -552,7 +477,6 @@
         }
       },
       "post" : {
-        "tags" : [ "integration", "admins" ],
         "parameters" : [ {
           "required" : false,
           "in" : "header",
@@ -578,7 +502,6 @@
         }
       },
       "delete" : {
-        "tags" : [ "integration", "admins" ],
         "parameters" : [ {
           "name" : "Prefer",
           "in" : "header",
@@ -624,66 +547,6 @@
         "responses" : {
           "200" : {
             "description" : "OK"
-          }
-        }
-      },
-      "patch" : {
-        "tags" : [ "integration", "admins" ],
-        "parameters" : [ {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "body",
-          "in" : "body",
-          "schema" : {
-            "$ref" : "#/definitions/Integration"
-          },
-          "description" : "integration"
-        }, {
-          "name" : "id",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "integrationId",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "integrationEmail",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "userId",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "scopes",
-          "in" : "query",
-          "type" : "string",
-          "format" : "ARRAY"
-        }, {
-          "name" : "provider",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "settings",
-          "in" : "query",
-          "type" : "string",
-          "format" : "json"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "204" : {
-            "description" : "No Content"
           }
         }
       }
