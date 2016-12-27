@@ -1123,8 +1123,6 @@
               "type" : "object",
               "properties" : {
                 "sshKey" : {
-                  "description" : "The public information about ssh-key generated",
-                  "type" : "",
                   "$ref" : "#/definitions/SSHKey"
                 },
                 "emails" : {
@@ -1165,22 +1163,44 @@
             }
           }
         }
-      },
+      }
+    },
+    "/users/me/settings/sshkey/reset" : {
       "post" : {
-        "summary" : "Creates new ssh keys",
-        "parameters" : [ {
-          "in" : "body",
-          "name" : "ssh-keys",
-          "schema" : {
-            "type" : "array",
-            "items" : [ {
+        "summary" : "Creates or reset the ssh key",
+        "tags" : [ "user-information" ],
+        "responses" : {
+          "201" : {
+            "description" : "ssh-key created or updated",
+            "schema" : {
               "$ref" : "#/definitions/SSHKey"
-            } ]
+            }
           }
-        } ],
+        }
+      }
+    },
+    "/users/me/settings/emails" : {
+      "get" : {
+        "summary" : "Gets the emails registered in the account",
+        "tags" : [ "user-information" ],
         "responses" : {
           "200" : {
-            "description" : "ssh-keys created"
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Email"
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Registers a new email",
+        "tags" : [ "user-information" ],
+        "responses" : {
+          "201" : {
+            "description" : "OK"
           }
         }
       }
@@ -1554,9 +1574,13 @@
       }
     },
     "SSHKey" : {
-      "type" : "string"
+      "properties" : {
+        "value" : {
+          "type" : "string"
+        }
+      }
     },
-    "SshTunnel" : {
+    "SSHTunnel" : {
       "type" : "object",
       "properties" : {
         "id" : {
