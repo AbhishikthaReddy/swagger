@@ -16,8 +16,17 @@
     "name" : "internal-use",
     "description" : "These actions are used internally for other apps/services"
   }, {
-    "name" : "user-information",
-    "description" : "Retrieve information about the user logged in"
+    "name" : "user-account",
+    "description" : "Retrieve information about the user account"
+  }, {
+    "name" : "collaborators",
+    "description" : ""
+  }, {
+    "name" : "projects",
+    "description" : ""
+  }, {
+    "name" : "servers",
+    "description" : ""
   } ],
   "host" : "virtserver.swaggerhub.com",
   "basePath" : "/3Blades/app-backend/v1",
@@ -375,6 +384,7 @@
         "$ref" : "#/parameters/namespace"
       } ],
       "get" : {
+        "tags" : [ "projects" ],
         "summary" : "Gets all the projects in the namespace context",
         "operationId" : "searchProject",
         "description" : "By passing in the appropriate options, you can search for\navailable project in the system\n",
@@ -405,6 +415,7 @@
         }
       },
       "post" : {
+        "tags" : [ "projects" ],
         "summary" : "Adds a new project",
         "parameters" : [ {
           "in" : "body",
@@ -516,22 +527,12 @@
         "responses" : {
           "200" : {
             "description" : "OK"
-          },
-          "206" : {
-            "description" : "Partial Content"
           }
         }
       },
       "post" : {
         "parameters" : [ {
-          "required" : false,
-          "in" : "header",
-          "name" : "Prefer",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=representation,plurality=singular", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "body",
+          "name" : "integration",
           "in" : "body",
           "schema" : {
             "$ref" : "#/definitions/Integration"
@@ -539,66 +540,15 @@
           "description" : "integration"
         } ],
         "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
           "201" : {
             "description" : "Created"
-          }
-        }
-      },
-      "delete" : {
-        "parameters" : [ {
-          "name" : "Prefer",
-          "in" : "header",
-          "type" : "string",
-          "enum" : [ "return=representation", "return=minimal", "return=none" ],
-          "description" : "Preference"
-        }, {
-          "name" : "id",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "integrationId",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "integrationEmail",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "userId",
-          "in" : "query",
-          "type" : "string",
-          "format" : "integer"
-        }, {
-          "name" : "scopes",
-          "in" : "query",
-          "type" : "string",
-          "format" : "ARRAY"
-        }, {
-          "name" : "provider",
-          "in" : "query",
-          "type" : "string",
-          "format" : "character varying"
-        }, {
-          "name" : "settings",
-          "in" : "query",
-          "type" : "string",
-          "format" : "json"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
           }
         }
       }
     },
     "/projects/{projectId}" : {
       "get" : {
+        "tags" : [ "projects" ],
         "summary" : "Gets a project by ID",
         "parameters" : [ {
           "$ref" : "#/parameters/projectId"
@@ -616,6 +566,7 @@
         }
       },
       "put" : {
+        "tags" : [ "projects" ],
         "summary" : "Updates project object",
         "description" : "Updates a project",
         "parameters" : [ {
@@ -644,6 +595,7 @@
         }
       },
       "delete" : {
+        "tags" : [ "projects" ],
         "summary" : "Deletes a project by ID",
         "parameters" : [ {
           "$ref" : "#/parameters/projectId"
@@ -666,6 +618,7 @@
         "$ref" : "#/parameters/projectId"
       } ],
       "get" : {
+        "tags" : [ "servers" ],
         "summary" : "Gets workspaces from a project",
         "responses" : {
           "200" : {
@@ -683,6 +636,7 @@
         }
       },
       "post" : {
+        "tags" : [ "servers" ],
         "summary" : "Creates a new workspace to the project",
         "parameters" : [ {
           "in" : "body",
@@ -719,6 +673,7 @@
         "$ref" : "#/parameters/workspaceId"
       } ],
       "get" : {
+        "tags" : [ "servers" ],
         "summary" : "Gets workspace by Id",
         "responses" : {
           "200" : {
@@ -730,6 +685,7 @@
         }
       },
       "put" : {
+        "tags" : [ "servers" ],
         "summary" : "Updates a workspace",
         "parameters" : [ {
           "in" : "body",
@@ -752,6 +708,7 @@
         }
       },
       "delete" : {
+        "tags" : [ "servers" ],
         "summary" : "Deletes a workspace",
         "responses" : {
           "200" : {
@@ -771,6 +728,7 @@
         "$ref" : "#/parameters/projectId"
       } ],
       "get" : {
+        "tags" : [ "servers" ],
         "summary" : "Gets all the models contain in a project",
         "responses" : {
           "200" : {
@@ -788,6 +746,7 @@
         }
       },
       "post" : {
+        "tags" : [ "servers" ],
         "summary" : "Creates a new model to the project",
         "parameters" : [ {
           "in" : "body",
@@ -824,6 +783,7 @@
         "$ref" : "#/parameters/modelId"
       } ],
       "get" : {
+        "tags" : [ "servers" ],
         "summary" : "Gets model by Id",
         "responses" : {
           "200" : {
@@ -835,6 +795,7 @@
         }
       },
       "put" : {
+        "tags" : [ "servers" ],
         "summary" : "Updates a model",
         "parameters" : [ {
           "in" : "body",
@@ -857,6 +818,7 @@
         }
       },
       "delete" : {
+        "tags" : [ "servers" ],
         "summary" : "Deletes a model",
         "responses" : {
           "200" : {
@@ -876,6 +838,7 @@
         "$ref" : "#/parameters/projectId"
       } ],
       "get" : {
+        "tags" : [ "servers" ],
         "summary" : "Gets all the jobs contain in a project",
         "responses" : {
           "200" : {
@@ -893,6 +856,7 @@
         }
       },
       "post" : {
+        "tags" : [ "servers" ],
         "summary" : "Creates a new job to the project",
         "parameters" : [ {
           "in" : "body",
@@ -929,6 +893,7 @@
         "$ref" : "#/parameters/jobId"
       } ],
       "get" : {
+        "tags" : [ "servers" ],
         "summary" : "Gets job by Id",
         "responses" : {
           "200" : {
@@ -940,6 +905,7 @@
         }
       },
       "put" : {
+        "tags" : [ "servers" ],
         "summary" : "Updates a job",
         "parameters" : [ {
           "in" : "body",
@@ -962,6 +928,7 @@
         }
       },
       "delete" : {
+        "tags" : [ "servers" ],
         "summary" : "Deletes a job",
         "responses" : {
           "200" : {
@@ -987,6 +954,7 @@
         "description" : "Id to identify any type of server: Workspace, Model or Job"
       } ],
       "get" : {
+        "tags" : [ "servers" ],
         "summary" : "Gets all the run statistics",
         "responses" : {
           "200" : {
@@ -1012,6 +980,7 @@
         "description" : "Id to identify any type of server: Workspace, Model or Job"
       } ],
       "get" : {
+        "tags" : [ "servers" ],
         "summary" : "Gets all the statistics of server",
         "responses" : {
           "200" : {
@@ -1031,6 +1000,7 @@
         "$ref" : "#/parameters/projectId"
       } ],
       "get" : {
+        "tags" : [ "collaborators" ],
         "summary" : "Gets all active project collaborators",
         "description" : "",
         "responses" : {
@@ -1046,6 +1016,7 @@
         }
       },
       "post" : {
+        "tags" : [ "collaborators" ],
         "summary" : "Add a collaborator to the project",
         "parameters" : [ {
           "in" : "body",
@@ -1073,6 +1044,7 @@
     },
     "/projects/{projectId}/collaborators/{userId}" : {
       "delete" : {
+        "tags" : [ "collaborators" ],
         "summary" : "Deletes a collaborator from the project",
         "parameters" : [ {
           "$ref" : "#/parameters/projectId"
@@ -1088,7 +1060,7 @@
     },
     "/account/settings" : {
       "get" : {
-        "tags" : [ "user-information" ],
+        "tags" : [ "user-account" ],
         "summary" : "Gets the user settings",
         "responses" : {
           "200" : {
@@ -1127,7 +1099,7 @@
     },
     "/account/settings/sshkey" : {
       "get" : {
-        "tags" : [ "user-information" ],
+        "tags" : [ "user-account" ],
         "summary" : "Gets the ssh key created",
         "responses" : {
           "200" : {
@@ -1142,7 +1114,7 @@
     "/account/settings/sshkey/reset" : {
       "post" : {
         "summary" : "Creates or resets the ssh key",
-        "tags" : [ "user-information" ],
+        "tags" : [ "user-account" ],
         "responses" : {
           "201" : {
             "description" : "ssh-key created or updated",
@@ -1156,7 +1128,7 @@
     "/account/settings/emails" : {
       "get" : {
         "summary" : "Gets the emails registered in the account",
-        "tags" : [ "user-information" ],
+        "tags" : [ "user-account" ],
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -1171,7 +1143,7 @@
       },
       "post" : {
         "summary" : "Registers a new email",
-        "tags" : [ "user-information" ],
+        "tags" : [ "user-account" ],
         "parameters" : [ {
           "in" : "body",
           "name" : "email",
@@ -1189,6 +1161,7 @@
     },
     "/account/settings/emails/{address}/make-primary" : {
       "put" : {
+        "tags" : [ "user-account" ],
         "summary" : "Make the email address primary",
         "parameters" : [ {
           "in" : "path",
@@ -1205,7 +1178,7 @@
     },
     "/account/settings/api-key" : {
       "get" : {
-        "tags" : [ "user-information" ],
+        "tags" : [ "user-account" ],
         "summary" : "gets the value of api-key",
         "responses" : {
           "200" : {
@@ -1219,8 +1192,8 @@
     },
     "/account/settings/api-key/reset" : {
       "post" : {
+        "tags" : [ "user-account" ],
         "summary" : "Creates or Resets the api-key",
-        "tags" : [ "user-information" ],
         "responses" : {
           "201" : {
             "description" : "ssh-key created or updated",
@@ -1233,6 +1206,7 @@
     },
     "/users/me" : {
       "get" : {
+        "tags" : [ "user-account" ],
         "summary" : "Gets the user info",
         "responses" : {
           "200" : {
