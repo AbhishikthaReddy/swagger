@@ -1091,6 +1091,22 @@
         }
       }
     },
+    "/users/me/settings/emails/{address}/make-primary" : {
+      "put" : {
+        "summary" : "Make the email address primary",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "address",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
     "/users/me" : {
       "get" : {
         "summary" : "Gets the user info",
@@ -1147,25 +1163,17 @@
       }
     },
     "Email" : {
+      "type" : "object",
+      "required" : [ "address" ],
       "properties" : {
         "address" : {
-          "format" : "character varying",
           "type" : "string"
         },
-        "user_id" : {
-          "format" : "integer",
-          "type" : "integer"
-        },
         "public" : {
-          "format" : "boolean",
-          "type" : "boolean"
-        },
-        "unsubscribed" : {
-          "format" : "boolean",
+          "default" : true,
           "type" : "boolean"
         }
-      },
-      "type" : "object"
+      }
     },
     "EnvironmentType" : {
       "type" : "object",
