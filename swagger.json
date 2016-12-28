@@ -943,7 +943,7 @@
         }
       }
     },
-    "/projects/{projectId}/server/{serverId}/run-statistics" : {
+    "/projects/{projectId}/server/{serverId}/runs/stats" : {
       "parameters" : [ {
         "$ref" : "#/parameters/projectId"
       }, {
@@ -952,6 +952,38 @@
         "type" : "string",
         "required" : true,
         "description" : "Id to identify any type of server: Workspace, Model or Job"
+      } ],
+      "get" : {
+        "tags" : [ "servers" ],
+        "summary" : "Gets all the run statistics",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ServerRunStatistics"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/server/{serverId}/runs/{runId}/stats" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/projectId"
+      }, {
+        "in" : "path",
+        "name" : "serverId",
+        "type" : "string",
+        "required" : true,
+        "description" : "Id to identify any type of server: Workspace, Model or Job"
+      }, {
+        "in" : "path",
+        "name" : "runId",
+        "type" : "number",
+        "format" : "int32",
+        "required" : true
       } ],
       "get" : {
         "tags" : [ "servers" ],
@@ -1507,6 +1539,10 @@
     "ServerRunStatistics" : {
       "type" : "object",
       "properties" : {
+        "id" : {
+          "type" : "number",
+          "format" : "int32"
+        },
         "start" : {
           "format" : "date-time",
           "type" : "string"
