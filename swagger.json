@@ -178,7 +178,7 @@
         }
       }
     },
-    "/admin/environment/resources" : {
+    "/admin/servers/options/resources" : {
       "get" : {
         "security" : [ {
           "oauth2_password" : [ "admin" ]
@@ -194,7 +194,7 @@
             "schema" : {
               "type" : "array",
               "items" : {
-                "$ref" : "#/definitions/EnvironmentResources"
+                "$ref" : "#/definitions/ServerResourcesType"
               }
             }
           }
@@ -205,11 +205,11 @@
           "oauth2_password" : [ "admin" ]
         } ],
         "parameters" : [ {
-          "name" : "env-resources",
+          "name" : "resources-type",
           "in" : "body",
           "description" : "Resources type to create",
           "schema" : {
-            "$ref" : "#/definitions/EnvironmentResources"
+            "$ref" : "#/definitions/ServerResourcesType"
           }
         } ],
         "responses" : {
@@ -225,10 +225,10 @@
         }
       }
     },
-    "/admin/environment/resources/{env-resources-id}" : {
+    "/admin/servers/options/resources/{resources-id}" : {
       "parameters" : [ {
         "in" : "path",
-        "name" : "env-resources-id",
+        "name" : "resources-id",
         "required" : true,
         "type" : "string"
       } ],
@@ -258,7 +258,7 @@
         }
       }
     },
-    "/admin/environment/types" : {
+    "/admin/servers/options/types" : {
       "get" : {
         "security" : [ {
           "oauth2_password" : [ "admin" ]
@@ -274,7 +274,7 @@
             "schema" : {
               "type" : "array",
               "items" : {
-                "$ref" : "#/definitions/EnvironmentType"
+                "$ref" : "#/definitions/ServerType"
               }
             }
           }
@@ -285,10 +285,10 @@
           "oauth2_password" : [ "admin" ]
         } ],
         "parameters" : [ {
-          "name" : "env-type",
+          "name" : "server-type",
           "in" : "body",
           "schema" : {
-            "$ref" : "#/definitions/EnvironmentType"
+            "$ref" : "#/definitions/ServerType"
           },
           "description" : "Environment type to create"
         } ],
@@ -299,10 +299,10 @@
         }
       }
     },
-    "/admin/environment/types/{env-type-id}" : {
+    "/admin/servers/options/types/{type-id}" : {
       "parameters" : [ {
         "in" : "path",
-        "name" : "env-type-id",
+        "name" : "type-id",
         "required" : true,
         "type" : "string"
       } ],
@@ -1293,7 +1293,7 @@
         }
       }
     },
-    "EnvironmentType" : {
+    "ServerType" : {
       "type" : "object",
       "required" : [ "name", "imageName", "Cmd" ],
       "properties" : {
@@ -1455,7 +1455,7 @@
         }
       }
     },
-    "EnvironmentResources" : {
+    "ServerResourcesType" : {
       "type" : "object",
       "required" : [ "name", "cpu", "memory" ],
       "properties" : {
@@ -1511,10 +1511,10 @@
           "type" : "string"
         },
         "envTypeId" : {
-          "$ref" : "#/definitions/EnvironmentType"
+          "$ref" : "#/definitions/ServerType"
         },
         "resourcesId" : {
-          "$ref" : "#/definitions/EnvironmentResources"
+          "$ref" : "#/definitions/ServerResourcesType"
         },
         "envVars" : {
           "type" : "object",
