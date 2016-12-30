@@ -55,9 +55,9 @@
         } ],
         "summary" : "Gets a list of all users.",
         "parameters" : [ {
-          "$ref" : "#/parameters/skipParam"
+          "$ref" : "#/parameters/skip-param"
         }, {
-          "$ref" : "#/parameters/limitParam"
+          "$ref" : "#/parameters/limit-param"
         } ],
         "responses" : {
           "200" : {
@@ -111,7 +111,7 @@
         } ],
         "summary" : "Gets a user by ID",
         "parameters" : [ {
-          "$ref" : "#/parameters/userId"
+          "$ref" : "#/parameters/user-id"
         } ],
         "responses" : {
           "200" : {
@@ -132,7 +132,7 @@
         "summary" : "Updates user object",
         "description" : "Updates user data",
         "parameters" : [ {
-          "$ref" : "#/parameters/userId"
+          "$ref" : "#/parameters/user-id"
         }, {
           "in" : "body",
           "name" : "user",
@@ -163,7 +163,7 @@
         } ],
         "summary" : "Deletes a user by ID",
         "parameters" : [ {
-          "$ref" : "#/parameters/userId"
+          "$ref" : "#/parameters/user-id"
         } ],
         "responses" : {
           "200" : {
@@ -184,9 +184,9 @@
           "oauth2_password" : [ "admin" ]
         } ],
         "parameters" : [ {
-          "$ref" : "#/parameters/skipParam"
+          "$ref" : "#/parameters/skip-param"
         }, {
-          "$ref" : "#/parameters/limitParam"
+          "$ref" : "#/parameters/limit-param"
         } ],
         "responses" : {
           "200" : {
@@ -264,9 +264,9 @@
           "oauth2_password" : [ "admin" ]
         } ],
         "parameters" : [ {
-          "$ref" : "#/parameters/skipParam"
+          "$ref" : "#/parameters/skip-param"
         }, {
-          "$ref" : "#/parameters/limitParam"
+          "$ref" : "#/parameters/limit-param"
         } ],
         "responses" : {
           "200" : {
@@ -338,9 +338,9 @@
           "oauth2_password" : [ "admin" ]
         } ],
         "parameters" : [ {
-          "$ref" : "#/parameters/skipParam"
+          "$ref" : "#/parameters/skip-param"
         }, {
-          "$ref" : "#/parameters/limitParam"
+          "$ref" : "#/parameters/limit-param"
         } ],
         "responses" : {
           "200" : {
@@ -381,7 +381,7 @@
     },
     "/{owner-id}/projects" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/ownerId"
+        "$ref" : "#/parameters/owner-id"
       } ],
       "get" : {
         "tags" : [ "projects" ],
@@ -395,9 +395,9 @@
           "required" : false,
           "type" : "string"
         }, {
-          "$ref" : "#/parameters/skipParam"
+          "$ref" : "#/parameters/skip-param"
         }, {
-          "$ref" : "#/parameters/limitParam"
+          "$ref" : "#/parameters/limit-param"
         } ],
         "responses" : {
           "200" : {
@@ -446,13 +446,13 @@
     },
     "/{owner-id}/groups" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/ownerId"
+        "$ref" : "#/parameters/owner-id"
       } ],
       "get" : {
         "parameters" : [ {
-          "$ref" : "#/parameters/skipParam"
+          "$ref" : "#/parameters/skip-param"
         }, {
-          "$ref" : "#/parameters/limitParam"
+          "$ref" : "#/parameters/limit-param"
         } ],
         "responses" : {
           "200" : {
@@ -490,9 +490,9 @@
     },
     "/{owner-id}/groups/{group-id}" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/ownerId"
+        "$ref" : "#/parameters/owner-id"
       }, {
-        "$ref" : "#/parameters/groupId"
+        "$ref" : "#/parameters/group-id"
       } ],
       "put" : {
         "description" : "Updates a group",
@@ -521,7 +521,7 @@
     },
     "/{user-id}/teams" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/userId"
+        "$ref" : "#/parameters/user-id"
       } ],
       "get" : {
         "summary" : "Gets all user teams",
@@ -541,7 +541,7 @@
     },
     "/{user-id}/integrations" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/userId"
+        "$ref" : "#/parameters/user-id"
       } ],
       "get" : {
         "responses" : {
@@ -571,7 +571,7 @@
         "tags" : [ "projects" ],
         "summary" : "Gets a project by ID",
         "parameters" : [ {
-          "$ref" : "#/parameters/projectId"
+          "$ref" : "#/parameters/project-id"
         } ],
         "responses" : {
           "200" : {
@@ -590,7 +590,7 @@
         "summary" : "Updates project object",
         "description" : "Updates a project",
         "parameters" : [ {
-          "$ref" : "#/parameters/projectId"
+          "$ref" : "#/parameters/project-id"
         }, {
           "in" : "body",
           "name" : "project",
@@ -618,7 +618,7 @@
         "tags" : [ "projects" ],
         "summary" : "Deletes a project by ID",
         "parameters" : [ {
-          "$ref" : "#/parameters/projectId"
+          "$ref" : "#/parameters/project-id"
         } ],
         "responses" : {
           "200" : {
@@ -633,9 +633,110 @@
         }
       }
     },
+    "/projects/{project-id}/files" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/project-id"
+      } ],
+      "get" : {
+        "tags" : [ "files" ],
+        "summary" : "Gets files from a project",
+        "responses" : {
+          "200" : {
+            "description" : "List of project files",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/File"
+              }
+            }
+          },
+          "404" : {
+            "$ref" : "#/responses/FileDoesNotExistResponse"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "files" ],
+        "summary" : "Create new file in project",
+        "responses" : {
+          "201" : {
+            "description" : "File created",
+            "headers" : {
+              "Location" : {
+                "type" : "string",
+                "description" : "The location to get the new file"
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/responses/BadRequestResponse"
+          },
+          "409" : {
+            "description" : "An existing file already exists"
+          }
+        }
+      }
+    },
+    "/project/{project-id}/files/{file-id}" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/file-id"
+      }, {
+        "$ref" : "#/parameters/project-id"
+      } ],
+      "get" : {
+        "tags" : [ "files" ],
+        "summary" : "Gets file by Id",
+        "responses" : {
+          "200" : {
+            "description" : "File data",
+            "schema" : {
+              "$ref" : "#/definitions/File"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "files" ],
+        "summary" : "Updates a file",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "file",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/File"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "File Updated"
+          },
+          "404" : {
+            "description" : "The resource was not found"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "files" ],
+        "summary" : "Deletes a file",
+        "responses" : {
+          "200" : {
+            "description" : "File deleted"
+          },
+          "404" : {
+            "description" : "The resource was not found"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
     "/projects/{project-id}/workspaces" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/projectId"
+        "$ref" : "#/parameters/project-id"
       } ],
       "get" : {
         "tags" : [ "servers" ],
@@ -657,7 +758,7 @@
       },
       "post" : {
         "tags" : [ "servers" ],
-        "summary" : "Creates a new workspace to the project",
+        "summary" : "Creates a new workspace in the project",
         "parameters" : [ {
           "in" : "body",
           "name" : "workspace",
@@ -688,9 +789,9 @@
     },
     "/projects/{project-id}/workspaces/{workspace-id}" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/projectId"
+        "$ref" : "#/parameters/project-id"
       }, {
-        "$ref" : "#/parameters/workspaceId"
+        "$ref" : "#/parameters/workspace-id"
       } ],
       "get" : {
         "tags" : [ "servers" ],
@@ -745,7 +846,7 @@
     },
     "/projects/{project-id}/models" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/projectId"
+        "$ref" : "#/parameters/project-id"
       } ],
       "get" : {
         "tags" : [ "servers" ],
@@ -798,9 +899,9 @@
     },
     "/projects/{project-id}/models/{model-id}" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/projectId"
+        "$ref" : "#/parameters/project-id"
       }, {
-        "$ref" : "#/parameters/modelId"
+        "$ref" : "#/parameters/model-id"
       } ],
       "get" : {
         "tags" : [ "servers" ],
@@ -855,7 +956,7 @@
     },
     "/projects/{project-id}/jobs" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/projectId"
+        "$ref" : "#/parameters/project-id"
       } ],
       "get" : {
         "tags" : [ "servers" ],
@@ -908,9 +1009,9 @@
     },
     "/projects/{project-id}/jobs/{job-id}" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/projectId"
+        "$ref" : "#/parameters/project-id"
       }, {
-        "$ref" : "#/parameters/jobId"
+        "$ref" : "#/parameters/job-id"
       } ],
       "get" : {
         "tags" : [ "servers" ],
@@ -965,9 +1066,9 @@
     },
     "/projects/{project-id}/server/{server-id}/runs/stats" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/projectId"
+        "$ref" : "#/parameters/project-id"
       }, {
-        "$ref" : "#/parameters/serverId"
+        "$ref" : "#/parameters/server-id"
       } ],
       "get" : {
         "tags" : [ "servers" ],
@@ -987,9 +1088,9 @@
     },
     "/projects/{project-id}/server/{server-id}/runs/{run-id}/stats" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/projectId"
+        "$ref" : "#/parameters/project-id"
       }, {
-        "$ref" : "#/parameters/serverId"
+        "$ref" : "#/parameters/server-id"
       }, {
         "in" : "path",
         "name" : "run-id",
@@ -1015,9 +1116,9 @@
     },
     "/projects/{project-id}/server/{server-id}/statistics" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/projectId"
+        "$ref" : "#/parameters/project-id"
       }, {
-        "$ref" : "#/parameters/serverId"
+        "$ref" : "#/parameters/server-id"
       } ],
       "get" : {
         "tags" : [ "servers" ],
@@ -1037,7 +1138,7 @@
     },
     "/projects/{project-id}/collaborators" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/projectId"
+        "$ref" : "#/parameters/project-id"
       } ],
       "get" : {
         "tags" : [ "collaborators" ],
@@ -1087,9 +1188,9 @@
         "tags" : [ "collaborators" ],
         "summary" : "Deletes a collaborator from the project",
         "parameters" : [ {
-          "$ref" : "#/parameters/projectId"
+          "$ref" : "#/parameters/project-id"
         }, {
-          "$ref" : "#/parameters/userId"
+          "$ref" : "#/parameters/user-id"
         } ],
         "responses" : {
           "200" : {
@@ -1262,7 +1363,7 @@
   "definitions" : {
     "AuditLog" : {
       "type" : "object",
-      "required" : [ "date", "action", "userId" ],
+      "required" : [ "date", "action", "user-id" ],
       "properties" : {
         "id" : {
           "format" : "integer",
@@ -1276,7 +1377,7 @@
         "action" : {
           "type" : "string"
         },
-        "userId" : {
+        "user-id" : {
           "format" : "integer",
           "type" : "integer"
         }
@@ -1306,6 +1407,42 @@
       "properties" : {
         "address" : {
           "type" : "string"
+        },
+        "public" : {
+          "default" : true,
+          "type" : "boolean"
+        }
+      }
+    },
+    "File" : {
+      "type" : "object",
+      "required" : [ "content", "encoding", "file-path" ],
+      "properties" : {
+        "file-id" : {
+          "type" : "string",
+          "readOnly" : true
+        },
+        "file-path" : {
+          "type" : "string"
+        },
+        "encoding" : {
+          "type" : "string"
+        },
+        "author-email" : {
+          "type" : "string"
+        },
+        "author-name" : {
+          "type" : "string"
+        },
+        "content" : {
+          "type" : "string",
+          "format" : "byte",
+          "description" : "content as base64 encoded characters"
+        },
+        "size" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "file size in bytes"
         },
         "public" : {
           "default" : true,
@@ -1386,7 +1523,7 @@
         "integrationEmail" : {
           "type" : "string"
         },
-        "userId" : {
+        "user-id" : {
           "description" : "The User id",
           "type" : "string"
         },
@@ -1454,7 +1591,7 @@
       "type" : "object",
       "required" : [ "name", "isPrivate" ],
       "properties" : {
-        "projectId" : {
+        "project-id" : {
           "type" : "string",
           "readOnly" : true
         },
@@ -1640,7 +1777,7 @@
           "format" : "integer",
           "type" : "integer"
         },
-        "projectId" : {
+        "project-id" : {
           "format" : "integer",
           "type" : "integer"
         },
@@ -1735,7 +1872,7 @@
           "format" : "integer",
           "type" : "integer"
         },
-        "groupId" : {
+        "group-id" : {
           "format" : "integer",
           "type" : "integer"
         }
@@ -1770,7 +1907,7 @@
       "type" : "object",
       "required" : [ "email", "username", "firstName" ],
       "properties" : {
-        "userId" : {
+        "user-id" : {
           "type" : "string",
           "readOnly" : true
         },
@@ -1831,7 +1968,7 @@
     }
   },
   "parameters" : {
-    "skipParam" : {
+    "skip-param" : {
       "name" : "skip",
       "in" : "query",
       "description" : "number of items to skip",
@@ -1839,7 +1976,7 @@
       "type" : "integer",
       "format" : "int32"
     },
-    "limitParam" : {
+    "limit-param" : {
       "name" : "limit",
       "in" : "query",
       "description" : "max records to return",
@@ -1847,7 +1984,7 @@
       "type" : "integer",
       "format" : "int32"
     },
-    "userId" : {
+    "user-id" : {
       "name" : "user-id",
       "in" : "path",
       "required" : true,
@@ -1856,7 +1993,7 @@
       "description" : "The user's Id",
       "type" : "string"
     },
-    "projectId" : {
+    "project-id" : {
       "name" : "project-id",
       "in" : "path",
       "required" : true,
@@ -1865,7 +2002,16 @@
       "description" : "The project's Id",
       "type" : "string"
     },
-    "workspaceId" : {
+    "file-id" : {
+      "name" : "file-id",
+      "in" : "path",
+      "required" : true,
+      "minLength" : 8,
+      "maxLength" : 25,
+      "description" : "The file's Id",
+      "type" : "string"
+    },
+    "workspace-id" : {
       "name" : "workspace-id",
       "in" : "path",
       "required" : true,
@@ -1874,7 +2020,7 @@
       "description" : "The workspace's Id",
       "type" : "string"
     },
-    "modelId" : {
+    "model-id" : {
       "name" : "model-id",
       "in" : "path",
       "required" : true,
@@ -1883,7 +2029,7 @@
       "description" : "The model's Id",
       "type" : "string"
     },
-    "jobId" : {
+    "job-id" : {
       "name" : "job-id",
       "in" : "path",
       "required" : true,
@@ -1892,14 +2038,14 @@
       "description" : "The job's Id",
       "type" : "string"
     },
-    "ownerId" : {
+    "owner-id" : {
       "name" : "owner-id",
       "in" : "path",
       "required" : true,
       "description" : "User id or team Id to identify the context",
       "type" : "string"
     },
-    "groupId" : {
+    "group-id" : {
       "name" : "group-id",
       "in" : "path",
       "required" : true,
@@ -1908,7 +2054,7 @@
       "description" : "The group's Id",
       "type" : "string"
     },
-    "serverId" : {
+    "server-id" : {
       "in" : "path",
       "name" : "server-id",
       "type" : "string",
@@ -1919,6 +2065,9 @@
   "responses" : {
     "UserDoesNotExistResponse" : {
       "description" : "User does not exist"
+    },
+    "FileDoesNotExistResponse" : {
+      "description" : "File does not exist"
     },
     "ProjectDoesNotExistResponse" : {
       "description" : "Project does not exist"
