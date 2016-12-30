@@ -379,13 +379,13 @@
         }
       }
     },
-    "/{namespace}/projects" : {
+    "/{owner-id}/projects" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/namespace"
+        "$ref" : "#/parameters/ownerId"
       } ],
       "get" : {
         "tags" : [ "projects" ],
-        "summary" : "Gets all the projects in the namespace context",
+        "summary" : "Gets all the projects in the owner context",
         "operationId" : "searchProject",
         "description" : "By passing in the appropriate options, you can search for\navailable project in the system\n",
         "parameters" : [ {
@@ -444,9 +444,9 @@
         }
       }
     },
-    "/{namespace}/groups" : {
+    "/{owner-id}/groups" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/namespace"
+        "$ref" : "#/parameters/ownerId"
       } ],
       "get" : {
         "parameters" : [ {
@@ -488,9 +488,9 @@
         }
       }
     },
-    "/{namespace}/groups/{group-id}" : {
+    "/{owner-id}/groups/{group-id}" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/namespace"
+        "$ref" : "#/parameters/ownerId"
       }, {
         "$ref" : "#/parameters/groupId"
       } ],
@@ -1892,8 +1892,8 @@
       "description" : "The job's Id",
       "type" : "string"
     },
-    "namespace" : {
-      "name" : "namespace",
+    "ownerId" : {
+      "name" : "owner-id",
       "in" : "path",
       "required" : true,
       "description" : "User id or team Id to identify the context",
