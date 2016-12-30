@@ -519,7 +519,27 @@
         }
       }
     },
-    "/users/{user-id}/integrations" : {
+    "/{user-id}/teams" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/userId"
+      } ],
+      "get" : {
+        "summary" : "Gets all user teams",
+        "description" : "The teams can be the created by herself or those where her was added",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Team"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{user-id}/integrations" : {
       "parameters" : [ {
         "$ref" : "#/parameters/userId"
       } ],
