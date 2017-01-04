@@ -1,15 +1,15 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "description" : "This is 3Blades's API.",
-    "version" : "0.1.1",
     "title" : "3Blades API",
     "contact" : {
-      "email" : "conactt@3blades.io"
+      "email" : "conact@3blades.io"
     },
+    "version" : "0.1.1",
+    "description" : "This documentation describes the `3Blades API`. 3Blades currently offers a **HTTP REST API** and a **Websocket Stream API**. Both of these APIs are used by the web user interface and command line tools (CLI). This documentation also provides examples on how to use the API, including CLI, Go and Python.\n\n  **Authentication**\n\nA valid `API Key` from your account is necessary to authenticate to the REST API and Stream API. To obtain your API Key, log into your account using the Web UI, select your profile at the top right hand corner, select Settings, and then select the Reveal link in the API Key section.\nEach API request requires an HTTP header that includes the 'X-Auth-Token’ and 'X-Auth-Project-Id’ parameter. \n\n  `X-Auth-Token`: The JSON web token (JWT) that you receive when logging into 3Blades.\n  \n**REST API**\n\n  The 3Blades REST API is reachable through the following hostname:\n\n  https://api.3blades.io/\n\n  All requests should be sent to this endpoint using Basic authentication using your API key as password:\n\n  Authorization: `Basic 3f9g2bc9da80957de8f6e9f3623a6b35c3cc30c4`\n\nHTTP responses are given in JSON format, so the following Accept header is required for every API call:\n\n  Accept: `application/json`\n  \nAdditional documentation can be found at https://support.3blades.io.\n\n  **Stream API**\n\n The 3Blades Stream API is available at:\n \n   wss://ws.3blades.io/\n   \n  Authentication is the same on the Stream API as it is on the REST API:\n\n  Authorization: `Basic 3f9g2bc9da80957de8f6e9f3623a6b35c3cc30c4`",
     "license" : {
-      "name" : "AGPL 3.0",
-      "url" : "https://www.gnu.org/licenses/agpl-3.0.en.html"
+      "name" : "BSD 3.0",
+      "url" : "https://opensource.org/licenses/BSD-3-Clause"
     }
   },
   "tags" : [ {
@@ -27,6 +27,12 @@
   }, {
     "name" : "servers",
     "description" : ""
+  }, {
+    "name" : "rest-api",
+    "description" : "rest api endpoint type"
+  }, {
+    "name" : "stream-api",
+    "description" : "stream api endpoint type"
   } ],
   "host" : "virtserver.swaggerhub.com",
   "basePath" : "/3Blades/app-backend/v1",
@@ -850,7 +856,7 @@
       } ],
       "get" : {
         "tags" : [ "servers" ],
-        "summary" : "Gets all the models contain in a project",
+        "summary" : "Gets all models contained in a project",
         "responses" : {
           "200" : {
             "description" : "List of project models",
@@ -1131,6 +1137,39 @@
               "items" : {
                 "$ref" : "#/definitions/ServerStatistics"
               }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{project-id}/server/{server-id}/logs" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/project-id"
+      }, {
+        "$ref" : "#/parameters/server-id"
+      } ],
+      "get" : {
+        "tags" : [ "servers", "stream api" ],
+        "summary" : "gets streaming logs by project and server ids",
+        "parameters" : [ {
+          "name" : "tail",
+          "in" : "query",
+          "default" : 300,
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "follow",
+          "in" : "query",
+          "default" : true,
+          "required" : true,
+          "type" : "boolean"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Workspace logs",
+            "schema" : {
+              "$ref" : "#/definitions/ServerLog"
             }
           }
         }
@@ -1678,6 +1717,28 @@
           "additionalProperties" : {
             "type" : "string"
           }
+        }
+      }
+    },
+    "ServerLog" : {
+      "type" : "object",
+      "required" : [ "id" ],
+      "properties" : {
+        "id" : {
+          "type" : "number",
+          "format" : "int32"
+        },
+        "log" : {
+          "format" : "text",
+          "type" : "string"
+        },
+        "stream-type" : {
+          "format" : "text",
+          "type" : "string"
+        },
+        "timestamp" : {
+          "type" : "string",
+          "format" : "date-time"
         }
       }
     },
