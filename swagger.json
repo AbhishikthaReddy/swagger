@@ -138,7 +138,6 @@
             "description" : "Created"
           },
           "400" : {
-            "description" : "bad input parameter",
             "$ref" : "#/responses/BadRequestResponse"
           },
           "404" : {
@@ -199,7 +198,6 @@
         "summary" : "Cancel an action object by ID",
         "responses" : {
           "400" : {
-            "description" : "bad input parameter",
             "$ref" : "#/responses/BadRequestResponse"
           },
           "404" : {
@@ -2443,13 +2441,6 @@
       "minLength" : 8,
       "maxLength" : 20,
       "description" : "The model's Id",
-      "type" : "string"
-    },
-    "owner_id" : {
-      "name" : "owner_id",
-      "in" : "path",
-      "required" : true,
-      "description" : "User id or team Id to identify the context",
       "type" : "string"
     },
     "project_id" : {
