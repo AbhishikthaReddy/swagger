@@ -13,6 +13,9 @@
     }
   },
   "tags" : [ {
+    "name" : "actions",
+    "description" : "Action objects"
+  }, {
     "name" : "admin",
     "description" : "Administrator resources"
   }, {
@@ -23,13 +26,25 @@
     "description" : "Project ollaborators"
   }, {
     "name" : "events",
-    "description" : "System eents"
+    "description" : "Event objects"
   }, {
     "name" : "internal-use",
     "description" : "Actions are used internally by other services"
   }, {
     "name" : "groups",
     "description" : "Entity representing groups of users"
+  }, {
+    "name" : "integrations",
+    "description" : "Integrations for account"
+  }, {
+    "name" : "jobs",
+    "description" : "Job servers"
+  }, {
+    "name" : "models",
+    "description" : "Model servers"
+  }, {
+    "name" : "namespaced",
+    "description" : "Endpoints that can be accessed with user or team namespace"
   }, {
     "name" : "projects",
     "description" : "User or team projects"
@@ -43,8 +58,13 @@
     "name" : "stream-api",
     "description" : "Stream API endpoint type"
   }, {
+    "name" : "teams",
+    "description" : "Team accout"
+  }, {
     "name" : "user-account",
-    "description" : "Retrieve user account information"
+    "description" : "User account"
+  }, {
+    "name" : "workspaces"
   } ],
   "host" : "virtserver.swaggerhub.com",
   "basePath" : "/3Blades/app-backend/v1",
@@ -66,6 +86,128 @@
     "oauth2_password" : [ "user" ]
   } ],
   "paths" : {
+    "/actions" : {
+      "get" : {
+        "tags" : [ "actions", "rest-api" ],
+        "summary" : "Retrieve a list of actions",
+        "operationId" : "searchAction",
+        "description" : "By passing in the appropriate options, you can search for\navailable actions in the system\n",
+        "parameters" : [ {
+          "name" : "searchString",
+          "in" : "query",
+          "description" : "pass an optional search string for looking up an event",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "$ref" : "#/parameters/skip_param"
+        }, {
+          "$ref" : "#/parameters/limit_param"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Search results matching criteria",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Event"
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "actions", "rest-api" ],
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
+        "summary" : "Create an action object",
+        "parameters" : [ {
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Action"
+          },
+          "in" : "body",
+          "name" : "action",
+          "description" : "the action to register"
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Created"
+          },
+          "400" : {
+            "description" : "bad input parameter",
+            "$ref" : "#/responses/BadRequestResponse"
+          },
+          "404" : {
+            "$ref" : "#/responses/ActionDoesNotExistResponse"
+          }
+        }
+      }
+    },
+    "/action/{action_id}" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/action_id"
+      } ],
+      "get" : {
+        "tags" : [ "actions", "rest-api" ],
+        "summary" : "Gets an action object by ID",
+        "parameters" : [ {
+          "$ref" : "#/parameters/action_id"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Returns event data",
+            "schema" : {
+              "$ref" : "#/definitions/Action"
+            }
+          },
+          "404" : {
+            "$ref" : "#/responses/ActionDoesNotExistResponse"
+          }
+        }
+      }
+    },
+    "/action/{action_id}/logs" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/action_id"
+      } ],
+      "get" : {
+        "tags" : [ "actions", "stream-api" ],
+        "summary" : "Gets a logs of an action by ID",
+        "responses" : {
+          "200" : {
+            "description" : "Returns action streaming logs",
+            "schema" : {
+              "$ref" : "#/definitions/ActionLog"
+            }
+          },
+          "404" : {
+            "$ref" : "#/responses/ActionDoesNotExistResponse"
+          }
+        }
+      }
+    },
+    "/action/{action_id}/cancel" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/action_id"
+      } ],
+      "post" : {
+        "tags" : [ "actions", "rest-api" ],
+        "summary" : "Cancel an action object by ID",
+        "responses" : {
+          "400" : {
+            "description" : "bad input parameter",
+            "$ref" : "#/responses/BadRequestResponse"
+          },
+          "404" : {
+            "$ref" : "#/responses/ActionDoesNotExistResponse"
+          }
+        }
+      }
+    },
     "/audit_logs" : {
       "get" : {
         "tags" : [ "audit-logs", "rest-api" ],
@@ -116,7 +258,7 @@
     },
     "/[namespace/]events" : {
       "get" : {
-        "tags" : [ "events", "stream-api" ],
+        "tags" : [ "events", "namespaced", "stream-api" ],
         "summary" : "Gets all events from owner context",
         "operationId" : "searchEvent",
         "description" : "By passing in the appropriate options, you can search for\navailable events in the system\n",
@@ -142,7 +284,7 @@
             }
           },
           "400" : {
-            "description" : "bad input parameter"
+            "$ref" : "#/responses/BadRequestResponse"
           }
         }
       }
@@ -152,7 +294,7 @@
         "$ref" : "#/parameters/event_id"
       } ],
       "get" : {
-        "tags" : [ "events", "stream-api" ],
+        "tags" : [ "events", "namespaced", "stream-api" ],
         "summary" : "Gets a event by ID",
         "parameters" : [ {
           "$ref" : "#/parameters/event_id"
@@ -172,7 +314,7 @@
     },
     "/[namespace/]groups" : {
       "get" : {
-        "tags" : [ "groups", "rest-api" ],
+        "tags" : [ "groups", "namespaced", "rest-api" ],
         "parameters" : [ {
           "$ref" : "#/parameters/skip_param"
         }, {
@@ -191,6 +333,7 @@
         }
       },
       "post" : {
+        "tags" : [ "groups", "namespaced", "rest-api" ],
         "parameters" : [ {
           "name" : "group",
           "in" : "body",
@@ -217,6 +360,7 @@
         "$ref" : "#/parameters/group_id"
       } ],
       "put" : {
+        "tags" : [ "groups", "namespaced", "rest-api" ],
         "description" : "Updates a group",
         "parameters" : [ {
           "in" : "body",
@@ -233,6 +377,7 @@
         }
       },
       "delete" : {
+        "tags" : [ "groups", "namespaced", "rest-api" ],
         "description" : "Deletes a group",
         "responses" : {
           "200" : {
@@ -243,7 +388,7 @@
     },
     "/[namespace/]projects/{project_id}" : {
       "get" : {
-        "tags" : [ "projects" ],
+        "tags" : [ "projects", "namespaced", "rest-api" ],
         "summary" : "Gets a project by ID",
         "parameters" : [ {
           "$ref" : "#/parameters/project_id"
@@ -261,7 +406,7 @@
         }
       },
       "put" : {
-        "tags" : [ "projects" ],
+        "tags" : [ "projects", "namespaced", "rest-api" ],
         "summary" : "Updates project object",
         "description" : "Updates a project",
         "parameters" : [ {
@@ -290,7 +435,7 @@
         }
       },
       "delete" : {
-        "tags" : [ "projects" ],
+        "tags" : [ "projects", "namespaced", "rest-api" ],
         "summary" : "Deletes a project by ID",
         "parameters" : [ {
           "$ref" : "#/parameters/project_id"
@@ -313,7 +458,7 @@
         "$ref" : "#/parameters/project_id"
       } ],
       "get" : {
-        "tags" : [ "files" ],
+        "tags" : [ "files", "namespaced", "rest-api" ],
         "summary" : "Gets files from a project",
         "responses" : {
           "200" : {
@@ -331,7 +476,7 @@
         }
       },
       "post" : {
-        "tags" : [ "files" ],
+        "tags" : [ "files", "namespaced", "rest-api" ],
         "summary" : "Create new file in project",
         "responses" : {
           "201" : {
@@ -359,7 +504,7 @@
         "$ref" : "#/parameters/project_id"
       } ],
       "get" : {
-        "tags" : [ "files" ],
+        "tags" : [ "files", "namespaced", "rest-api" ],
         "summary" : "Gets file by Id",
         "responses" : {
           "200" : {
@@ -371,7 +516,7 @@
         }
       },
       "put" : {
-        "tags" : [ "files" ],
+        "tags" : [ "files", "namespaced", "rest-api" ],
         "summary" : "Updates a file",
         "parameters" : [ {
           "in" : "body",
@@ -394,7 +539,7 @@
         }
       },
       "delete" : {
-        "tags" : [ "files" ],
+        "tags" : [ "files", "namespaced", "rest-api" ],
         "summary" : "Deletes a file",
         "responses" : {
           "200" : {
@@ -414,7 +559,7 @@
         "$ref" : "#/parameters/project_id"
       } ],
       "get" : {
-        "tags" : [ "servers" ],
+        "tags" : [ "rest-api", "namespaced", "servers", "workspaces" ],
         "summary" : "Gets workspaces from a project",
         "responses" : {
           "200" : {
@@ -432,7 +577,7 @@
         }
       },
       "post" : {
-        "tags" : [ "servers" ],
+        "tags" : [ "rest-api", "namespaced", "servers", "workspaces" ],
         "summary" : "Creates a new workspace in the project",
         "parameters" : [ {
           "in" : "body",
@@ -469,7 +614,7 @@
         "$ref" : "#/parameters/workspace_id"
       } ],
       "get" : {
-        "tags" : [ "servers" ],
+        "tags" : [ "namespaced", "rest-api", "servers", "workspaces" ],
         "summary" : "Gets workspace by Id",
         "responses" : {
           "200" : {
@@ -481,7 +626,7 @@
         }
       },
       "put" : {
-        "tags" : [ "servers" ],
+        "tags" : [ "rest-api", "namespaced", "servers", "workspaces" ],
         "summary" : "Updates a workspace",
         "parameters" : [ {
           "in" : "body",
@@ -504,7 +649,7 @@
         }
       },
       "delete" : {
-        "tags" : [ "servers" ],
+        "tags" : [ "namespaced", "servers", "workspace" ],
         "summary" : "Deletes a workspace",
         "responses" : {
           "200" : {
@@ -524,7 +669,7 @@
         "$ref" : "#/parameters/project_id"
       } ],
       "get" : {
-        "tags" : [ "servers" ],
+        "tags" : [ "models", "namespaced", "rest-api", "servers" ],
         "summary" : "Gets all models contained in a project",
         "responses" : {
           "200" : {
@@ -542,7 +687,7 @@
         }
       },
       "post" : {
-        "tags" : [ "servers" ],
+        "tags" : [ "projects", "models", "namespaced", "servers" ],
         "summary" : "Creates a new model to the project",
         "parameters" : [ {
           "in" : "body",
@@ -579,7 +724,7 @@
         "$ref" : "#/parameters/model_id"
       } ],
       "get" : {
-        "tags" : [ "servers" ],
+        "tags" : [ "models", "namespaced", "rest-api", "servers" ],
         "summary" : "Gets model by Id",
         "responses" : {
           "200" : {
@@ -591,7 +736,7 @@
         }
       },
       "put" : {
-        "tags" : [ "servers" ],
+        "tags" : [ "models", "namespaced", "rest-api", "servers" ],
         "summary" : "Updates a model",
         "parameters" : [ {
           "in" : "body",
@@ -614,7 +759,7 @@
         }
       },
       "delete" : {
-        "tags" : [ "servers" ],
+        "tags" : [ "models", "namespaced", "rest-api", "servers" ],
         "summary" : "Deletes a model",
         "responses" : {
           "200" : {
@@ -634,7 +779,7 @@
         "$ref" : "#/parameters/project_id"
       } ],
       "get" : {
-        "tags" : [ "servers" ],
+        "tags" : [ "jobs", "namespaced", "rest-api", "servers" ],
         "summary" : "Gets all the jobs contain in a project",
         "responses" : {
           "200" : {
@@ -652,7 +797,7 @@
         }
       },
       "post" : {
-        "tags" : [ "servers" ],
+        "tags" : [ "jobs", "namespaced", "rest-api", "servers" ],
         "summary" : "Creates a new job to the project",
         "parameters" : [ {
           "in" : "body",
@@ -689,7 +834,7 @@
         "$ref" : "#/parameters/job_id"
       } ],
       "get" : {
-        "tags" : [ "servers" ],
+        "tags" : [ "jobs", "namespaced", "rest-api", "servers" ],
         "summary" : "Gets job by Id",
         "responses" : {
           "200" : {
@@ -701,7 +846,7 @@
         }
       },
       "put" : {
-        "tags" : [ "servers" ],
+        "tags" : [ "jobs", "namespaced", "rest-api", "servers" ],
         "summary" : "Updates a job",
         "parameters" : [ {
           "in" : "body",
@@ -724,7 +869,7 @@
         }
       },
       "delete" : {
-        "tags" : [ "servers" ],
+        "tags" : [ "jobs", "namespaced", "rest-api", "servers" ],
         "summary" : "Deletes a job",
         "responses" : {
           "200" : {
@@ -746,7 +891,7 @@
         "$ref" : "#/parameters/server_id"
       } ],
       "get" : {
-        "tags" : [ "servers" ],
+        "tags" : [ "rest-api", "namespaced", "servers" ],
         "summary" : "Gets all the run statistics",
         "responses" : {
           "200" : {
@@ -774,8 +919,8 @@
         "required" : true
       } ],
       "get" : {
-        "tags" : [ "servers" ],
-        "summary" : "Gets all the run statistics",
+        "tags" : [ "rest-api", "servers", "namespaced" ],
+        "summary" : "Gets all run statistics",
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -796,7 +941,7 @@
         "$ref" : "#/parameters/server_id"
       } ],
       "get" : {
-        "tags" : [ "servers" ],
+        "tags" : [ "namespaced", "rest-api", "servers" ],
         "summary" : "Gets all the statistics of server",
         "responses" : {
           "200" : {
@@ -818,7 +963,7 @@
         "$ref" : "#/parameters/server_id"
       } ],
       "get" : {
-        "tags" : [ "servers", "stream api" ],
+        "tags" : [ "projects", "servers", "stream-api" ],
         "summary" : "gets streaming logs by project and server ids",
         "parameters" : [ {
           "name" : "tail",
@@ -849,7 +994,7 @@
         "$ref" : "#/parameters/project_id"
       } ],
       "get" : {
-        "tags" : [ "collaborators" ],
+        "tags" : [ "collaborators", "servers", "rest-api" ],
         "summary" : "Gets all active project collaborators",
         "description" : "",
         "responses" : {
@@ -865,7 +1010,7 @@
         }
       },
       "post" : {
-        "tags" : [ "collaborators" ],
+        "tags" : [ "collaborators", "servers", "rest-api" ],
         "summary" : "Add a collaborator to the project",
         "parameters" : [ {
           "in" : "body",
@@ -893,7 +1038,7 @@
     },
     "/[namespace/]projects/{project_id}/collaborators/{user_id}" : {
       "delete" : {
-        "tags" : [ "collaborators" ],
+        "tags" : [ "collaborators", "namespaced", "rest-api", "servers" ],
         "summary" : "Deletes a collaborator from the project",
         "parameters" : [ {
           "$ref" : "#/parameters/project_id"
@@ -909,7 +1054,7 @@
     },
     "/[namespace/]projects" : {
       "get" : {
-        "tags" : [ "projects", "rest-api" ],
+        "tags" : [ "projects", "namespaced", "rest-api" ],
         "summary" : "Gets all the projects in the owner context",
         "operationId" : "searchProject",
         "description" : "By passing in the appropriate options, you can search for\navailable project in the system\n",
@@ -940,7 +1085,7 @@
         }
       },
       "post" : {
-        "tags" : [ "events", "rest-api" ],
+        "tags" : [ "projects", "namespaced", "rest-api" ],
         "summary" : "Adds a new project",
         "parameters" : [ {
           "in" : "body",
@@ -971,7 +1116,7 @@
     },
     "/[namespace/]settings" : {
       "get" : {
-        "tags" : [ "user-account" ],
+        "tags" : [ "namespaced", "rest-api", "user-account" ],
         "summary" : "Gets the user settings",
         "responses" : {
           "200" : {
@@ -1010,7 +1155,7 @@
     },
     "/[namespace/]settings/sshkey" : {
       "get" : {
-        "tags" : [ "user-account" ],
+        "tags" : [ "namespaced", "rest-api", "user-account" ],
         "summary" : "Gets the ssh key created",
         "responses" : {
           "200" : {
@@ -1025,7 +1170,7 @@
     "/[namespace/]settings/sshkey/reset" : {
       "post" : {
         "summary" : "Creates or resets the ssh key",
-        "tags" : [ "user-account" ],
+        "tags" : [ "namespaced", "rest-api", "user-account" ],
         "responses" : {
           "201" : {
             "description" : "ssh-key created or updated",
@@ -1039,7 +1184,7 @@
     "/[namespace/]settings/emails" : {
       "get" : {
         "summary" : "Gets the emails registered in the account",
-        "tags" : [ "user-account" ],
+        "tags" : [ "namespaced", "rest-api", "user-account" ],
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -1054,7 +1199,7 @@
       },
       "post" : {
         "summary" : "Registers a new email",
-        "tags" : [ "user-account" ],
+        "tags" : [ "namespaced", "rest-api", "user-account" ],
         "parameters" : [ {
           "in" : "body",
           "name" : "email",
@@ -1072,8 +1217,8 @@
     },
     "/[namespace/]settings/emails/{address}/make_primary" : {
       "put" : {
-        "tags" : [ "user-account" ],
-        "summary" : "Make the email address primary",
+        "tags" : [ "namespaced", "rest-api", "user-account" ],
+        "summary" : "Make email address primary address",
         "parameters" : [ {
           "in" : "path",
           "name" : "address",
@@ -1089,7 +1234,7 @@
     },
     "/[namespace/]settings/api_key" : {
       "get" : {
-        "tags" : [ "user-account" ],
+        "tags" : [ "namespaced", "rest-api", "user-account" ],
         "summary" : "gets the value of api_key",
         "responses" : {
           "200" : {
@@ -1103,7 +1248,7 @@
     },
     "/[namespace/]settings/api_key/reset" : {
       "post" : {
-        "tags" : [ "user-account" ],
+        "tags" : [ "namespaced", "rest-api", "user-account" ],
         "summary" : "Creates or Resets the api_key",
         "responses" : {
           "201" : {
@@ -1117,6 +1262,7 @@
     },
     "/[namespace/]servers/options/resources" : {
       "get" : {
+        "tags" : [ "namespaced", "rest-api", "servers" ],
         "security" : [ {
           "oauth2_password" : [ "admin" ]
         } ],
@@ -1138,6 +1284,7 @@
         }
       },
       "post" : {
+        "tags" : [ "rest-api", "namespaced", "servers" ],
         "security" : [ {
           "oauth2_password" : [ "admin" ]
         } ],
@@ -1170,6 +1317,7 @@
         "type" : "string"
       } ],
       "delete" : {
+        "tags" : [ "namespaced", "rest-api", "servers" ],
         "security" : [ {
           "oauth2_password" : [ "admin" ]
         } ],
@@ -1184,6 +1332,7 @@
         }
       },
       "put" : {
+        "tags" : [ "namespaced", "rest-api", "servers" ],
         "security" : [ {
           "oauth2_password" : [ "admin" ]
         } ],
@@ -1197,6 +1346,7 @@
     },
     "/[namespace/]servers/options/types" : {
       "get" : {
+        "tags" : [ "namespaced", "rest-api", "servers" ],
         "security" : [ {
           "oauth2_password" : [ "admin" ]
         } ],
@@ -1218,6 +1368,7 @@
         }
       },
       "post" : {
+        "tags" : [ "namespaced", "rest-api", "servers" ],
         "security" : [ {
           "oauth2_password" : [ "admin" ]
         } ],
@@ -1238,12 +1389,10 @@
     },
     "/[namespace/]servers/options/types/{type_id}" : {
       "parameters" : [ {
-        "in" : "path",
-        "name" : "type_id",
-        "required" : true,
-        "type" : "string"
+        "$ref" : "#/parameters/type_id"
       } ],
       "delete" : {
+        "tags" : [ "namespaced", "rest-api", "servers" ],
         "security" : [ {
           "oauth2_password" : [ "admin" ]
         } ],
@@ -1258,6 +1407,7 @@
         }
       },
       "put" : {
+        "tags" : [ "namespaced", "rest-api", "servers" ],
         "security" : [ {
           "oauth2_password" : [ "admin" ]
         } ],
@@ -1271,6 +1421,7 @@
     },
     "/[namespace/]teams" : {
       "get" : {
+        "tags" : [ "namespaced", "rest-api", "teams" ],
         "summary" : "Gets all user teams",
         "description" : "The teams can be the created by herself or those where her was added",
         "responses" : {
@@ -1288,6 +1439,7 @@
     },
     "/[namespace/]integrations" : {
       "get" : {
+        "tags" : [ "integrations", "namespaced", "rest-api" ],
         "responses" : {
           "200" : {
             "description" : "OK"
@@ -1295,6 +1447,7 @@
         }
       },
       "post" : {
+        "tags" : [ "integrations", "namespaced", "rest-api" ],
         "parameters" : [ {
           "name" : "integration",
           "in" : "body",
@@ -1312,6 +1465,7 @@
     },
     "/[namespace/]users" : {
       "get" : {
+        "tags" : [ "namespaced", "rest-api", "users" ],
         "security" : [ {
           "oauth2_password" : [ "admin" ]
         } ],
@@ -1334,6 +1488,7 @@
         }
       },
       "post" : {
+        "tags" : [ "namespaced", "rest-api", "users" ],
         "security" : [ {
           "oauth2_password" : [ "admin" ]
         } ],
@@ -1368,7 +1523,7 @@
     },
     "/users/me" : {
       "get" : {
-        "tags" : [ "user-account" ],
+        "tags" : [ "rest-api", "user-account" ],
         "summary" : "Gets the user info",
         "responses" : {
           "200" : {
@@ -1381,14 +1536,15 @@
       }
     },
     "/users/{user_id}" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/user_id"
+      } ],
       "get" : {
+        "tags" : [ "rest-api", "users" ],
         "security" : [ {
           "oauth2_password" : [ "admin" ]
         } ],
         "summary" : "Gets a user by ID",
-        "parameters" : [ {
-          "$ref" : "#/parameters/user_id"
-        } ],
         "responses" : {
           "200" : {
             "description" : "Returns the user data",
@@ -1402,6 +1558,7 @@
         }
       },
       "put" : {
+        "tags" : [ "rest-api", "users" ],
         "security" : [ {
           "oauth2_password" : [ "admin" ]
         } ],
@@ -1434,6 +1591,7 @@
         }
       },
       "delete" : {
+        "tags" : [ "rest-api", "users" ],
         "security" : [ {
           "oauth2_password" : [ "admin" ]
         } ],
@@ -1478,7 +1636,7 @@
         }
       }
     },
-    "Actions" : {
+    "Action" : {
       "type" : "object",
       "properties" : {
         "resource_uri" : {
@@ -1547,6 +1705,21 @@
         "can_be_retried" : {
           "type" : "boolean",
           "description" : "If the action can be canceled by the user in the middle of its execution"
+        }
+      }
+    },
+    "ActionLog" : {
+      "properties" : {
+        "follow" : {
+          "type" : "boolean",
+          "default" : true,
+          "example" : true
+        },
+        "tail" : {
+          "type" : "integer",
+          "format" : "int32",
+          "default" : 300,
+          "example" : 350
         }
       }
     },
@@ -2210,13 +2383,14 @@
     }
   },
   "parameters" : {
-    "limit_param" : {
-      "name" : "limit",
-      "in" : "query",
-      "description" : "max records to return",
-      "required" : false,
-      "type" : "integer",
-      "format" : "int32"
+    "action_id" : {
+      "name" : "action_id",
+      "in" : "path",
+      "required" : true,
+      "minLength" : 8,
+      "maxLength" : 25,
+      "description" : "The action's Id",
+      "type" : "string"
     },
     "event_id" : {
       "name" : "event_id",
@@ -2253,6 +2427,14 @@
       "maxLength" : 20,
       "description" : "The job's Id",
       "type" : "string"
+    },
+    "limit_param" : {
+      "name" : "limit",
+      "in" : "query",
+      "description" : "max records to return",
+      "required" : false,
+      "type" : "integer",
+      "format" : "int32"
     },
     "model_id" : {
       "name" : "model_id",
@@ -2294,6 +2476,14 @@
       "required" : true,
       "description" : "Id to identify any type of server: Workspace, Model or Job"
     },
+    "type_id" : {
+      "in" : "path",
+      "name" : "type_id",
+      "type" : "string",
+      "enum" : [ "job", "model", "workspace" ],
+      "required" : true,
+      "description" : "Id to identify server type"
+    },
     "user_id" : {
       "name" : "user_id",
       "in" : "path",
@@ -2314,6 +2504,9 @@
     }
   },
   "responses" : {
+    "ActionDoesNotExistResponse" : {
+      "description" : "Action does not exist"
+    },
     "BadRequestResponse" : {
       "description" : "Bad request. Verify field values"
     },
