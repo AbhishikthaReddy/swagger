@@ -6,37 +6,49 @@
       "email" : "conact@3blades.io"
     },
     "version" : "0.1.1",
-    "description" : "This documentation describes the `3Blades API`. 3Blades currently offers a **HTTP REST API** and a **Websocket Stream API**. Both of these APIs are used by the web user interface and command line tools (CLI). This documentation also provides examples on how to use the API, including CLI, Go and Python.\n\n  **Authentication**\n\nA valid `API Key` from your account is necessary to authenticate to the REST API and Stream API. To obtain your API Key, log into your account using the Web UI, select your profile at the top right hand corner, select Settings, and then select the Reveal link in the API Key section.\nEach API request requires an HTTP header that includes the 'X-Auth-Token’ and 'X-Auth-Project-Id’ parameter. \n\n  `X-Auth-Token`: The JSON web token (JWT) that you receive when logging into 3Blades.\n  \n**REST API**\n\n  The 3Blades REST API is reachable through the following hostname:\n\n  https://api.3blades.io/\n\n  All requests should be sent to this endpoint using Basic authentication using your API key as password:\n\n  Authorization: `Basic 3f9g2bc9da80957de8f6e9f3623a6b35c3cc30c4`\n\nHTTP responses are given in JSON format, so the following Accept header is required for every API call:\n\n  Accept: `application/json`\n  \nAdditional documentation can be found at https://support.3blades.io.\n\n  **Stream API**\n\n The 3Blades Stream API is available at:\n \n   wss://ws.3blades.io/\n   \n  Authentication is the same on the Stream API as it is on the REST API:\n\n  Authorization: `Basic 3f9g2bc9da80957de8f6e9f3623a6b35c3cc30c4`",
+    "description" : "This documentation describes the `3Blades API`. 3Blades currently offers a **HTTP REST API** and a **Websocket Stream API**. Both of these APIs are used by the web user interface and command line tools (CLI). This documentation also provides examples on how to use the API, including CLI, Go and Python.\n\n  **Authentication**\n\nA valid `API Key` from your account is necessary to authenticate to the REST API and Stream API. To obtain your API Key, log into your account using the Web UI, select your profile at the top right hand corner, select Settings, and then select the Reveal link in the API Key section.\nEach API request requires an HTTP header that includes the 'X-Auth-Token’ and 'X-Auth-project_id’ parameter.\n\n  `X-Auth-Token`: The JSON web token (JWT) that you receive when logging into 3Blades.\n\n**REST API**\n\n  The 3Blades REST API is reachable through the following hostname:\n\n  https://api.3blades.io/\n\n  All requests should be sent to this endpoint using Basic authentication using your API key as password:\n\n  Authorization: `Basic 3f9g2bc9da80957de8f6e9f3623a6b35c3cc30c4`\n\nHTTP responses are given in JSON format, so the following Accept header is required for every API call:\n\n  Accept: `application/json`\n\nAdditional documentation can be found at https://support.3blades.io.\n\n  **Stream API**\n\n The 3Blades Stream API is available at:\n\n   wss://ws.3blades.io/\n\n  Authentication is the same on the Stream API as it is on the REST API:\n\n  Authorization: `Basic 3f9g2bc9da80957de8f6e9f3623a6b35c3cc30c4`",
     "license" : {
       "name" : "BSD 3.0",
       "url" : "https://opensource.org/licenses/BSD-3-Clause"
     }
   },
   "tags" : [ {
-    "name" : "internal-use",
-    "description" : "These actions are used internally for other apps/services"
+    "name" : "admin",
+    "description" : "Administrator resources"
   }, {
-    "name" : "user-account",
-    "description" : "Retrieve information about the user account"
+    "name" : "audit-logs",
+    "description" : "Audit logs to track user activity"
   }, {
     "name" : "collaborators",
-    "description" : ""
+    "description" : "Project ollaborators"
+  }, {
+    "name" : "events",
+    "description" : "System eents"
+  }, {
+    "name" : "internal-use",
+    "description" : "Actions are used internally by other services"
+  }, {
+    "name" : "groups",
+    "description" : "Entity representing groups of users"
   }, {
     "name" : "projects",
-    "description" : ""
+    "description" : "User or team projects"
   }, {
     "name" : "servers",
-    "description" : ""
+    "description" : "All server types"
   }, {
     "name" : "rest-api",
-    "description" : "rest api endpoint type"
+    "description" : "RESTful API endpoint type"
   }, {
     "name" : "stream-api",
-    "description" : "stream api endpoint type"
+    "description" : "Stream API endpoint type"
+  }, {
+    "name" : "user-account",
+    "description" : "Retrieve user account information"
   } ],
   "host" : "virtserver.swaggerhub.com",
   "basePath" : "/3Blades/app-backend/v1",
-  "schemes" : [ "https" ],
+  "schemes" : [ "https", "wss" ],
   "produces" : [ "application/json" ],
   "consumes" : [ "application/json" ],
   "securityDefinitions" : {
@@ -46,7 +58,7 @@
       "tokenUrl" : "/auth/oauth2/token",
       "scopes" : {
         "user" : "User scope",
-        "admin" : "For admin operations"
+        "admin" : "Admin scope"
       }
     }
   },
@@ -54,299 +66,16 @@
     "oauth2_password" : [ "user" ]
   } ],
   "paths" : {
-    "/admin/users" : {
+    "/audit_logs" : {
       "get" : {
+        "tags" : [ "audit-logs", "rest-api" ],
         "security" : [ {
           "oauth2_password" : [ "admin" ]
         } ],
-        "summary" : "Gets a list of all users.",
         "parameters" : [ {
-          "$ref" : "#/parameters/skip-param"
+          "$ref" : "#/parameters/skip_param"
         }, {
-          "$ref" : "#/parameters/limit-param"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "A list of users",
-            "schema" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/definitions/User"
-              }
-            }
-          }
-        }
-      },
-      "post" : {
-        "security" : [ {
-          "oauth2_password" : [ "admin" ]
-        } ],
-        "summary" : "Adds a new user",
-        "parameters" : [ {
-          "in" : "body",
-          "name" : "user",
-          "description" : "User definition",
-          "required" : true,
-          "schema" : {
-            "$ref" : "#/definitions/User"
-          }
-        } ],
-        "responses" : {
-          "201" : {
-            "description" : "User created",
-            "headers" : {
-              "Location" : {
-                "type" : "string",
-                "description" : "The location to get the new user"
-              }
-            }
-          },
-          "400" : {
-            "$ref" : "#/responses/BadRequestResponse"
-          },
-          "default" : {
-            "$ref" : "#/responses/Standard500ErrorResponse"
-          }
-        }
-      }
-    },
-    "/admin/users/{user-id}" : {
-      "get" : {
-        "security" : [ {
-          "oauth2_password" : [ "admin" ]
-        } ],
-        "summary" : "Gets a user by ID",
-        "parameters" : [ {
-          "$ref" : "#/parameters/user-id"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Returns the user data",
-            "schema" : {
-              "$ref" : "#/definitions/User"
-            }
-          },
-          "404" : {
-            "$ref" : "#/responses/UserDoesNotExistResponse"
-          }
-        }
-      },
-      "put" : {
-        "security" : [ {
-          "oauth2_password" : [ "admin" ]
-        } ],
-        "summary" : "Updates user object",
-        "description" : "Updates user data",
-        "parameters" : [ {
-          "$ref" : "#/parameters/user-id"
-        }, {
-          "in" : "body",
-          "name" : "user",
-          "description" : "User definition",
-          "required" : true,
-          "schema" : {
-            "$ref" : "#/definitions/User"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "User updated"
-          },
-          "400" : {
-            "$ref" : "#/responses/BadRequestResponse"
-          },
-          "404" : {
-            "$ref" : "#/responses/UserDoesNotExistResponse"
-          },
-          "default" : {
-            "$ref" : "#/responses/Standard500ErrorResponse"
-          }
-        }
-      },
-      "delete" : {
-        "security" : [ {
-          "oauth2_password" : [ "admin" ]
-        } ],
-        "summary" : "Deletes a user by ID",
-        "parameters" : [ {
-          "$ref" : "#/parameters/user-id"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "User deleted"
-          },
-          "404" : {
-            "$ref" : "#/responses/UserDoesNotExistResponse"
-          },
-          "default" : {
-            "$ref" : "#/responses/Standard500ErrorResponse"
-          }
-        }
-      }
-    },
-    "/admin/servers/options/resources" : {
-      "get" : {
-        "security" : [ {
-          "oauth2_password" : [ "admin" ]
-        } ],
-        "parameters" : [ {
-          "$ref" : "#/parameters/skip-param"
-        }, {
-          "$ref" : "#/parameters/limit-param"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "schema" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/definitions/ServerResourcesType"
-              }
-            }
-          }
-        }
-      },
-      "post" : {
-        "security" : [ {
-          "oauth2_password" : [ "admin" ]
-        } ],
-        "parameters" : [ {
-          "name" : "resources-type",
-          "in" : "body",
-          "description" : "Resources type to create",
-          "schema" : {
-            "$ref" : "#/definitions/ServerResourcesType"
-          }
-        } ],
-        "responses" : {
-          "201" : {
-            "description" : "Created",
-            "headers" : {
-              "Location" : {
-                "type" : "string",
-                "description" : "Location where the new item can be obtained"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/admin/servers/options/resources/{resources-id}" : {
-      "parameters" : [ {
-        "in" : "path",
-        "name" : "resources-id",
-        "required" : true,
-        "type" : "string"
-      } ],
-      "delete" : {
-        "security" : [ {
-          "oauth2_password" : [ "admin" ]
-        } ],
-        "summary" : "Deletes an unused resource type",
-        "responses" : {
-          "200" : {
-            "description" : "Deleted"
-          },
-          "404" : {
-            "$ref" : "#/responses/GeneralDoesNotExistResponse"
-          }
-        }
-      },
-      "put" : {
-        "security" : [ {
-          "oauth2_password" : [ "admin" ]
-        } ],
-        "summary" : "Updates a resource type",
-        "responses" : {
-          "200" : {
-            "description" : "Updated"
-          }
-        }
-      }
-    },
-    "/admin/servers/options/types" : {
-      "get" : {
-        "security" : [ {
-          "oauth2_password" : [ "admin" ]
-        } ],
-        "parameters" : [ {
-          "$ref" : "#/parameters/skip-param"
-        }, {
-          "$ref" : "#/parameters/limit-param"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "schema" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/definitions/ServerType"
-              }
-            }
-          }
-        }
-      },
-      "post" : {
-        "security" : [ {
-          "oauth2_password" : [ "admin" ]
-        } ],
-        "parameters" : [ {
-          "name" : "server-type",
-          "in" : "body",
-          "schema" : {
-            "$ref" : "#/definitions/ServerType"
-          },
-          "description" : "Environment type to create"
-        } ],
-        "responses" : {
-          "201" : {
-            "description" : "Created"
-          }
-        }
-      }
-    },
-    "/admin/servers/options/types/{type-id}" : {
-      "parameters" : [ {
-        "in" : "path",
-        "name" : "type-id",
-        "required" : true,
-        "type" : "string"
-      } ],
-      "delete" : {
-        "security" : [ {
-          "oauth2_password" : [ "admin" ]
-        } ],
-        "summary" : "Deletes an unused env type",
-        "responses" : {
-          "200" : {
-            "description" : "Deleted"
-          },
-          "404" : {
-            "$ref" : "#/responses/GeneralDoesNotExistResponse"
-          }
-        }
-      },
-      "put" : {
-        "security" : [ {
-          "oauth2_password" : [ "admin" ]
-        } ],
-        "summary" : "Updates an env type",
-        "responses" : {
-          "200" : {
-            "description" : "Updated"
-          }
-        }
-      }
-    },
-    "/admin/audit-logs" : {
-      "get" : {
-        "security" : [ {
-          "oauth2_password" : [ "admin" ]
-        } ],
-        "parameters" : [ {
-          "$ref" : "#/parameters/skip-param"
-        }, {
-          "$ref" : "#/parameters/limit-param"
+          "$ref" : "#/parameters/limit_param"
         } ],
         "responses" : {
           "200" : {
@@ -364,11 +93,11 @@
         }
       },
       "post" : {
+        "tags" : [ "internal-use", "rest-api" ],
         "security" : [ {
           "oauth2_password" : [ "admin" ]
         } ],
         "summary" : "Register actions or events that occurs internally on other application or services",
-        "tags" : [ "internal-use" ],
         "parameters" : [ {
           "required" : true,
           "schema" : {
@@ -385,25 +114,22 @@
         }
       }
     },
-    "/{owner-id}/projects" : {
-      "parameters" : [ {
-        "$ref" : "#/parameters/owner-id"
-      } ],
+    "/[namespace/]events" : {
       "get" : {
-        "tags" : [ "projects" ],
-        "summary" : "Gets all the projects in the owner context",
-        "operationId" : "searchProject",
-        "description" : "By passing in the appropriate options, you can search for\navailable project in the system\n",
+        "tags" : [ "events", "stream-api" ],
+        "summary" : "Gets all events from owner context",
+        "operationId" : "searchEvent",
+        "description" : "By passing in the appropriate options, you can search for\navailable events in the system\n",
         "parameters" : [ {
           "name" : "searchString",
           "in" : "query",
-          "description" : "pass an optional search string for looking up project",
+          "description" : "pass an optional search string for looking up an event",
           "required" : false,
           "type" : "string"
         }, {
-          "$ref" : "#/parameters/skip-param"
+          "$ref" : "#/parameters/skip_param"
         }, {
-          "$ref" : "#/parameters/limit-param"
+          "$ref" : "#/parameters/limit_param"
         } ],
         "responses" : {
           "200" : {
@@ -411,7 +137,7 @@
             "schema" : {
               "type" : "array",
               "items" : {
-                "$ref" : "#/definitions/Project"
+                "$ref" : "#/definitions/Event"
               }
             }
           },
@@ -419,46 +145,38 @@
             "description" : "bad input parameter"
           }
         }
-      },
-      "post" : {
-        "tags" : [ "projects" ],
-        "summary" : "Adds a new project",
+      }
+    },
+    "/[namespace/]events/{event_id}" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/event_id"
+      } ],
+      "get" : {
+        "tags" : [ "events", "stream-api" ],
+        "summary" : "Gets a event by ID",
         "parameters" : [ {
-          "in" : "body",
-          "name" : "project",
-          "description" : "Project to add",
-          "schema" : {
-            "$ref" : "#/definitions/Project"
-          }
+          "$ref" : "#/parameters/event_id"
         } ],
         "responses" : {
-          "201" : {
-            "description" : "Project created",
-            "headers" : {
-              "Location" : {
-                "type" : "string",
-                "description" : "The location to get the new project"
-              }
+          "200" : {
+            "description" : "Returns event data",
+            "schema" : {
+              "$ref" : "#/definitions/Event"
             }
           },
-          "400" : {
-            "$ref" : "#/responses/BadRequestResponse"
-          },
-          "409" : {
-            "description" : "An existing project already exists"
+          "404" : {
+            "$ref" : "#/responses/EventDoesNotExistResponse"
           }
         }
       }
     },
-    "/{owner-id}/groups" : {
-      "parameters" : [ {
-        "$ref" : "#/parameters/owner-id"
-      } ],
+    "/[namespace/]groups" : {
       "get" : {
+        "tags" : [ "groups", "rest-api" ],
         "parameters" : [ {
-          "$ref" : "#/parameters/skip-param"
+          "$ref" : "#/parameters/skip_param"
         }, {
-          "$ref" : "#/parameters/limit-param"
+          "$ref" : "#/parameters/limit_param"
         } ],
         "responses" : {
           "200" : {
@@ -494,11 +212,9 @@
         }
       }
     },
-    "/{owner-id}/groups/{group-id}" : {
+    "/[namespace/]groups/{group_id}" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/owner-id"
-      }, {
-        "$ref" : "#/parameters/group-id"
+        "$ref" : "#/parameters/group_id"
       } ],
       "put" : {
         "description" : "Updates a group",
@@ -525,59 +241,12 @@
         }
       }
     },
-    "/{user-id}/teams" : {
-      "parameters" : [ {
-        "$ref" : "#/parameters/user-id"
-      } ],
-      "get" : {
-        "summary" : "Gets all user teams",
-        "description" : "The teams can be the created by herself or those where her was added",
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "schema" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/definitions/Team"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/{user-id}/integrations" : {
-      "parameters" : [ {
-        "$ref" : "#/parameters/user-id"
-      } ],
-      "get" : {
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          }
-        }
-      },
-      "post" : {
-        "parameters" : [ {
-          "name" : "integration",
-          "in" : "body",
-          "schema" : {
-            "$ref" : "#/definitions/Integration"
-          },
-          "description" : "integration"
-        } ],
-        "responses" : {
-          "201" : {
-            "description" : "Created"
-          }
-        }
-      }
-    },
-    "/projects/{project-id}" : {
+    "/[namespace/]projects/{project_id}" : {
       "get" : {
         "tags" : [ "projects" ],
         "summary" : "Gets a project by ID",
         "parameters" : [ {
-          "$ref" : "#/parameters/project-id"
+          "$ref" : "#/parameters/project_id"
         } ],
         "responses" : {
           "200" : {
@@ -596,7 +265,7 @@
         "summary" : "Updates project object",
         "description" : "Updates a project",
         "parameters" : [ {
-          "$ref" : "#/parameters/project-id"
+          "$ref" : "#/parameters/project_id"
         }, {
           "in" : "body",
           "name" : "project",
@@ -624,7 +293,7 @@
         "tags" : [ "projects" ],
         "summary" : "Deletes a project by ID",
         "parameters" : [ {
-          "$ref" : "#/parameters/project-id"
+          "$ref" : "#/parameters/project_id"
         } ],
         "responses" : {
           "200" : {
@@ -639,9 +308,9 @@
         }
       }
     },
-    "/projects/{project-id}/files" : {
+    "/[namespace/]projects/{project_id}/files" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/project-id"
+        "$ref" : "#/parameters/project_id"
       } ],
       "get" : {
         "tags" : [ "files" ],
@@ -683,11 +352,11 @@
         }
       }
     },
-    "/project/{project-id}/files/{file-id}" : {
+    "/[namespace/]project/{project_id}/files/{file_id}" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/file-id"
+        "$ref" : "#/parameters/file_id"
       }, {
-        "$ref" : "#/parameters/project-id"
+        "$ref" : "#/parameters/project_id"
       } ],
       "get" : {
         "tags" : [ "files" ],
@@ -740,9 +409,9 @@
         }
       }
     },
-    "/projects/{project-id}/workspaces" : {
+    "/[namespace/]projects/{project_id}/workspaces" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/project-id"
+        "$ref" : "#/parameters/project_id"
       } ],
       "get" : {
         "tags" : [ "servers" ],
@@ -793,11 +462,11 @@
         }
       }
     },
-    "/projects/{project-id}/workspaces/{workspace-id}" : {
+    "/[namespace/]projects/{project_id}/workspaces/{workspace_id}" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/project-id"
+        "$ref" : "#/parameters/project_id"
       }, {
-        "$ref" : "#/parameters/workspace-id"
+        "$ref" : "#/parameters/workspace_id"
       } ],
       "get" : {
         "tags" : [ "servers" ],
@@ -850,9 +519,9 @@
         }
       }
     },
-    "/projects/{project-id}/models" : {
+    "/[namespace/]projects/{project_id}/models" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/project-id"
+        "$ref" : "#/parameters/project_id"
       } ],
       "get" : {
         "tags" : [ "servers" ],
@@ -903,11 +572,11 @@
         }
       }
     },
-    "/projects/{project-id}/models/{model-id}" : {
+    "/[namespace/]projects/{project_id}/models/{model_id}" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/project-id"
+        "$ref" : "#/parameters/project_id"
       }, {
-        "$ref" : "#/parameters/model-id"
+        "$ref" : "#/parameters/model_id"
       } ],
       "get" : {
         "tags" : [ "servers" ],
@@ -960,9 +629,9 @@
         }
       }
     },
-    "/projects/{project-id}/jobs" : {
+    "/[namespace/]projects/{project_id}/jobs" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/project-id"
+        "$ref" : "#/parameters/project_id"
       } ],
       "get" : {
         "tags" : [ "servers" ],
@@ -1013,11 +682,11 @@
         }
       }
     },
-    "/projects/{project-id}/jobs/{job-id}" : {
+    "/[namespace/]projects/{project_id}/jobs/{job_id}" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/project-id"
+        "$ref" : "#/parameters/project_id"
       }, {
-        "$ref" : "#/parameters/job-id"
+        "$ref" : "#/parameters/job_id"
       } ],
       "get" : {
         "tags" : [ "servers" ],
@@ -1070,11 +739,11 @@
         }
       }
     },
-    "/projects/{project-id}/server/{server-id}/runs/stats" : {
+    "/[namespace/]projects/{project_id}/server/{server_id}/runs/stats" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/project-id"
+        "$ref" : "#/parameters/project_id"
       }, {
-        "$ref" : "#/parameters/server-id"
+        "$ref" : "#/parameters/server_id"
       } ],
       "get" : {
         "tags" : [ "servers" ],
@@ -1092,14 +761,14 @@
         }
       }
     },
-    "/projects/{project-id}/server/{server-id}/runs/{run-id}/stats" : {
+    "/[namespace/]projects/{project_id}/server/{server_id}/runs/{run_id}/stats" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/project-id"
+        "$ref" : "#/parameters/project_id"
       }, {
-        "$ref" : "#/parameters/server-id"
+        "$ref" : "#/parameters/server_id"
       }, {
         "in" : "path",
-        "name" : "run-id",
+        "name" : "run_id",
         "type" : "number",
         "format" : "int32",
         "required" : true
@@ -1120,11 +789,11 @@
         }
       }
     },
-    "/projects/{project-id}/server/{server-id}/statistics" : {
+    "/[namespace/]projects/{project_id}/server/{server_id}/statistics" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/project-id"
+        "$ref" : "#/parameters/project_id"
       }, {
-        "$ref" : "#/parameters/server-id"
+        "$ref" : "#/parameters/server_id"
       } ],
       "get" : {
         "tags" : [ "servers" ],
@@ -1142,11 +811,11 @@
         }
       }
     },
-    "/projects/{project-id}/server/{server-id}/logs" : {
+    "/[namespace/]projects/{project_id}/server/{server_id}/logs" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/project-id"
+        "$ref" : "#/parameters/project_id"
       }, {
-        "$ref" : "#/parameters/server-id"
+        "$ref" : "#/parameters/server_id"
       } ],
       "get" : {
         "tags" : [ "servers", "stream api" ],
@@ -1175,9 +844,9 @@
         }
       }
     },
-    "/projects/{project-id}/collaborators" : {
+    "/[namespace/]projects/{project_id}/collaborators" : {
       "parameters" : [ {
-        "$ref" : "#/parameters/project-id"
+        "$ref" : "#/parameters/project_id"
       } ],
       "get" : {
         "tags" : [ "collaborators" ],
@@ -1222,14 +891,14 @@
         }
       }
     },
-    "/projects/{project-id}/collaborators/{user-id}" : {
+    "/[namespace/]projects/{project_id}/collaborators/{user_id}" : {
       "delete" : {
         "tags" : [ "collaborators" ],
         "summary" : "Deletes a collaborator from the project",
         "parameters" : [ {
-          "$ref" : "#/parameters/project-id"
+          "$ref" : "#/parameters/project_id"
         }, {
-          "$ref" : "#/parameters/user-id"
+          "$ref" : "#/parameters/user_id"
         } ],
         "responses" : {
           "200" : {
@@ -1238,7 +907,69 @@
         }
       }
     },
-    "/account/settings" : {
+    "/[namespace/]projects" : {
+      "get" : {
+        "tags" : [ "projects", "rest-api" ],
+        "summary" : "Gets all the projects in the owner context",
+        "operationId" : "searchProject",
+        "description" : "By passing in the appropriate options, you can search for\navailable project in the system\n",
+        "parameters" : [ {
+          "name" : "searchString",
+          "in" : "query",
+          "description" : "pass an optional search string for looking up project",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "$ref" : "#/parameters/skip_param"
+        }, {
+          "$ref" : "#/parameters/limit_param"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Search results matching criteria",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Event"
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "events", "rest-api" ],
+        "summary" : "Adds a new project",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "project",
+          "description" : "Project to add",
+          "schema" : {
+            "$ref" : "#/definitions/Project"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Project created",
+            "headers" : {
+              "Location" : {
+                "type" : "string",
+                "description" : "The location to get the new project"
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/responses/BadRequestResponse"
+          },
+          "409" : {
+            "description" : "An existing project already exists"
+          }
+        }
+      }
+    },
+    "/[namespace/]settings" : {
       "get" : {
         "tags" : [ "user-account" ],
         "summary" : "Gets the user settings",
@@ -1277,7 +1008,7 @@
         }
       }
     },
-    "/account/settings/sshkey" : {
+    "/[namespace/]settings/sshkey" : {
       "get" : {
         "tags" : [ "user-account" ],
         "summary" : "Gets the ssh key created",
@@ -1291,7 +1022,7 @@
         }
       }
     },
-    "/account/settings/sshkey/reset" : {
+    "/[namespace/]settings/sshkey/reset" : {
       "post" : {
         "summary" : "Creates or resets the ssh key",
         "tags" : [ "user-account" ],
@@ -1305,7 +1036,7 @@
         }
       }
     },
-    "/account/settings/emails" : {
+    "/[namespace/]settings/emails" : {
       "get" : {
         "summary" : "Gets the emails registered in the account",
         "tags" : [ "user-account" ],
@@ -1339,7 +1070,7 @@
         }
       }
     },
-    "/account/settings/emails/{address}/make-primary" : {
+    "/[namespace/]settings/emails/{address}/make_primary" : {
       "put" : {
         "tags" : [ "user-account" ],
         "summary" : "Make the email address primary",
@@ -1356,10 +1087,10 @@
         }
       }
     },
-    "/account/settings/api-key" : {
+    "/[namespace/]settings/api_key" : {
       "get" : {
         "tags" : [ "user-account" ],
-        "summary" : "gets the value of api-key",
+        "summary" : "gets the value of api_key",
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -1370,16 +1101,267 @@
         }
       }
     },
-    "/account/settings/api-key/reset" : {
+    "/[namespace/]settings/api_key/reset" : {
       "post" : {
         "tags" : [ "user-account" ],
-        "summary" : "Creates or Resets the api-key",
+        "summary" : "Creates or Resets the api_key",
         "responses" : {
           "201" : {
             "description" : "ssh-key created or updated",
             "schema" : {
               "$ref" : "#/definitions/Token"
             }
+          }
+        }
+      }
+    },
+    "/[namespace/]servers/options/resources" : {
+      "get" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
+        "parameters" : [ {
+          "$ref" : "#/parameters/skip_param"
+        }, {
+          "$ref" : "#/parameters/limit_param"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ServerResourcesType"
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
+        "parameters" : [ {
+          "name" : "resources-type",
+          "in" : "body",
+          "description" : "Resources type to create",
+          "schema" : {
+            "$ref" : "#/definitions/ServerResourcesType"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Created",
+            "headers" : {
+              "Location" : {
+                "type" : "string",
+                "description" : "Location where the new item can be obtained"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/[namespace/]servers/options/resources/{resources_id}" : {
+      "parameters" : [ {
+        "in" : "path",
+        "name" : "resources_id",
+        "required" : true,
+        "type" : "string"
+      } ],
+      "delete" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
+        "summary" : "Deletes an unused resource type",
+        "responses" : {
+          "200" : {
+            "description" : "Deleted"
+          },
+          "404" : {
+            "$ref" : "#/responses/GeneralDoesNotExistResponse"
+          }
+        }
+      },
+      "put" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
+        "summary" : "Updates a resource type",
+        "responses" : {
+          "200" : {
+            "description" : "Updated"
+          }
+        }
+      }
+    },
+    "/[namespace/]servers/options/types" : {
+      "get" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
+        "parameters" : [ {
+          "$ref" : "#/parameters/skip_param"
+        }, {
+          "$ref" : "#/parameters/limit_param"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ServerType"
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
+        "parameters" : [ {
+          "name" : "server-type",
+          "in" : "body",
+          "schema" : {
+            "$ref" : "#/definitions/ServerType"
+          },
+          "description" : "Environment type to create"
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Created"
+          }
+        }
+      }
+    },
+    "/[namespace/]servers/options/types/{type_id}" : {
+      "parameters" : [ {
+        "in" : "path",
+        "name" : "type_id",
+        "required" : true,
+        "type" : "string"
+      } ],
+      "delete" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
+        "summary" : "Deletes an unused env type",
+        "responses" : {
+          "200" : {
+            "description" : "Deleted"
+          },
+          "404" : {
+            "$ref" : "#/responses/GeneralDoesNotExistResponse"
+          }
+        }
+      },
+      "put" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
+        "summary" : "Updates an env type",
+        "responses" : {
+          "200" : {
+            "description" : "Updated"
+          }
+        }
+      }
+    },
+    "/[namespace/]teams" : {
+      "get" : {
+        "summary" : "Gets all user teams",
+        "description" : "The teams can be the created by herself or those where her was added",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Team"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/[namespace/]integrations" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      },
+      "post" : {
+        "parameters" : [ {
+          "name" : "integration",
+          "in" : "body",
+          "schema" : {
+            "$ref" : "#/definitions/Integration"
+          },
+          "description" : "integration"
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Created"
+          }
+        }
+      }
+    },
+    "/[namespace/]users" : {
+      "get" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
+        "summary" : "Gets a list of all users.",
+        "parameters" : [ {
+          "$ref" : "#/parameters/skip_param"
+        }, {
+          "$ref" : "#/parameters/limit_param"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "A list of users",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/User"
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
+        "summary" : "Adds a new user",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "user",
+          "description" : "User definition",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/User"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "User created",
+            "headers" : {
+              "Location" : {
+                "type" : "string",
+                "description" : "The location to get the new user"
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/responses/BadRequestResponse"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
           }
         }
       }
@@ -1397,12 +1379,86 @@
           }
         }
       }
+    },
+    "/users/{user_id}" : {
+      "get" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
+        "summary" : "Gets a user by ID",
+        "parameters" : [ {
+          "$ref" : "#/parameters/user_id"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Returns the user data",
+            "schema" : {
+              "$ref" : "#/definitions/User"
+            }
+          },
+          "404" : {
+            "$ref" : "#/responses/UserDoesNotExistResponse"
+          }
+        }
+      },
+      "put" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
+        "summary" : "Updates user object",
+        "description" : "Updates user data",
+        "parameters" : [ {
+          "$ref" : "#/parameters/user_id"
+        }, {
+          "in" : "body",
+          "name" : "user",
+          "description" : "User definition",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/User"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "User updated"
+          },
+          "400" : {
+            "$ref" : "#/responses/BadRequestResponse"
+          },
+          "404" : {
+            "$ref" : "#/responses/UserDoesNotExistResponse"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
+          }
+        }
+      },
+      "delete" : {
+        "security" : [ {
+          "oauth2_password" : [ "admin" ]
+        } ],
+        "summary" : "Deletes a user by ID",
+        "parameters" : [ {
+          "$ref" : "#/parameters/user_id"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "User deleted"
+          },
+          "404" : {
+            "$ref" : "#/responses/UserDoesNotExistResponse"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
+          }
+        }
+      }
     }
   },
   "definitions" : {
     "AuditLog" : {
       "type" : "object",
-      "required" : [ "date", "action", "user-id" ],
+      "required" : [ "date", "action", "user_id" ],
       "properties" : {
         "id" : {
           "format" : "integer",
@@ -1416,9 +1472,81 @@
         "action" : {
           "type" : "string"
         },
-        "user-id" : {
+        "user_id" : {
           "format" : "integer",
           "type" : "integer"
+        }
+      }
+    },
+    "Actions" : {
+      "type" : "object",
+      "properties" : {
+        "resource_uri" : {
+          "type" : "string"
+        },
+        "uuid" : {
+          "type" : "string",
+          "description" : "A unique identifier for the action generated automatically on creation"
+        },
+        "object" : {
+          "type" : "object",
+          "description" : "The API object (resource URI) to which the action applies to"
+        },
+        "action" : {
+          "type" : "string",
+          "description" : "Name of the operation performed/being performed"
+        },
+        "method" : {
+          "type" : "string",
+          "description" : "HTTP method used to access the API"
+        },
+        "path" : {
+          "type" : "string",
+          "description" : "HTTP path of the API accessed"
+        },
+        "user" : {
+          "type" : "string",
+          "description" : "The user authenticated in the request that created the action"
+        },
+        "user_agent" : {
+          "type" : "string",
+          "description" : "The user agent provided by the client when accessing the API endpoint"
+        },
+        "start_date" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Date and time when the API call was performed and the operation started processing"
+        },
+        "end_date" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Date and time when the API call finished processing"
+        },
+        "state" : {
+          "type" : "string",
+          "description" : "State of the operation (see table below)",
+          "enum" : [ "Pending", "In Progress", "Canceling", "Cancelled", "Success", "Failed" ],
+          "default" : "Pending"
+        },
+        "ip" : {
+          "type" : "string",
+          "description" : "IP address of the user that performed the API call"
+        },
+        "location" : {
+          "type" : "string",
+          "description" : "Geographic location of the IP address of the user that performed the API call"
+        },
+        "is_user_action" : {
+          "type" : "boolean",
+          "description" : "If the action has been triggered by the user"
+        },
+        "can_be_cancelled" : {
+          "type" : "boolean",
+          "description" : "If the action can be retried by the user"
+        },
+        "can_be_retried" : {
+          "type" : "boolean",
+          "description" : "If the action can be canceled by the user in the middle of its execution"
         }
       }
     },
@@ -1453,11 +1581,56 @@
         }
       }
     },
+    "Error" : {
+      "type" : "object",
+      "required" : [ "code", "message" ],
+      "properties" : {
+        "code" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "message" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Event" : {
+      "type" : "object",
+      "properties" : {
+        "action" : {
+          "type" : "string",
+          "description" : "Type of action that was executed on the object. Possible values create, update or delete.",
+          "enum" : [ "create", "update", "delete" ]
+        },
+        "datetime" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Date and time of the event in ISO 8601 format"
+        },
+        "resource_uri" : {
+          "type" : "string",
+          "description" : "Resource URI (REST API) of the object that was created or updated. You can do a GET operation on this URL to fetch its details"
+        },
+        "state" : {
+          "type" : "string",
+          "description" : "The current state of the object"
+        },
+        "type" : {
+          "type" : "string",
+          "description" : "Type of object that was created or updated. For possible values, check the events types table below.",
+          "enum" : [ "action", "data_source", "error", "file", "folder", "integration'", "job_server", "model_server", "project", "workspace_server" ]
+        },
+        "uuid" : {
+          "type" : "string",
+          "description" : "Unique identifier for the event"
+        }
+      }
+    },
     "File" : {
       "type" : "object",
       "required" : [ "content", "encoding", "file-path" ],
       "properties" : {
-        "file-id" : {
+        "file_id" : {
           "type" : "string",
           "readOnly" : true
         },
@@ -1486,39 +1659,6 @@
         "public" : {
           "default" : true,
           "type" : "boolean"
-        }
-      }
-    },
-    "ServerType" : {
-      "type" : "object",
-      "required" : [ "name", "imageName", "Cmd" ],
-      "properties" : {
-        "id" : {
-          "type" : "string",
-          "readOnly" : true
-        },
-        "name" : {
-          "type" : "string"
-        },
-        "imageName" : {
-          "type" : "string",
-          "minLength" : 200
-        },
-        "Cmd" : {
-          "type" : "string"
-        }
-      }
-    },
-    "Error" : {
-      "type" : "object",
-      "required" : [ "code", "message" ],
-      "properties" : {
-        "code" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "message" : {
-          "type" : "string"
         }
       }
     },
@@ -1562,7 +1702,7 @@
         "integrationEmail" : {
           "type" : "string"
         },
-        "user-id" : {
+        "user_id" : {
           "description" : "The User id",
           "type" : "string"
         },
@@ -1630,7 +1770,7 @@
       "type" : "object",
       "required" : [ "name", "isPrivate" ],
       "properties" : {
-        "project-id" : {
+        "project_id" : {
           "type" : "string",
           "readOnly" : true
         },
@@ -1648,6 +1788,20 @@
         "isPrivate" : {
           "type" : "boolean",
           "default" : false
+        }
+      }
+    },
+    "Role" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer"
+        },
+        "name" : {
+          "type" : "string"
+        },
+        "description" : {
+          "type" : "string"
         }
       }
     },
@@ -1673,20 +1827,6 @@
         "active" : {
           "type" : "boolean",
           "default" : true
-        }
-      }
-    },
-    "Role" : {
-      "type" : "object",
-      "properties" : {
-        "id" : {
-          "type" : "integer"
-        },
-        "name" : {
-          "type" : "string"
-        },
-        "description" : {
-          "type" : "string"
         }
       }
     },
@@ -1788,6 +1928,26 @@
         }
       }
     },
+    "ServerType" : {
+      "type" : "object",
+      "required" : [ "name", "imageName", "Cmd" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "readOnly" : true
+        },
+        "name" : {
+          "type" : "string"
+        },
+        "imageName" : {
+          "type" : "string",
+          "minLength" : 200
+        },
+        "Cmd" : {
+          "type" : "string"
+        }
+      }
+    },
     "SSHKey" : {
       "properties" : {
         "value" : {
@@ -1838,7 +1998,7 @@
           "format" : "integer",
           "type" : "integer"
         },
-        "project-id" : {
+        "project_id" : {
           "format" : "integer",
           "type" : "integer"
         },
@@ -1926,14 +2086,14 @@
         }
       }
     },
-    "TeamGroups" : {
+    "TeamGroup" : {
       "type" : "object",
       "properties" : {
         "teamId" : {
           "format" : "integer",
           "type" : "integer"
         },
-        "group-id" : {
+        "group_id" : {
           "format" : "integer",
           "type" : "integer"
         }
@@ -1964,11 +2124,32 @@
         }
       }
     },
+    "Trigger" : {
+      "properties" : {
+        "name" : {
+          "type" : "string",
+          "description" : "A user provided name for the trigger"
+        },
+        "operation" : {
+          "type" : "string",
+          "description" : "The operation that the trigger call performes"
+        },
+        "resource_uri" : {
+          "type" : "string",
+          "description" : "A unique API endpoint that represents the trigger"
+        },
+        "url" : {
+          "type" : "string",
+          "description" : "Address to be used to call the trigger with a POST request",
+          "enum" : [ "redeploy" ]
+        }
+      }
+    },
     "User" : {
       "type" : "object",
       "required" : [ "email", "username", "firstName" ],
       "properties" : {
-        "user-id" : {
+        "user_id" : {
           "type" : "string",
           "readOnly" : true
         },
@@ -2029,15 +2210,7 @@
     }
   },
   "parameters" : {
-    "skip-param" : {
-      "name" : "skip",
-      "in" : "query",
-      "description" : "number of items to skip",
-      "required" : false,
-      "type" : "integer",
-      "format" : "int32"
-    },
-    "limit-param" : {
+    "limit_param" : {
       "name" : "limit",
       "in" : "query",
       "description" : "max records to return",
@@ -2045,26 +2218,17 @@
       "type" : "integer",
       "format" : "int32"
     },
-    "user-id" : {
-      "name" : "user-id",
+    "event_id" : {
+      "name" : "event_id",
       "in" : "path",
       "required" : true,
       "minLength" : 8,
       "maxLength" : 25,
-      "description" : "The user's Id",
+      "description" : "The event's Id",
       "type" : "string"
     },
-    "project-id" : {
-      "name" : "project-id",
-      "in" : "path",
-      "required" : true,
-      "minLength" : 8,
-      "maxLength" : 25,
-      "description" : "The project's Id",
-      "type" : "string"
-    },
-    "file-id" : {
-      "name" : "file-id",
+    "file_id" : {
+      "name" : "file_id",
       "in" : "path",
       "required" : true,
       "minLength" : 8,
@@ -2072,42 +2236,8 @@
       "description" : "The file's Id",
       "type" : "string"
     },
-    "workspace-id" : {
-      "name" : "workspace-id",
-      "in" : "path",
-      "required" : true,
-      "minLength" : 8,
-      "maxLength" : 20,
-      "description" : "The workspace's Id",
-      "type" : "string"
-    },
-    "model-id" : {
-      "name" : "model-id",
-      "in" : "path",
-      "required" : true,
-      "minLength" : 8,
-      "maxLength" : 20,
-      "description" : "The model's Id",
-      "type" : "string"
-    },
-    "job-id" : {
-      "name" : "job-id",
-      "in" : "path",
-      "required" : true,
-      "minLength" : 8,
-      "maxLength" : 20,
-      "description" : "The job's Id",
-      "type" : "string"
-    },
-    "owner-id" : {
-      "name" : "owner-id",
-      "in" : "path",
-      "required" : true,
-      "description" : "User id or team Id to identify the context",
-      "type" : "string"
-    },
-    "group-id" : {
-      "name" : "group-id",
+    "group_id" : {
+      "name" : "group_id",
       "in" : "path",
       "required" : true,
       "minLength" : 8,
@@ -2115,35 +2245,98 @@
       "description" : "The group's Id",
       "type" : "string"
     },
-    "server-id" : {
+    "job_id" : {
+      "name" : "job_id",
       "in" : "path",
-      "name" : "server-id",
+      "required" : true,
+      "minLength" : 8,
+      "maxLength" : 20,
+      "description" : "The job's Id",
+      "type" : "string"
+    },
+    "model_id" : {
+      "name" : "model_id",
+      "in" : "path",
+      "required" : true,
+      "minLength" : 8,
+      "maxLength" : 20,
+      "description" : "The model's Id",
+      "type" : "string"
+    },
+    "owner_id" : {
+      "name" : "owner_id",
+      "in" : "path",
+      "required" : true,
+      "description" : "User id or team Id to identify the context",
+      "type" : "string"
+    },
+    "project_id" : {
+      "name" : "project_id",
+      "in" : "path",
+      "required" : true,
+      "minLength" : 8,
+      "maxLength" : 25,
+      "description" : "The project's Id",
+      "type" : "string"
+    },
+    "skip_param" : {
+      "name" : "skip",
+      "in" : "query",
+      "description" : "number of items to skip",
+      "required" : false,
+      "type" : "integer",
+      "format" : "int32"
+    },
+    "server_id" : {
+      "in" : "path",
+      "name" : "server_id",
       "type" : "string",
       "required" : true,
       "description" : "Id to identify any type of server: Workspace, Model or Job"
+    },
+    "user_id" : {
+      "name" : "user_id",
+      "in" : "path",
+      "required" : true,
+      "minLength" : 8,
+      "maxLength" : 25,
+      "description" : "The user's Id",
+      "type" : "string"
+    },
+    "workspace_id" : {
+      "name" : "workspace_id",
+      "in" : "path",
+      "required" : true,
+      "minLength" : 8,
+      "maxLength" : 20,
+      "description" : "The workspace's Id",
+      "type" : "string"
     }
   },
   "responses" : {
-    "UserDoesNotExistResponse" : {
-      "description" : "User does not exist"
+    "BadRequestResponse" : {
+      "description" : "Bad request. Verify field values"
+    },
+    "EventDoesNotExistResponse" : {
+      "description" : "Event does not exist"
     },
     "FileDoesNotExistResponse" : {
       "description" : "File does not exist"
     },
-    "ProjectDoesNotExistResponse" : {
-      "description" : "Project does not exist"
-    },
     "GeneralDoesNotExistResponse" : {
       "description" : "The object does not exist"
     },
-    "BadRequestResponse" : {
-      "description" : "Bad request. Verify field values"
+    "ProjectDoesNotExistResponse" : {
+      "description" : "Project does not exist"
     },
     "Standard500ErrorResponse" : {
-      "description" : "Something was wrong",
+      "description" : "Something went wrong",
       "schema" : {
         "$ref" : "#/definitions/Error"
       }
+    },
+    "UserDoesNotExistResponse" : {
+      "description" : "User does not exist"
     }
   }
 }
