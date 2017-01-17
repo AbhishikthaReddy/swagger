@@ -64,6 +64,9 @@
     "name" : "teams",
     "description" : "Team accout"
   }, {
+    "name" : "triggers",
+    "description" : "Project and server triggers"
+  }, {
     "name" : "user-account",
     "description" : "User account"
   }, {
@@ -928,6 +931,42 @@
         }
       }
     },
+    "/[namespace/]projects/{project_id}/server/{server_id}/logs" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/project_id"
+      }, {
+        "$ref" : "#/parameters/server_id"
+      } ],
+      "get" : {
+        "tags" : [ "projects", "servers", "stream-api" ],
+        "summary" : "gets streaming logs by project and server ids",
+        "parameters" : [ {
+          "name" : "tail",
+          "in" : "query",
+          "default" : 300,
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "follow",
+          "in" : "query",
+          "default" : true,
+          "required" : true,
+          "type" : "boolean"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Workspace logs",
+            "schema" : {
+              "$ref" : "#/definitions/ServerLog"
+            }
+          },
+          "404" : {
+            "$ref" : "#/responses/ServerDoesNotExistResponse"
+          }
+        }
+      }
+    },
     "/[namespace/]projects/{project_id}/server/{server_id}/runs/stats" : {
       "parameters" : [ {
         "$ref" : "#/parameters/project_id"
@@ -1005,42 +1044,6 @@
         }
       }
     },
-    "/[namespace/]projects/{project_id}/server/{server_id}/logs" : {
-      "parameters" : [ {
-        "$ref" : "#/parameters/project_id"
-      }, {
-        "$ref" : "#/parameters/server_id"
-      } ],
-      "get" : {
-        "tags" : [ "projects", "servers", "stream-api" ],
-        "summary" : "gets streaming logs by project and server ids",
-        "parameters" : [ {
-          "name" : "tail",
-          "in" : "query",
-          "default" : 300,
-          "required" : true,
-          "type" : "integer",
-          "format" : "int32"
-        }, {
-          "name" : "follow",
-          "in" : "query",
-          "default" : true,
-          "required" : true,
-          "type" : "boolean"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Workspace logs",
-            "schema" : {
-              "$ref" : "#/definitions/ServerLog"
-            }
-          },
-          "404" : {
-            "$ref" : "#/responses/ServerDoesNotExistResponse"
-          }
-        }
-      }
-    },
     "/[namespace/]projects/{project_id}/server/{server_id}/sshtunnels" : {
       "parameters" : [ {
         "$ref" : "#/parameters/project_id"
@@ -1114,6 +1117,99 @@
         }
       }
     },
+    "/[namespace/]projects/{project_id}/server/{server_id}/triggers" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/project_id"
+      }, {
+        "$ref" : "#/parameters/server_id"
+      } ],
+      "get" : {
+        "tags" : [ "namespaced", "projects", "rest-api", "servers", "triggers" ],
+        "summary" : "Gets triggers",
+        "description" : "Gets all triggers by poject and server Id",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/Trigger"
+            }
+          },
+          "404" : {
+            "$ref" : "#/responses/TriggerDoesNotExistResponse"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "namespaced", "projects", "servers", "sshtunnels", "rest-api" ],
+        "summary" : "Updates a trigger",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "model",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Trigger"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Trigger Updated"
+          },
+          "404" : {
+            "description" : "The resource was not found"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "namespaced", "projects", "rest-api", "servers", "triggers" ],
+        "summary" : "Add a trigger to the project and server",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "trigger",
+          "description" : "Trigger definition",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Trigger"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "The trigger that was added",
+            "headers" : {
+              "Location" : {
+                "description" : "Location where the trigger can be obtained",
+                "type" : "string"
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/responses/BadRequestResponse"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "namespaced", "rest-api", "servers", "triggers" ],
+        "summary" : "Deletes a trigger from the server and project",
+        "parameters" : [ {
+          "$ref" : "#/parameters/project_id"
+        }, {
+          "$ref" : "#/parameters/server_id"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Trigger deleted"
+          },
+          "400" : {
+            "$ref" : "#/responses/BadRequestResponse"
+          },
+          "404" : {
+            "$ref" : "#/responses/TriggerDoesNotExistResponse"
+          }
+        }
+      }
+    },
     "/[namespace/]projects/{project_id}/collaborators" : {
       "parameters" : [ {
         "$ref" : "#/parameters/project_id"
@@ -1173,6 +1269,12 @@
         "responses" : {
           "200" : {
             "description" : "Collaborator deleted"
+          },
+          "400" : {
+            "$ref" : "#/responses/BadRequestResponse"
+          },
+          "404" : {
+            "$ref" : "#/responses/UserDoesNotExistResponse"
           }
         }
       }
@@ -1200,7 +1302,7 @@
             "schema" : {
               "type" : "array",
               "items" : {
-                "$ref" : "#/definitions/Event"
+                "$ref" : "#/definitions/Project"
               }
             }
           },
@@ -1423,7 +1525,7 @@
         } ],
         "responses" : {
           "201" : {
-            "description" : "Created",
+            "description" : "Resource created",
             "headers" : {
               "Location" : {
                 "type" : "string",
@@ -1558,6 +1660,9 @@
                 "$ref" : "#/definitions/Team"
               }
             }
+          },
+          "404" : {
+            "$ref" : "#/responses/TeamDoesNotExistResponse"
           }
         }
       }
@@ -2653,6 +2758,12 @@
       "schema" : {
         "$ref" : "#/definitions/Error"
       }
+    },
+    "TeamDoesNotExistResponse" : {
+      "description" : "Team does not exist"
+    },
+    "TriggerDoesNotExistResponse" : {
+      "description" : "Trigger does not exist"
     },
     "UserDoesNotExistResponse" : {
       "description" : "User does not exist"
