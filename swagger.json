@@ -55,6 +55,9 @@
     "name" : "rest-api",
     "description" : "RESTful API endpoint type"
   }, {
+    "name" : "ssh-tunnels",
+    "description" : "SSH Tunnels configured for servers"
+  }, {
     "name" : "stream-api",
     "description" : "Stream API endpoint type"
   }, {
@@ -64,7 +67,8 @@
     "name" : "user-account",
     "description" : "User account"
   }, {
-    "name" : "workspaces"
+    "name" : "workspaces",
+    "description" : "Workspace servers"
   } ],
   "host" : "virtserver.swaggerhub.com",
   "basePath" : "/3Blades/app-backend/v1",
@@ -86,16 +90,34 @@
     "oauth2_password" : [ "user" ]
   } ],
   "paths" : {
-    "/actions" : {
+    "/action" : {
       "get" : {
         "tags" : [ "actions", "rest-api" ],
-        "summary" : "Retrieve a list of actions",
-        "operationId" : "searchAction",
-        "description" : "By passing in the appropriate options, you can search for\navailable actions in the system\n",
+        "summary" : "Retrieve a list of actions in chronological order",
+        "description" : "By passing in the appropriate options, you can search for\navailable actions in the system. Results are returned in chronological\norder.\n",
         "parameters" : [ {
-          "name" : "searchString",
+          "name" : "action_id",
           "in" : "query",
-          "description" : "pass an optional search string for looking up an event",
+          "description" : "Pass an optional action name for looking up an action\n",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "state",
+          "in" : "query",
+          "description" : "Filter by state. Possible values In progress, Success, Failed\n",
+          "default" : "In progress",
+          "type" : "string",
+          "required" : false
+        }, {
+          "name" : "start_date",
+          "in" : "query",
+          "description" : "Filter by start date. Valid filtering values are start_date__gte (after or on the date supplied) and start_date__lte (before or on the date supplied)\n",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "end_date",
+          "in" : "query",
+          "description" : "Filter by end date. Valid filtering values are end_date__gte (after or on the date supplied) and end_date__lte (before or on the date supplied)\n",
           "required" : false,
           "type" : "string"
         }, {
@@ -109,12 +131,15 @@
             "schema" : {
               "type" : "array",
               "items" : {
-                "$ref" : "#/definitions/Event"
+                "$ref" : "#/definitions/Action"
               }
             }
           },
           "400" : {
-            "description" : "bad input parameter"
+            "description" : "Bad input parameter"
+          },
+          "404" : {
+            "$ref" : "#/responses/ActionDoesNotExistResponse"
           }
         }
       },
@@ -131,17 +156,14 @@
           },
           "in" : "body",
           "name" : "action",
-          "description" : "the action to register"
+          "description" : "The action to create"
         } ],
         "responses" : {
           "201" : {
-            "description" : "Created"
+            "description" : "Action created"
           },
           "400" : {
             "$ref" : "#/responses/BadRequestResponse"
-          },
-          "404" : {
-            "$ref" : "#/responses/ActionDoesNotExistResponse"
           }
         }
       }
@@ -342,7 +364,7 @@
         } ],
         "responses" : {
           "201" : {
-            "description" : "Created",
+            "description" : "Group created",
             "schema" : {
               "$ref" : "#/definitions/Group"
             }
@@ -357,6 +379,21 @@
       "parameters" : [ {
         "$ref" : "#/parameters/group_id"
       } ],
+      "get" : {
+        "tags" : [ "groups", "namespaced", "rest-api" ],
+        "summary" : "Gets a group by ID",
+        "responses" : {
+          "200" : {
+            "description" : "Returns group data",
+            "schema" : {
+              "$ref" : "#/definitions/Group"
+            }
+          },
+          "404" : {
+            "$ref" : "#/responses/EventDoesNotExistResponse"
+          }
+        }
+      },
       "put" : {
         "tags" : [ "groups", "namespaced", "rest-api" ],
         "description" : "Updates a group",
@@ -379,7 +416,7 @@
         "description" : "Deletes a group",
         "responses" : {
           "200" : {
-            "description" : "Deleted"
+            "description" : "Deleted group"
           }
         }
       }
@@ -456,8 +493,8 @@
         "$ref" : "#/parameters/project_id"
       } ],
       "get" : {
-        "tags" : [ "files", "namespaced", "rest-api" ],
-        "summary" : "Gets files from a project",
+        "tags" : [ "files", "projects", "namespaced", "rest-api" ],
+        "summary" : "Gets files from a project by project Id",
         "responses" : {
           "200" : {
             "description" : "List of project files",
@@ -474,7 +511,7 @@
         }
       },
       "post" : {
-        "tags" : [ "files", "namespaced", "rest-api" ],
+        "tags" : [ "files", "namespaced", "projects", "rest-api" ],
         "summary" : "Create new file in project",
         "responses" : {
           "201" : {
@@ -502,7 +539,7 @@
         "$ref" : "#/parameters/project_id"
       } ],
       "get" : {
-        "tags" : [ "files", "namespaced", "rest-api" ],
+        "tags" : [ "files", "namespaced", "projects", "rest-api" ],
         "summary" : "Gets file by Id",
         "responses" : {
           "200" : {
@@ -510,11 +547,14 @@
             "schema" : {
               "$ref" : "#/definitions/File"
             }
+          },
+          "404" : {
+            "$ref" : "#/responses/FileDoesNotExistResponse"
           }
         }
       },
       "put" : {
-        "tags" : [ "files", "namespaced", "rest-api" ],
+        "tags" : [ "files", "namespaced", "projects", "rest-api" ],
         "summary" : "Updates a file",
         "parameters" : [ {
           "in" : "body",
@@ -537,14 +577,14 @@
         }
       },
       "delete" : {
-        "tags" : [ "files", "namespaced", "rest-api" ],
+        "tags" : [ "files", "namespaced", "projects", "rest-api" ],
         "summary" : "Deletes a file",
         "responses" : {
           "200" : {
             "description" : "File deleted"
           },
           "404" : {
-            "description" : "The resource was not found"
+            "$ref" : "#/responses/FileDoesNotExistResponse"
           },
           "default" : {
             "$ref" : "#/responses/Standard500ErrorResponse"
@@ -557,7 +597,7 @@
         "$ref" : "#/parameters/project_id"
       } ],
       "get" : {
-        "tags" : [ "rest-api", "namespaced", "servers", "workspaces" ],
+        "tags" : [ "rest-api", "namespaced", "projects", "workspaces" ],
         "summary" : "Gets workspaces from a project",
         "responses" : {
           "200" : {
@@ -575,7 +615,7 @@
         }
       },
       "post" : {
-        "tags" : [ "rest-api", "namespaced", "servers", "workspaces" ],
+        "tags" : [ "rest-api", "namespaced", "projects", "workspaces" ],
         "summary" : "Creates a new workspace in the project",
         "parameters" : [ {
           "in" : "body",
@@ -612,7 +652,7 @@
         "$ref" : "#/parameters/workspace_id"
       } ],
       "get" : {
-        "tags" : [ "namespaced", "rest-api", "servers", "workspaces" ],
+        "tags" : [ "namespaced", "rest-api", "projects", "workspaces" ],
         "summary" : "Gets workspace by Id",
         "responses" : {
           "200" : {
@@ -620,6 +660,9 @@
             "schema" : {
               "$ref" : "#/definitions/Workspace"
             }
+          },
+          "404" : {
+            "$ref" : "#/responses/WorkspaceDoesNotExistResponse"
           }
         }
       },
@@ -667,7 +710,7 @@
         "$ref" : "#/parameters/project_id"
       } ],
       "get" : {
-        "tags" : [ "models", "namespaced", "rest-api", "servers" ],
+        "tags" : [ "models", "namespaced", "projects", "rest-api" ],
         "summary" : "Gets all models contained in a project",
         "responses" : {
           "200" : {
@@ -685,7 +728,7 @@
         }
       },
       "post" : {
-        "tags" : [ "projects", "models", "namespaced", "servers" ],
+        "tags" : [ "models", "namespaced", "projects", "rest-api" ],
         "summary" : "Creates a new model to the project",
         "parameters" : [ {
           "in" : "body",
@@ -832,7 +875,7 @@
         "$ref" : "#/parameters/job_id"
       } ],
       "get" : {
-        "tags" : [ "jobs", "namespaced", "rest-api", "servers" ],
+        "tags" : [ "jobs", "namespaced", "projects", "rest-api" ],
         "summary" : "Gets job by Id",
         "responses" : {
           "200" : {
@@ -840,11 +883,14 @@
             "schema" : {
               "$ref" : "#/definitions/Job"
             }
+          },
+          "404" : {
+            "$ref" : "#/responses/JobDoesNotExistResponse"
           }
         }
       },
       "put" : {
-        "tags" : [ "jobs", "namespaced", "rest-api", "servers" ],
+        "tags" : [ "jobs", "namespaced", "projects", "rest-api" ],
         "summary" : "Updates a job",
         "parameters" : [ {
           "in" : "body",
@@ -859,7 +905,7 @@
             "description" : "Job Updated"
           },
           "404" : {
-            "description" : "The resource was not found"
+            "$ref" : "#/responses/JobDoesNotExistResponse"
           },
           "default" : {
             "$ref" : "#/responses/Standard500ErrorResponse"
@@ -900,6 +946,9 @@
                 "$ref" : "#/definitions/ServerRunStatistics"
               }
             }
+          },
+          "404" : {
+            "$ref" : "#/responses/ServerDoesNotExistResponse"
           }
         }
       }
@@ -910,14 +959,10 @@
       }, {
         "$ref" : "#/parameters/server_id"
       }, {
-        "in" : "path",
-        "name" : "run_id",
-        "type" : "number",
-        "format" : "int32",
-        "required" : true
+        "$ref" : "#/parameters/run_id"
       } ],
       "get" : {
-        "tags" : [ "rest-api", "servers", "namespaced" ],
+        "tags" : [ "namespaced", "projects", "rest-api", "runs", "servers" ],
         "summary" : "Gets all run statistics",
         "responses" : {
           "200" : {
@@ -928,6 +973,9 @@
                 "$ref" : "#/definitions/ServerRunStatistics"
               }
             }
+          },
+          "404" : {
+            "$ref" : "#/responses/RunDoesNotExistResponse"
           }
         }
       }
@@ -939,8 +987,8 @@
         "$ref" : "#/parameters/server_id"
       } ],
       "get" : {
-        "tags" : [ "namespaced", "rest-api", "servers" ],
-        "summary" : "Gets all the statistics of server",
+        "tags" : [ "namespaced", "projects", "rest-api", "servers" ],
+        "summary" : "Gets all server statistics",
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -950,6 +998,9 @@
                 "$ref" : "#/definitions/ServerStatistics"
               }
             }
+          },
+          "404" : {
+            "$ref" : "#/responses/ServerStatsDoesNotExistResponse"
           }
         }
       }
@@ -983,6 +1034,82 @@
             "schema" : {
               "$ref" : "#/definitions/ServerLog"
             }
+          },
+          "404" : {
+            "$ref" : "#/responses/ServerDoesNotExistResponse"
+          }
+        }
+      }
+    },
+    "/[namespace/]projects/{project_id}/server/{server_id}/sshtunnels" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/project_id"
+      }, {
+        "$ref" : "#/parameters/server_id"
+      } ],
+      "get" : {
+        "tags" : [ "namespaced", "projects", "servers", "sshtunnels", "rest-api" ],
+        "summary" : "Gets SSH tunnels",
+        "description" : "Gets all active project SSH tunnels by poject and server Id",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/SSHTunnel"
+            }
+          },
+          "404" : {
+            "$ref" : "#/responses/SSHTunnelDoesNotExistResponse"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "namespaced", "projects", "servers", "sshtunnels", "rest-api" ],
+        "summary" : "Updates an SSH Tunnel",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "model",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/SSHTunnel"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "SSH Tunnel Updated"
+          },
+          "404" : {
+            "description" : "The resource was not found"
+          },
+          "default" : {
+            "$ref" : "#/responses/Standard500ErrorResponse"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "namespaced", "projects", "servers", "sshtunnels", "rest-api" ],
+        "summary" : "Add an SSH Tunnel to the project",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "ssh_tunnel",
+          "description" : "SSH tunnel definition",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/SSHTunnel"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "The SSH tunnel was added",
+            "headers" : {
+              "Location" : {
+                "description" : "Location where the SSH tunnel can be obtained",
+                "type" : "string"
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/responses/BadRequestResponse"
           }
         }
       }
@@ -1962,20 +2089,6 @@
         }
       }
     },
-    "Role" : {
-      "type" : "object",
-      "properties" : {
-        "id" : {
-          "type" : "integer"
-        },
-        "name" : {
-          "type" : "string"
-        },
-        "description" : {
-          "type" : "string"
-        }
-      }
-    },
     "ServerResourcesType" : {
       "type" : "object",
       "required" : [ "name", "cpu", "memory" ],
@@ -2452,6 +2565,13 @@
       "description" : "The project's Id",
       "type" : "string"
     },
+    "run_id" : {
+      "in" : "path",
+      "name" : "run_id",
+      "type" : "number",
+      "format" : "int32",
+      "required" : true
+    },
     "skip_param" : {
       "name" : "skip",
       "in" : "query",
@@ -2510,8 +2630,23 @@
     "GeneralDoesNotExistResponse" : {
       "description" : "The object does not exist"
     },
+    "JobDoesNotExistResponse" : {
+      "description" : "Job does not exist"
+    },
     "ProjectDoesNotExistResponse" : {
       "description" : "Project does not exist"
+    },
+    "RunDoesNotExistResponse" : {
+      "description" : "Run does not exist"
+    },
+    "ServerDoesNotExistResponse" : {
+      "description" : "Server does not exist"
+    },
+    "ServerStatsDoesNotExistResponse" : {
+      "description" : "Server statistics do not exist"
+    },
+    "SSHTunnelDoesNotExistResponse" : {
+      "description" : "SSH Tunnel does not exist"
     },
     "Standard500ErrorResponse" : {
       "description" : "Something went wrong",
@@ -2521,6 +2656,9 @@
     },
     "UserDoesNotExistResponse" : {
       "description" : "User does not exist"
+    },
+    "WorkspaceDoesNotExistResponse" : {
+      "description" : "Workspace does not exist"
     }
   }
 }
